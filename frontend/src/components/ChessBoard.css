@@ -1,0 +1,18 @@
+/*
+  Aumenta contraste e peso das coordenadas (a-h, 1-8) do Chessground.
+  Obs: o Chessground usa esses nomes de classe ("coords", "coord") desde
+  a v8, mas se a versão instalada renderizar com outra estrutura, abra o
+  devtools no tabuleiro e ajuste o seletor abaixo.
+*/
+.cg-wrap coords {
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.02em;
+}
+
+.cg-wrap coords coord {
+  opacity: 1 !important;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.55),
+    0 0 1px rgba(0, 0, 0, 0.4);
+}
