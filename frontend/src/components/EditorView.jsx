@@ -1,25 +1,34 @@
-import { useMemo } from 'react'
+import { useState } from 'react'
 import ChessBoard from './ChessBoard'
-import { RefreshCw, Eraser, ArrowLeftRight } from 'lucide-react'
+import SecondaryButton from './SecondaryButton'
+import TurnBadge from './TurnBadge'
+import { RefreshCw, Undo2, RotateCcw, ArrowLeftRight } from 'lucide-react'
 
 function EditorView({ editor, boardWidth = 520, bestMoveUci }) {
-  const autoShapes = useMemo(() => (
-    bestMoveUci && bestMoveUci.length >= 4
-      ? [{ orig: bestMoveUci.slice(0, 2), dest: bestMoveUci.slice(2, 4), brush: 'green' }]
-      : []
-  ), [bestMoveUci])
+  const [orientation, setOrientation] = useState('white')
+
+  const autoShapes = bestMoveUci && bestMoveUci.length >= 4
+    ? [{ orig: bestMoveUci.slice(0, 2), dest: bestMoveUci.slice(2, 4), brush: 'green' }]
+    : []
 
   function handleAfterMove(orig, dest) {
     editor.movePiece(orig, dest)
   }
 
+  function handleFlip() {
+    setOrientation((o) => (o === 'white' ? 'black' : 'white'))
+  }
+
   return (
     <div className="flex flex-col items-center gap-3">
+      <TurnBadge turn={editor.turn} moveLabel="Modo Editor" />
+
       <ChessBoard
         fen={editor.fen}
+        orientation={orientation}
         boardWidth={boardWidth}
         movableColor="both"
-        freeMove
+        freeMove={true}
         dests={undefined}
         showDests={false}
         autoShapes={autoShapes}
@@ -31,38 +40,37 @@ function EditorView({ editor, boardWidth = 520, bestMoveUci }) {
       </span>
 
       <div className="flex gap-2">
-        <button
-          onClick={() => editor.reset()}
-          className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-all duration-200 border border-white/5 hover:border-white/10 hover:shadow-md"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
+        <SecondaryButton icon={RefreshCw} onClick={() => editor.reset()}>
           Posição inicial
-        </button>
-        <button
-          onClick={() => editor.clear()}
-          className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-all duration-200 border border-white/5 hover:border-white/10 hover:shadow-md"
-        >
-          <Eraser className="w-3.5 h-3.5" />
-          Limpar tabuleiro
-        </button>
+        </SecondaryButton>
+        <SecondaryButton icon={Undo2} onClick={() => editor.undo()} disabled={!editor.canUndo}>
+          Desfazer
+        </SecondaryButton>
+        <SecondaryButton icon={RotateCcw} onClick={handleFlip}>
+          Girar tabuleiro
+        </SecondaryButton>
       </div>
 
       <div className="flex items-center gap-2 text-xs text-slate-400">
         <ArrowLeftRight className="w-3.5 h-3.5" />
         <span>Vez de jogar:</span>
-        <div className="flex bg-slate-800/80 rounded-lg p-0.5 border border-white/5">
+        <div className="flex bg-slate-900/60 backdrop-blur-sm rounded-xl p-1 ring-1 ring-white/10">
           <button
             onClick={() => editor.setSideToMove('w')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
-              editor.turn === 'w' ? 'bg-white text-slate-900' : 'text-slate-400 hover:text-white'
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+              editor.turn === 'w'
+                ? 'bg-gradient-to-b from-white to-slate-100 text-slate-900 shadow-md shadow-black/20'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             Brancas
           </button>
           <button
             onClick={() => editor.setSideToMove('b')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
-              editor.turn === 'b' ? 'bg-slate-600 text-white' : 'text-slate-400 hover:text-white'
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+              editor.turn === 'b'
+                ? 'bg-gradient-to-b from-slate-600 to-slate-700 text-white shadow-md shadow-black/30 ring-1 ring-white/10'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             Pretas

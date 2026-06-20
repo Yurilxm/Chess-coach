@@ -51,7 +51,10 @@ export function describeUciMove(fen, uci) {
   try {
     const temp = new Chess(fen)
     const move = temp.move({ from, to, promotion })
-    if (!move) return null
+    if (!move) {
+      console.warn('[moveTranslation] Lance UCI não pôde ser aplicado nesta posição:', uci, '| FEN:', fen)
+      return null
+    }
     return {
       text: describeMoveObject(move),
       from,
@@ -61,7 +64,8 @@ export function describeUciMove(fen, uci) {
       captured: move.captured || null,
       san: move.san,
     }
-  } catch {
+  } catch (err) {
+    console.warn('[moveTranslation] Erro ao interpretar lance UCI:', uci, '| FEN:', fen, '| erro:', err?.message)
     return null
   }
 }
@@ -109,4 +113,35 @@ export function explainMoveHeuristic(moveInfo) {
     return 'Move o rei para uma posição mais segura.'
   }
   return 'Melhora a posição das peças e mantém o controle do jogo.'
+}
+
+/**
+ * Texto qualitativo de vantagem/risco por posição no ranking do motor
+ * (0 = melhor lance, 1 = segunda opção, 2 = terceira opção).
+ *
+ * Importante: o backend hoje retorna apenas a lista de lances (top_moves),
+ * sem uma avaliação numérica individual por lance. Por isso este texto é
+ * uma leitura qualitativa baseada na posição no ranking, não um valor
+ * exato de centipawns por opção.
+ */
+const OPTION_INSIGHTS = [
+  {
+    label: 'Melhor lance',
+    advantage: 'Esta é a linha mais precisa encontrada pelo motor nesta posição.',
+    risk: 'Nenhum risco adicional identificado pelo motor nesta profundidade de busca.',
+  },
+  {
+    label: 'Segunda opção',
+    advantage: 'Mantém boa parte da vantagem, com uma abordagem ligeiramente diferente.',
+    risk: 'É um pouco menos precisa que a melhor opção — pode ceder uma fração da vantagem.',
+  },
+  {
+    label: 'Terceira opção',
+    advantage: 'Tende a ser mais sólida ou defensiva, simplificando a posição.',
+    risk: 'Normalmente cede mais vantagem do que as duas primeiras opções.',
+  },
+]
+
+export function getOptionInsight(rank) {
+  return OPTION_INSIGHTS[rank] || OPTION_INSIGHTS[OPTION_INSIGHTS.length - 1]
 }

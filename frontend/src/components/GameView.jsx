@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import ChessBoard from './ChessBoard'
 import MoveHistoryPanel from './MoveHistoryPanel'
 import PromotionModal from './PromotionModal'
+import SecondaryButton from './SecondaryButton'
+import TurnBadge from './TurnBadge'
 import { RotateCcw, Undo2, RefreshCw } from 'lucide-react'
 
 function GameView({ game, boardWidth = 520, bestMoveUci }) {
@@ -21,8 +23,12 @@ function GameView({ game, boardWidth = 520, bestMoveUci }) {
     setOrientation((o) => (o === 'white' ? 'black' : 'white'))
   }
 
+  const moveLabel = game.moveCount > 0 ? `Lance ${game.moveCount}` : 'Início da partida'
+
   return (
     <div className="flex flex-col items-center gap-3">
+      <TurnBadge turn={game.turn} moveLabel={moveLabel} gameOver={game.isGameOver} />
+
       <ChessBoard
         fen={game.fen}
         orientation={orientation}
@@ -37,41 +43,16 @@ function GameView({ game, boardWidth = 520, bestMoveUci }) {
         onAfterMove={handleAfterMove}
       />
 
-      <div className="flex items-center gap-3 text-xs text-slate-400">
-        <span>
-          {game.moveCount > 0 ? `Lance ${game.moveCount}` : 'Início da partida'} • Vez das{' '}
-          {game.turn === 'w' ? 'brancas' : 'pretas'}
-        </span>
-        {game.isGameOver && (
-          <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 font-medium">
-            Fim de jogo
-          </span>
-        )}
-      </div>
-
       <div className="flex gap-2">
-        <button
-          onClick={() => game.reset()}
-          className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-all duration-200 border border-white/5 hover:border-white/10 hover:shadow-md"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
+        <SecondaryButton icon={RefreshCw} onClick={() => game.reset()}>
           Nova partida
-        </button>
-        <button
-          onClick={() => game.undo()}
-          disabled={game.history.length === 0}
-          className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-all duration-200 border border-white/5 hover:border-white/10 hover:shadow-md disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:shadow-none"
-        >
-          <Undo2 className="w-3.5 h-3.5" />
+        </SecondaryButton>
+        <SecondaryButton icon={Undo2} onClick={() => game.undo()} disabled={game.history.length === 0}>
           Desfazer
-        </button>
-        <button
-          onClick={handleFlip}
-          className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-all duration-200 border border-white/5 hover:border-white/10 hover:shadow-md"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
+        </SecondaryButton>
+        <SecondaryButton icon={RotateCcw} onClick={handleFlip}>
           Girar tabuleiro
-        </button>
+        </SecondaryButton>
       </div>
 
       <MoveHistoryPanel history={game.history} />
