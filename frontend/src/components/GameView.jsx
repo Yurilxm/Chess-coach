@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import ChessBoard from './ChessBoard'
 import MoveHistoryPanel from './MoveHistoryPanel'
 import PromotionModal from './PromotionModal'
@@ -8,10 +8,14 @@ import CapturedPieces from './CapturedPieces'
 import OpeningBadge from './OpeningBadge'
 import { getCapturedPieces } from '../utils/chessHelpers'
 import { detectOpening } from '../utils/openings'
-import { RotateCcw, Undo2, RefreshCw } from 'lucide-react'
+import { RefreshCw } from 'lucide-react'
 
-function GameView({ game, boardWidth = 520, bestMoveUci }) {
-  const [orientation, setOrientation] = useState('white')
+function GameView({ game, boardWidth = 520, bestMoveUci, isBotMode = false, onBotReset }) {
+  // No modo Bot, orientação segue a cor do jogador
+  // Pretas = tabuleiro virado (black), Brancas = normal (white)
+  const orientation = isBotMode 
+    ? (game.playerColor === 'b' ? 'black' : 'white')
+    : 'white'
 
   const autoShapes = useMemo(() => (
     bestMoveUci && bestMoveUci.length >= 4
@@ -20,37 +24,52 @@ function GameView({ game, boardWidth = 520, bestMoveUci }) {
   ), [bestMoveUci])
 
   const captured = useMemo(() => getCapturedPieces(game.history), [game.history])
-  
-  // Detecta a abertura baseada no histórico
   const opening = useMemo(() => detectOpening(game.history), [game.history])
 
   function handleAfterMove(orig, dest) {
     game.attemptMove(orig, dest)
   }
 
-  function handleFlip() {
-    setOrientation((o) => (o === 'white' ? 'black' : 'white'))
-  }
-
   const moveLabel = game.moveCount > 0 ? `Lance ${game.moveCount}` : 'Início da partida'
-
-  // Peças capturadas: byWhite = pretas comidas pelas brancas, byBlack = brancas comidas pelas pretas
   const whiteCaptured = captured.byWhite
   const blackCaptured = captured.byBlack
-
-  // Verifica se tem peças capturadas para adicionar margem extra
   const hasCapturedPieces = whiteCaptured.length > 0 || blackCaptured.length > 0
+
+  // No modo Bot, jogador só mexe suas peças
+  // No modo normal, mexe as peças da vez (ou nenhuma se game over)
+  const movableColor = isBotMode
+    ? (game.playerColor === 'w' ? 'white' : 'black')
+    : (game.isGameOver ? undefined : (game.turn === 'w' ? 'white' : 'black'))
+
+  // No modo Bot, só mostra dests quando é a vez do jogador
+  const showDests = isBotMode 
+    ? (game.turn === game.playerColor && !game.isGameOver)
+    : true
+
+  const dests = (game.isGameOver || (isBotMode && game.turn !== game.playerColor))
+    ? new Map() 
+    : game.getDests()
+
+  function handleReset() {
+    if (isBotMode && onBotReset) {
+      onBotReset()
+    } else {
+      game.reset()
+    }
+  }
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <TurnBadge turn={game.turn} moveLabel={moveLabel} gameOver={game.isGameOver} gameOverReason={game.gameOverReason} />
+      <TurnBadge 
+        turn={game.turn} 
+        moveLabel={moveLabel} 
+        gameOver={game.isGameOver} 
+        gameOverReason={game.gameOverReason} 
+      />
       
-      {/* Exibe a abertura detectada */}
       <OpeningBadge opening={opening} />
 
-      {/* Container do tabuleiro + peças capturadas nos cantos */}
       <div className="relative" style={{ width: boardWidth, paddingBottom: hasCapturedPieces ? '8px' : '0' }}>
-        {/* Peças comidas pelas PRETAS - canto superior direito */}
         <div className="absolute -top-6 right-0">
           <CapturedPieces pieces={blackCaptured} color="w" />
         </div>
@@ -62,29 +81,22 @@ function GameView({ game, boardWidth = 520, bestMoveUci }) {
           turnColor={game.turn === 'w' ? 'white' : 'black'}
           check={game.isCheck}
           lastMove={game.lastMove}
-          movableColor={game.isGameOver ? undefined : (game.turn === 'w' ? 'white' : 'black')}
+          movableColor={movableColor}
           freeMove={false}
-          dests={game.isGameOver ? new Map() : game.getDests()}
+          dests={dests}
+          showDests={showDests}
           autoShapes={autoShapes}
           onAfterMove={handleAfterMove}
         />
 
-        {/* Peças comidas pelas BRANCAS - canto inferior esquerdo */}
         <div className="absolute -bottom-6 left-0">
           <CapturedPieces pieces={whiteCaptured} color="b" />
         </div>
       </div>
 
-      {/* Botões com margem extra quando tem peças capturadas */}
       <div className={`flex gap-2 ${hasCapturedPieces ? 'mt-4' : ''}`}>
-        <SecondaryButton icon={RefreshCw} onClick={() => game.reset()}>
-          Nova partida
-        </SecondaryButton>
-        <SecondaryButton icon={Undo2} onClick={() => game.undo()} disabled={game.history.length === 0}>
-          Desfazer
-        </SecondaryButton>
-        <SecondaryButton icon={RotateCcw} onClick={handleFlip}>
-          Girar tabuleiro
+        <SecondaryButton icon={RefreshCw} onClick={handleReset}>
+          {isBotMode ? 'Novo jogo' : 'Nova partida'}
         </SecondaryButton>
       </div>
 

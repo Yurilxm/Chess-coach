@@ -1,7 +1,13 @@
 import { Brain } from 'lucide-react'
 import ModeSwitcher from './ModeSwitcher'
 
-function Header({ editorMode, onModeChange }) {
+function Header({ mode, onModeChange }) {
+  const subtitles = {
+    game: 'Aprenda xadrez com análise inteligente',
+    bot: 'Desafie o computador',
+    editor: 'Monte posições livremente',
+  }
+
   return (
     <header className="relative z-10 border-b border-white/5 px-6 py-4 flex-shrink-0 backdrop-blur-md bg-slate-950/30">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -13,12 +19,12 @@ function Header({ editorMode, onModeChange }) {
           <div>
             <h1 className="text-lg font-bold tracking-tight text-white leading-none">Chess Coach</h1>
             <p className="text-[11px] font-medium text-slate-400 tracking-wide mt-1">
-              Aprenda xadrez com análise inteligente
+              {subtitles[mode] || subtitles.game}
             </p>
           </div>
         </div>
 
-        <ModeSwitcher editorMode={editorMode} onChange={onModeChange} />
+        <ModeSwitcher mode={mode} onChange={onModeChange} />
       </div>
     </header>
   )

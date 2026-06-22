@@ -1,16 +1,13 @@
 import { useCallback, useRef, useState } from 'react'
 import { createChess, START_FEN, buildDests } from '../utils/chessHelpers'
 
-/**
- * Estado e lógica do Modo Jogo. Cada chamada deste hook cria sua própria
- * instância de Chess — não compartilha nada com o Modo Editor.
- */
 export function useChessGame(initialFen) {
   const chessRef = useRef(createChess(initialFen))
   const [fen, setFen] = useState(chessRef.current.fen())
   const [history, setHistory] = useState([])
   const [lastMove, setLastMove] = useState(null)
   const [pendingPromotion, setPendingPromotion] = useState(null)
+  const [playerColor, setPlayerColor] = useState(null)
 
   const refreshFromChess = useCallback(() => {
     const chess = chessRef.current
@@ -18,67 +15,50 @@ export function useChessGame(initialFen) {
     setHistory(chess.history({ verbose: true }))
   }, [])
 
-  /**
-   * Retorna o motivo do fim de jogo, ou null se o jogo continua.
-   * Detecta: xeque-mate, afogamento, repetição tripla, 50 lances,
-   * material insuficiente.
-   */
   const getGameOverReason = useCallback(() => {
     const chess = chessRef.current
-    
     if (!chess.isGameOver()) return null
-
-    // Xeque-mate
     if (chess.isCheckmate()) return 'checkmate'
-
-    // Afogamento (stalemate)
     if (chess.isStalemate()) return 'stalemate'
-
-    // Repetição tripla
     if (chess.isThreefoldRepetition()) return 'threefold'
-
-    // Regra dos 50 lances
-    if (chess.isInsufficientMaterial()) {
-      // Verifica primeiro se é material insuficiente
-      return 'insufficient'
-    }
-
-    // 50 lances sem captura ou movimento de peão
-    // O chess.js tem isDraw() mas vamos ser específicos
+    if (chess.isInsufficientMaterial()) return 'insufficient'
     const fenParts = chess.fen().split(' ')
     const halfMoves = parseInt(fenParts[4], 10)
     if (halfMoves >= 100) return 'fiftyMoves'
-
-    // Draw genérico (pode ser acordo, etc)
     if (chess.isDraw()) return 'draw'
-
     return 'gameOver'
   }, [])
 
-  const attemptMove = useCallback((from, to) => {
+  const attemptMove = useCallback((from, to, options = {}) => {
     const chess = chessRef.current
     const piece = chess.get(from)
+    
+    // Só verifica cor se não for skipColorCheck (usado pelo bot)
+    if (!options.skipColorCheck && playerColor && piece?.color !== playerColor) {
+      return { illegal: true }
+    }
+
     const isPromotion =
       piece?.type === 'p' &&
       ((piece.color === 'w' && to[1] === '8') || (piece.color === 'b' && to[1] === '1'))
 
-    if (isPromotion) {
+    if (isPromotion && !options.skipColorCheck) {
       setPendingPromotion({ from, to, color: chess.turn() })
       return { needsPromotion: true }
     }
 
     try {
-      const move = chess.move({ from, to, promotion: 'q' })
+      const move = chess.move({ from, to, promotion: options.promotion || 'q' })
       if (move) {
         setLastMove([from, to])
         refreshFromChess()
         return { move }
       }
     } catch {
-      // lance ilegal: ignora silenciosamente
+      // lance ilegal
     }
     return { illegal: true }
-  }, [refreshFromChess])
+  }, [refreshFromChess, playerColor])
 
   const resolvePromotion = useCallback((promotionCode) => {
     if (!pendingPromotion) return null
@@ -123,7 +103,7 @@ export function useChessGame(initialFen) {
       setLastMove(null)
       refreshFromChess()
     } catch {
-      // FEN inválido: ignora
+      // FEN inválido
     }
   }, [refreshFromChess])
 
@@ -134,6 +114,8 @@ export function useChessGame(initialFen) {
     history,
     lastMove,
     pendingPromotion,
+    playerColor,
+    setPlayerColor,
     turn: chess.turn(),
     isGameOver: chess.isGameOver(),
     gameOverReason: getGameOverReason(),

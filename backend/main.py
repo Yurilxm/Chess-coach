@@ -2,13 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from stockfish import Stockfish, StockfishException
+from typing import Optional
 import os
 
 app = FastAPI(title="Chess Coach API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -20,9 +21,24 @@ STOCKFISH_PATH = os.path.join(BASE_DIR, "engine", "stockfish.exe")
 ANALYSIS_DEPTH = 15
 MULTI_PV = 3
 
+# ELO mínimo do Stockfish é 1320
+DIFFICULTY_LEVELS = {
+    "beginner":     {"elo": 1350, "skill": 0,  "depth": 5},
+    "casual":       {"elo": 1500, "skill": 5,  "depth": 8},
+    "intermediate": {"elo": 1800, "skill": 10, "depth": 12},
+    "advanced":     {"elo": 2100, "skill": 15, "depth": 15},
+    "expert":       {"elo": 2500, "skill": 20, "depth": 18},
+    "stockfish":    {"elo": 3000, "skill": 20, "depth": 22},
+}
+
 
 class PositionRequest(BaseModel):
     fen: str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
+
+class PlayRequest(BaseModel):
+    fen: str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    difficulty: str = "intermediate"
 
 
 class AnalysisResponse(BaseModel):
@@ -30,37 +46,39 @@ class AnalysisResponse(BaseModel):
     best_move: str
     evaluation: dict
     top_moves: list
-    lines: list = []  # NOVO: avaliação real de cada uma das N melhores linhas
+    lines: list = []
+
+
+class PlayResponse(BaseModel):
+    fen: str
+    move: str
+    from_square: str
+    to_square: str
+    promotion: Optional[str] = None  # CORRIGIDO: Optional[str]
+
+
+def get_engine(depth=ANALYSIS_DEPTH, multi_pv=MULTI_PV, skill=None, elo=None):
+    """Cria e configura uma instância do Stockfish."""
+    params = {
+        "MultiPV": multi_pv,
+        "Threads": 2,
+        "Hash": 128,
+    }
+    if skill is not None:
+        params["Skill Level"] = skill
+    if elo is not None:
+        params["UCI_Elo"] = elo
+        params["UCI_LimitStrength"] = True
+    
+    engine = Stockfish(path=STOCKFISH_PATH, depth=depth, parameters=params)
+    engine.set_turn_perspective(False)
+    return engine
 
 
 def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int = MULTI_PV):
-    """
-    Usa a biblioteca `stockfish` (já estava no requirements.txt, mas não
-    era usada) em vez de conversar com o processo "na mão" via subprocess.
-    Isso corrige dois problemas reais que existiam antes:
-
-    1) `top_moves` pegava os 3 primeiros lances da MESMA linha principal
-       (ex: e2e4, depois e7e5, depois g1f3 — uma sequência hipotética),
-       e não 3 lances alternativos de verdade pro lance atual. Por isso
-       a "2ª opção" podia ser ilegal na posição exibida. Com MultiPV, o
-       motor calcula N linhas DISTINTAS e independentes, cada uma com
-       sua própria avaliação.
-
-    2) O protocolo UCI cru devolve o "cp" relativo a quem tem a vez de
-       jogar, não relativo às brancas. Sem normalizar isso, quando é a
-       vez das pretas um valor positivo na verdade significa vantagem
-       das PRETAS — mas o frontend sempre interpretou positivo como
-       vantagem das brancas. `set_turn_perspective(False)` corrige isso
-       na origem.
-    """
     engine = None
     try:
-        engine = Stockfish(path=STOCKFISH_PATH, depth=depth, parameters={
-            "MultiPV": multi_pv,
-            "Threads": 2,
-            "Hash": 128,
-        })
-        engine.set_turn_perspective(False)
+        engine = get_engine(depth=depth, multi_pv=multi_pv)
 
         if not engine.is_fen_valid(fen):
             return {
@@ -85,8 +103,6 @@ def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int 
             lines.append({"move": move, "evaluation": evaluation})
 
         if not lines:
-            # Sem lances legais (xeque-mate ou afogamento): get_top_moves
-            # devolve lista vazia nesse caso.
             return {
                 "best_move": None,
                 "evaluation": {"type": "cp", "value": 0},
@@ -118,9 +134,52 @@ def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int 
             "lines": [],
         }
     finally:
-        # __del__ chamaria send_quit_command() sozinho eventualmente, mas
-        # o Python não garante QUANDO isso aconteceria — então fechamos
-        # o processo do motor explicitamente aqui.
+        if engine is not None:
+            try:
+                engine.send_quit_command()
+            except Exception:
+                pass
+
+
+def play_bot_move(fen: str, difficulty: str = "intermediate"):
+    """Obtém o melhor lance do bot para a posição dada."""
+    config = DIFFICULTY_LEVELS.get(difficulty, DIFFICULTY_LEVELS["intermediate"])
+    
+    engine = None
+    try:
+        engine = get_engine(
+            depth=config["depth"],
+            multi_pv=1,
+            skill=config["skill"],
+            elo=config["elo"]
+        )
+
+        if not engine.is_fen_valid(fen):
+            print(f"FEN inválido: {fen}")
+            return None
+
+        engine.set_fen_position(fen)
+        best_move = engine.get_best_move()
+
+        if not best_move or len(best_move) < 4:
+            print(f"Sem lances disponíveis para: {fen}")
+            return None
+
+        from_sq = best_move[:2]
+        to_sq = best_move[2:4]
+        promotion = best_move[4] if len(best_move) > 4 else None
+
+        return {
+            "move": best_move,
+            "from_square": from_sq,
+            "to_square": to_sq,
+            "promotion": promotion,
+        }
+
+    except Exception as e:
+        print(f"Erro ao jogar como bot: {e}")
+        return None
+    finally:
         if engine is not None:
             try:
                 engine.send_quit_command()
@@ -135,7 +194,6 @@ async def root():
 
 @app.post("/analyze", response_model=AnalysisResponse)
 async def analyze_position(request: PositionRequest):
-    # FEN básico válido sempre
     if not request.fen or "/" not in request.fen:
         return {
             "fen": request.fen,
@@ -153,6 +211,28 @@ async def analyze_position(request: PositionRequest):
         "evaluation": result["evaluation"],
         "top_moves": result["top_moves"],
         "lines": result["lines"],
+    }
+
+
+@app.post("/play", response_model=PlayResponse)
+async def play(request: PlayRequest):
+    result = play_bot_move(request.fen, request.difficulty)
+    
+    if result is None:
+        return {
+            "fen": request.fen,
+            "move": "",
+            "from_square": "",
+            "to_square": "",
+            "promotion": None,
+        }
+    
+    return {
+        "fen": request.fen,
+        "move": result["move"],
+        "from_square": result["from_square"],
+        "to_square": result["to_square"],
+        "promotion": result["promotion"],
     }
 
 
