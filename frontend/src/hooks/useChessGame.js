@@ -18,6 +18,43 @@ export function useChessGame(initialFen) {
     setHistory(chess.history({ verbose: true }))
   }, [])
 
+  /**
+   * Retorna o motivo do fim de jogo, ou null se o jogo continua.
+   * Detecta: xeque-mate, afogamento, repetição tripla, 50 lances,
+   * material insuficiente.
+   */
+  const getGameOverReason = useCallback(() => {
+    const chess = chessRef.current
+    
+    if (!chess.isGameOver()) return null
+
+    // Xeque-mate
+    if (chess.isCheckmate()) return 'checkmate'
+
+    // Afogamento (stalemate)
+    if (chess.isStalemate()) return 'stalemate'
+
+    // Repetição tripla
+    if (chess.isThreefoldRepetition()) return 'threefold'
+
+    // Regra dos 50 lances
+    if (chess.isInsufficientMaterial()) {
+      // Verifica primeiro se é material insuficiente
+      return 'insufficient'
+    }
+
+    // 50 lances sem captura ou movimento de peão
+    // O chess.js tem isDraw() mas vamos ser específicos
+    const fenParts = chess.fen().split(' ')
+    const halfMoves = parseInt(fenParts[4], 10)
+    if (halfMoves >= 100) return 'fiftyMoves'
+
+    // Draw genérico (pode ser acordo, etc)
+    if (chess.isDraw()) return 'draw'
+
+    return 'gameOver'
+  }, [])
+
   const attemptMove = useCallback((from, to) => {
     const chess = chessRef.current
     const piece = chess.get(from)
@@ -99,7 +136,13 @@ export function useChessGame(initialFen) {
     pendingPromotion,
     turn: chess.turn(),
     isGameOver: chess.isGameOver(),
+    gameOverReason: getGameOverReason(),
     isCheck: chess.isCheck(),
+    isCheckmate: chess.isCheckmate(),
+    isStalemate: chess.isStalemate(),
+    isThreefoldRepetition: chess.isThreefoldRepetition(),
+    isInsufficientMaterial: chess.isInsufficientMaterial(),
+    halfMoves: parseInt(chess.fen().split(' ')[4], 10) || 0,
     moveCount: Math.ceil(history.length / 2),
     attemptMove,
     resolvePromotion,

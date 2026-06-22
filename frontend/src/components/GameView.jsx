@@ -38,7 +38,7 @@ function GameView({ game, boardWidth = 520, bestMoveUci }) {
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <TurnBadge turn={game.turn} moveLabel={moveLabel} gameOver={game.isGameOver} />
+      <TurnBadge turn={game.turn} moveLabel={moveLabel} gameOver={game.isGameOver} gameOverReason={game.gameOverReason} />
 
       {/* Container do tabuleiro + peças capturadas nos cantos */}
       <div className="relative" style={{ width: boardWidth, paddingBottom: hasCapturedPieces ? '8px' : '0' }}>
