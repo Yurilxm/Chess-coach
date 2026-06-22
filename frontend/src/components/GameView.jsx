@@ -5,7 +5,9 @@ import PromotionModal from './PromotionModal'
 import SecondaryButton from './SecondaryButton'
 import TurnBadge from './TurnBadge'
 import CapturedPieces from './CapturedPieces'
+import OpeningBadge from './OpeningBadge'
 import { getCapturedPieces } from '../utils/chessHelpers'
+import { detectOpening } from '../utils/openings'
 import { RotateCcw, Undo2, RefreshCw } from 'lucide-react'
 
 function GameView({ game, boardWidth = 520, bestMoveUci }) {
@@ -18,6 +20,9 @@ function GameView({ game, boardWidth = 520, bestMoveUci }) {
   ), [bestMoveUci])
 
   const captured = useMemo(() => getCapturedPieces(game.history), [game.history])
+  
+  // Detecta a abertura baseada no histórico
+  const opening = useMemo(() => detectOpening(game.history), [game.history])
 
   function handleAfterMove(orig, dest) {
     game.attemptMove(orig, dest)
@@ -30,8 +35,8 @@ function GameView({ game, boardWidth = 520, bestMoveUci }) {
   const moveLabel = game.moveCount > 0 ? `Lance ${game.moveCount}` : 'Início da partida'
 
   // Peças capturadas: byWhite = pretas comidas pelas brancas, byBlack = brancas comidas pelas pretas
-  const whiteCaptured = captured.byWhite  // peças que as brancas comeram (pretas)
-  const blackCaptured = captured.byBlack  // peças que as pretas comeram (brancas)
+  const whiteCaptured = captured.byWhite
+  const blackCaptured = captured.byBlack
 
   // Verifica se tem peças capturadas para adicionar margem extra
   const hasCapturedPieces = whiteCaptured.length > 0 || blackCaptured.length > 0
@@ -39,6 +44,9 @@ function GameView({ game, boardWidth = 520, bestMoveUci }) {
   return (
     <div className="flex flex-col items-center gap-3">
       <TurnBadge turn={game.turn} moveLabel={moveLabel} gameOver={game.isGameOver} gameOverReason={game.gameOverReason} />
+      
+      {/* Exibe a abertura detectada */}
+      <OpeningBadge opening={opening} />
 
       {/* Container do tabuleiro + peças capturadas nos cantos */}
       <div className="relative" style={{ width: boardWidth, paddingBottom: hasCapturedPieces ? '8px' : '0' }}>

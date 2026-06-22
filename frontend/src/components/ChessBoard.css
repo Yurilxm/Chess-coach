@@ -1,18 +1,26 @@
 /*
-  Aumenta contraste e peso das coordenadas (a-h, 1-8) do Chessground.
-  Obs: o Chessground usa esses nomes de classe ("coords", "coord") desde
-  a v8, mas se a versão instalada renderizar com outra estrutura, abra o
-  devtools no tabuleiro e ajuste o seletor abaixo.
+  Coordenadas do tabuleiro (a-h, 1-8) - visíveis e legíveis.
 */
 .cg-wrap coords {
   font-weight: 700 !important;
-  font-size: 13px !important;
+  font-size: 11px !important;
   letter-spacing: 0.02em;
 }
 
+/* Coordenadas claras nas casas escuras, escuras nas claras */
 .cg-wrap coords coord {
-  opacity: 1 !important;
-  text-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.55),
-    0 0 1px rgba(0, 0, 0, 0.4);
+  opacity: 0.85 !important;
+  text-shadow: 
+    0 0 2px rgba(0, 0, 0, 0.8),
+    0 1px 2px rgba(0, 0, 0, 0.6);
+  color: #e2e8f0 !important;
+}
+
+/* Nas casas claras, deixa a coordenada mais escura */
+.cg-wrap .light coords coord,
+.cg-wrap .white coords coord {
+  color: #475569 !important;
+  text-shadow: 
+    0 0 2px rgba(255, 255, 255, 0.6),
+    0 1px 1px rgba(255, 255, 255, 0.4);
 }

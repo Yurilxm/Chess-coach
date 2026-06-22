@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Brain } from 'lucide-react'
 import Header from './components/Header'
 import GameView from './components/GameView'
@@ -12,8 +12,8 @@ import { useStockfishAnalysis } from './hooks/useStockfishAnalysis'
 
 function App() {
   const [editorMode, setEditorMode] = useState(false)
+  const [selectedMoveIndex, setSelectedMoveIndex] = useState(0)
 
-  // Estados completamente independentes: mover peças em um nunca afeta o outro.
   const game = useChessGame()
   const editor = useChessEditor()
 
@@ -21,12 +21,15 @@ function App() {
 
   const activeFen = editorMode ? editor.fen : game.fen
 
-  // Toda vez que a posição ativa muda (lance, edição ou troca de modo),
-  // a análise anterior deixa de corresponder à posição exibida.
   useEffect(() => {
     clear()
+    setSelectedMoveIndex(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeFen])
+
+  const handleSelectMove = useCallback((index) => {
+    setSelectedMoveIndex(index)
+  }, [])
 
   function handleAnalyze() {
     analyze(activeFen)
@@ -37,16 +40,20 @@ function App() {
     else game.loadFen(fen)
   }
 
+  // Calcula o melhor lance baseado na opção selecionada
+  const selectedBestMove = analysis?.lines?.[selectedMoveIndex]?.move 
+    || analysis?.top_moves?.[selectedMoveIndex] 
+    || analysis?.best_move
+
   return (
     <div className="relative min-h-screen text-white font-sans flex flex-col overflow-x-hidden bg-slate-950">
-      {/* Base: gradiente azul petróleo / roxo — mais claro e com mais profundidade que antes */}
+      {/* Base: gradiente azul petróleo / roxo */}
       <div className="fixed inset-0 -z-20 bg-gradient-to-br from-[#141e3c] via-[#1c2b58] to-[#2a1b52]" />
 
       {/* Grid sutil estilo Linear/Vercel */}
       <div className="fixed inset-0 -z-10 opacity-40 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:56px_56px]" />
 
-      {/* Glows com pulso lento e discreto — incluindo um central, pra iluminar
-          o meio da tela e não deixar só as bordas claras */}
+      {/* Glows com pulso lento e discreto */}
       <div className="fixed -top-40 -left-40 -z-10 w-[600px] h-[600px] rounded-full bg-blue-500/25 blur-[130px] animate-pulse [animation-duration:9s]" />
       <div className="fixed top-1/3 -right-40 -z-10 w-[550px] h-[550px] rounded-full bg-violet-500/20 blur-[130px] animate-pulse [animation-duration:11s] [animation-delay:1.5s]" />
       <div className="fixed bottom-0 left-1/3 -z-10 w-[500px] h-[400px] rounded-full bg-cyan-500/10 blur-[140px] animate-pulse [animation-duration:13s] [animation-delay:3s]" />
@@ -55,17 +62,15 @@ function App() {
       <Header editorMode={editorMode} onModeChange={setEditorMode} />
 
       <main className="relative z-10 flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
-        {/* Painel de vidro: glassmorphism por cima do fundo colorido, deixa
-            as cores "vazarem" suavemente por trás do conteúdo */}
         <div className="relative w-full rounded-[32px] bg-white/[0.035] backdrop-blur-2xl ring-1 ring-white/10 shadow-2xl shadow-black/30 p-5 md:p-8">
           <div className="flex gap-6 justify-center items-start flex-wrap lg:flex-nowrap">
             <div className="flex gap-3 items-stretch">
               <EvalBar evaluation={analysis?.evaluation} orientation="vertical" />
 
               {editorMode ? (
-                <EditorView editor={editor} boardWidth={520} bestMoveUci={analysis?.best_move} />
+                <EditorView editor={editor} boardWidth={520} bestMoveUci={selectedBestMove} />
               ) : (
-                <GameView game={game} boardWidth={520} bestMoveUci={analysis?.best_move} />
+                <GameView game={game} boardWidth={520} bestMoveUci={selectedBestMove} />
               )}
             </div>
 
@@ -79,7 +84,14 @@ function App() {
                 {loading ? 'Analisando...' : 'Analisar posição'}
               </button>
 
-              <AnalysisPanel fen={activeFen} analysis={analysis} loading={loading} error={error} />
+              <AnalysisPanel 
+                fen={activeFen} 
+                analysis={analysis} 
+                loading={loading} 
+                error={error}
+                selected={selectedMoveIndex}
+                onSelect={handleSelectMove}
+              />
 
               <AdvancedTools fen={activeFen} onImportFen={handleImportFen} />
 

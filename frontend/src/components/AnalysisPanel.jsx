@@ -1,33 +1,21 @@
-import { useEffect, useState } from 'react'
 import { Sparkles, Loader2, AlertTriangle, ThumbsUp, ShieldAlert } from 'lucide-react'
 import EvalBar from './EvalBar'
 import { describeUciMove } from '../utils/moveTranslation'
 
 const OPTION_LABELS = ['Melhor lance', 'Segunda opção', 'Terceira opção']
 
-/**
- * Formata a avaliação em centipeões para exibição.
- * Ex: 35 -> "+0.35", -120 -> "-1.20"
- */
 function formatCp(cp) {
   if (cp === 0) return '0.00'
   const sign = cp > 0 ? '+' : ''
   return `${sign}${(cp / 100).toFixed(2)}`
 }
 
-/**
- * Formata avaliação de mate.
- * Ex: 3 -> "Mate em 3", -2 -> "Mate em -2"
- */
 function formatMate(mate) {
   const moves = Math.abs(mate)
   if (mate > 0) return `Mate em ${moves}`
   return `Mate em -${moves}`
 }
 
-/**
- * Traduz a avaliação do motor para texto explicativo.
- */
 function getEvaluationText(evaluation) {
   if (!evaluation) return 'Avaliação indisponível'
 
@@ -47,9 +35,6 @@ function getEvaluationText(evaluation) {
   return cp > 0 ? 'Vantagem decisiva das brancas' : 'Vantagem decisiva das pretas'
 }
 
-/**
- * Gera insight de vantagem baseado na avaliação real do motor.
- */
 function getAdvantageText(evaluation) {
   if (!evaluation) return 'Avaliação indisponível'
   
@@ -66,41 +51,49 @@ function getAdvantageText(evaluation) {
   return `As pretas estão melhores (${formatCp(-cp)})`
 }
 
-/**
- * Gera insight de risco baseado na diferença entre a 1ª e 2ª opção.
- */
-function getRiskText(lines) {
+function getRiskText(lines, selectedIndex) {
   if (!lines || lines.length < 2) return 'Análise de risco indisponível'
 
-  const best = lines[0].evaluation
-  const second = lines[1].evaluation
+  const selected = lines[selectedIndex]
+  const best = lines[0]
+  
+  if (!selected || !best) return 'Análise de risco indisponível'
 
-  // Se tipos diferentes (mate vs cp), risco máximo
-  if (best.type !== second.type) {
-    return 'Atenção: a segunda melhor opção leva a uma situação drasticamente diferente'
+  // Se a opção selecionada é a melhor, compara com a segunda
+  const compareWith = selectedIndex === 0 ? lines[1] : best
+  
+  if (!compareWith) return 'Análise de risco indisponível'
+
+  const selectedEval = selected.evaluation
+  const compareEval = compareWith.evaluation
+
+  if (selectedEval.type !== compareEval.type) {
+    return 'Atenção: esta opção leva a uma situação drasticamente diferente da melhor linha'
   }
 
-  if (best.type === 'mate') {
-    const diff = Math.abs(best.value - second.value)
-    if (diff >= 3) return 'Alerta: a segunda opção atrasa significativamente o mate'
-    return 'Há outras linhas que também levam ao mate'
+  if (selectedEval.type === 'mate') {
+    const diff = selectedEval.value - compareEval.value
+    if (selectedIndex === 0) {
+      return diff <= -3 ? 'Alerta: a segunda opção atrasa significativamente o mate' : 'Há outras linhas que também levam ao mate'
+    }
+    return diff >= 3 ? 'Esta opção é pior que a melhor linha' : 'Esta opção é próxima da melhor linha'
   }
 
-  const diff = Math.abs(best.value - second.value)
-  if (diff > 150) return 'Alerta: a segunda opção é muito inferior. Jogue o melhor lance com precisão!'
-  if (diff > 70) return 'A segunda opção é consideravelmente pior. Prefira o melhor lance'
-  if (diff > 30) return 'Existem alternativas razoáveis, mas o melhor lance é claramente superior'
-  return 'Há várias opções viáveis nesta posição'
+  const diff = selectedEval.value - compareEval.value
+  if (selectedIndex === 0) {
+    if (diff < -150) return 'Alerta: a segunda opção é muito inferior. Jogue o melhor lance com precisão!'
+    if (diff < -70) return 'A segunda opção é consideravelmente pior. Prefira o melhor lance'
+    if (diff < -30) return 'Existem alternativas razoáveis, mas o melhor lance é claramente superior'
+    return 'Há várias opções viáveis nesta posição'
+  }
+  
+  if (diff > 150) return 'Alerta: esta opção é muito inferior à melhor linha'
+  if (diff > 70) return 'Esta opção é consideravelmente pior que a melhor'
+  if (diff > 30) return 'Esta opção é razoável, mas inferior à melhor'
+  return 'Esta opção é quase tão boa quanto a melhor'
 }
 
-function AnalysisPanel({ fen, analysis, loading, error }) {
-  const [selected, setSelected] = useState(0)
-
-  // Sempre que chega uma nova análise, volta a destacar a melhor opção
-  useEffect(() => {
-    setSelected(0)
-  }, [analysis])
-
+function AnalysisPanel({ fen, analysis, loading, error, selected = 0, onSelect }) {
   if (loading) {
     return (
       <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-white/10 p-6 flex flex-col items-center gap-3">
@@ -121,7 +114,6 @@ function AnalysisPanel({ fen, analysis, loading, error }) {
 
   if (!analysis) return null
 
-  // Usa o novo campo `lines` quando disponível, fallback para `top_moves`
   const lines = analysis.lines?.length > 0 
     ? analysis.lines 
     : analysis.top_moves?.map(move => ({ move, evaluation: analysis.evaluation })) || []
@@ -134,7 +126,7 @@ function AnalysisPanel({ fen, analysis, loading, error }) {
   const moveInfo = selectedMove ? describeUciMove(fen, selectedMove) : null
   const evaluationText = selectedEval ? getEvaluationText(selectedEval) : ''
   const advantageText = selectedEval ? getAdvantageText(selectedEval) : ''
-  const riskText = getRiskText(lines)
+  const riskText = getRiskText(lines, selected)
 
   return (
     <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
@@ -144,7 +136,30 @@ function AnalysisPanel({ fen, analysis, loading, error }) {
           Coach Stockfish
         </div>
 
-        <EvalBar evaluation={analysis.evaluation} orientation="horizontal" />
+        {/* Barra de avaliação usa a avaliação da opção SELECIONADA */}
+        <EvalBar evaluation={selectedEval || analysis.evaluation} orientation="horizontal" />
+
+        {/* Texto de avaliação também usa a opção selecionada */}
+        {selectedEval && (
+          <div className="text-center">
+            <span className={`text-sm font-semibold ${
+              selectedEval.type === 'mate' 
+                ? 'text-amber-400' 
+                : selectedEval.value > 0 
+                  ? 'text-white' 
+                  : selectedEval.value < 0 
+                    ? 'text-slate-400' 
+                    : 'text-slate-300'
+            }`}>
+              {selectedEval.type === 'mate' 
+                ? formatMate(selectedEval.value) 
+                : formatCp(selectedEval.value)}
+            </span>
+            <span className="text-xs text-slate-400 block mt-0.5">
+              {evaluationText}
+            </span>
+          </div>
+        )}
 
         {options.length > 0 && (
           <div>
@@ -154,7 +169,6 @@ function AnalysisPanel({ fen, analysis, loading, error }) {
                 const info = describeUciMove(fen, line.move)
                 const isSelected = i === selected
                 
-                // Formata a avaliação para exibição
                 let evalBadge = ''
                 if (line.evaluation?.type === 'mate') {
                   evalBadge = `M${line.evaluation.value}`
@@ -165,7 +179,7 @@ function AnalysisPanel({ fen, analysis, loading, error }) {
                 return (
                   <button
                     key={line.move + i}
-                    onClick={() => setSelected(i)}
+                    onClick={() => onSelect?.(i)}
                     className={`text-left px-3.5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 ${
                       isSelected
                         ? 'bg-emerald-500/10 text-emerald-200 border-emerald-500/30 ring-1 ring-emerald-500/20'
@@ -196,10 +210,8 @@ function AnalysisPanel({ fen, analysis, loading, error }) {
           </div>
         )}
 
-        {/* Card de detalhes do lance selecionado */}
         {selectedMove && (
           <div className="bg-slate-800/60 rounded-xl p-4 space-y-3">
-            {/* Avaliação do motor */}
             {evaluationText && (
               <p className="text-sm text-slate-300 leading-relaxed pb-2 border-b border-white/5">
                 <span className="text-emerald-400 font-medium">Avaliação: </span>
@@ -207,7 +219,6 @@ function AnalysisPanel({ fen, analysis, loading, error }) {
               </p>
             )}
 
-            {/* Descrição do lance */}
             <p className="text-sm text-slate-300 leading-relaxed">
               <span className="text-slate-500">Lance: </span>
               {moveInfo ? moveInfo.text : (
@@ -220,7 +231,6 @@ function AnalysisPanel({ fen, analysis, loading, error }) {
               )}
             </p>
 
-            {/* Insights baseados na avaliação real */}
             <div className="grid grid-cols-1 gap-2 pt-2 border-t border-white/5">
               <div className="flex items-start gap-2">
                 <ThumbsUp className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
