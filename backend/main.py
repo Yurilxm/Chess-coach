@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import subprocess
+from stockfish import Stockfish, StockfishException
 import os
-import time
 
 app = FastAPI(title="Chess Coach API")
 
@@ -18,85 +17,121 @@ app.add_middleware(
 BASE_DIR = os.path.dirname(__file__)
 STOCKFISH_PATH = os.path.join(BASE_DIR, "engine", "stockfish.exe")
 
+ANALYSIS_DEPTH = 15
+MULTI_PV = 3
+
+
 class PositionRequest(BaseModel):
     fen: str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
 
 class AnalysisResponse(BaseModel):
     fen: str
     best_move: str
     evaluation: dict
     top_moves: list
+    lines: list = []  # NOVO: avaliação real de cada uma das N melhores linhas
 
-def analyze_with_stockfish(fen: str, depth: int = 15):
+
+def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int = MULTI_PV):
+    """
+    Usa a biblioteca `stockfish` (já estava no requirements.txt, mas não
+    era usada) em vez de conversar com o processo "na mão" via subprocess.
+    Isso corrige dois problemas reais que existiam antes:
+
+    1) `top_moves` pegava os 3 primeiros lances da MESMA linha principal
+       (ex: e2e4, depois e7e5, depois g1f3 — uma sequência hipotética),
+       e não 3 lances alternativos de verdade pro lance atual. Por isso
+       a "2ª opção" podia ser ilegal na posição exibida. Com MultiPV, o
+       motor calcula N linhas DISTINTAS e independentes, cada uma com
+       sua própria avaliação.
+
+    2) O protocolo UCI cru devolve o "cp" relativo a quem tem a vez de
+       jogar, não relativo às brancas. Sem normalizar isso, quando é a
+       vez das pretas um valor positivo na verdade significa vantagem
+       das PRETAS — mas o frontend sempre interpretou positivo como
+       vantagem das brancas. `set_turn_perspective(False)` corrige isso
+       na origem.
+    """
+    engine = None
     try:
-        stockfish = subprocess.Popen(
-            STOCKFISH_PATH,
-            universal_newlines=True,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
+        engine = Stockfish(path=STOCKFISH_PATH, depth=depth, parameters={
+            "MultiPV": multi_pv,
+            "Threads": 2,
+            "Hash": 128,
+        })
+        engine.set_turn_perspective(False)
 
-        commands = [
-            "uci",
-            "setoption name UCI_AnalyseMode value true",
-            f"position fen {fen}",
-            f"go depth {depth}"
-        ]
+        if not engine.is_fen_valid(fen):
+            return {
+                "best_move": None,
+                "evaluation": {"type": "cp", "value": 0},
+                "top_moves": [],
+                "lines": [],
+            }
 
-        for cmd in commands:
-            stockfish.stdin.write(cmd + "\n")
-            stockfish.stdin.flush()
+        engine.set_fen_position(fen)
+        top = engine.get_top_moves(multi_pv)
 
-        best_move = None
-        evaluation = {"type": "cp", "value": 0}
-        top_moves = []
+        lines = []
+        for entry in top:
+            move = entry.get("Move")
+            if not move:
+                continue
+            if entry.get("Mate") is not None:
+                evaluation = {"type": "mate", "value": entry["Mate"]}
+            else:
+                evaluation = {"type": "cp", "value": entry.get("Centipawn") or 0}
+            lines.append({"move": move, "evaluation": evaluation})
 
-        while True:
-            line = stockfish.stdout.readline().strip()
-            
-            if line.startswith("bestmove"):
-                parts = line.split()
-                best_move = parts[1] if len(parts) > 1 else None
-                break
-            
-            elif line.startswith("info") and "score" in line:
-                if "mate" in line:
-                    idx = line.find("mate")
-                    value = line[idx:].split()[1]
-                    evaluation = {"type": "mate", "value": int(value)}
-                elif "cp" in line:
-                    idx = line.find("cp")
-                    value = line[idx:].split()[1]
-                    evaluation = {"type": "cp", "value": int(value)}
-                
-                # NOVA EXTRAÇÃO DE TOP MOVES
-                if "pv" in line:
-                    parts = line.split(" pv ")
-                    if len(parts) > 1:
-                        moves = parts[1].split()[:3]
-                        if f"depth {depth}" in line:
-                            top_moves = moves
+        if not lines:
+            # Sem lances legais (xeque-mate ou afogamento): get_top_moves
+            # devolve lista vazia nesse caso.
+            return {
+                "best_move": None,
+                "evaluation": {"type": "cp", "value": 0},
+                "top_moves": [],
+                "lines": [],
+            }
 
-        stockfish.terminate()
-        
         return {
-            "best_move": best_move,
-            "evaluation": evaluation,
-            "top_moves": top_moves if top_moves else [best_move] if best_move else []
+            "best_move": lines[0]["move"],
+            "evaluation": lines[0]["evaluation"],
+            "top_moves": [line["move"] for line in lines],
+            "lines": lines,
         }
 
-    except Exception as e:
-        print(f"Erro Stockfish: {e}")
+    except StockfishException as e:
+        print(f"Stockfish travou com esta posição: {e}")
         return {
             "best_move": None,
             "evaluation": {"type": "cp", "value": 0},
-            "top_moves": []
+            "top_moves": [],
+            "lines": [],
         }
+    except Exception as e:
+        print(f"Erro inesperado na análise: {e}")
+        return {
+            "best_move": None,
+            "evaluation": {"type": "cp", "value": 0},
+            "top_moves": [],
+            "lines": [],
+        }
+    finally:
+        # __del__ chamaria send_quit_command() sozinho eventualmente, mas
+        # o Python não garante QUANDO isso aconteceria — então fechamos
+        # o processo do motor explicitamente aqui.
+        if engine is not None:
+            try:
+                engine.send_quit_command()
+            except Exception:
+                pass
+
 
 @app.get("/")
 async def root():
     return {"message": "Chess Coach API", "status": "running"}
+
 
 @app.post("/analyze", response_model=AnalysisResponse)
 async def analyze_position(request: PositionRequest):
@@ -106,17 +141,20 @@ async def analyze_position(request: PositionRequest):
             "fen": request.fen,
             "best_move": "",
             "evaluation": {"type": "cp", "value": 0},
-            "top_moves": []
+            "top_moves": [],
+            "lines": [],
         }
-    
+
     result = analyze_with_stockfish(request.fen)
-    
+
     return {
         "fen": request.fen,
         "best_move": result["best_move"] or "",
         "evaluation": result["evaluation"],
-        "top_moves": result["top_moves"]
+        "top_moves": result["top_moves"],
+        "lines": result["lines"],
     }
+
 
 @app.get("/health")
 async def health_check():
