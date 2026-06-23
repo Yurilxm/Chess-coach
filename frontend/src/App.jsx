@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import { Brain, User, Play, RefreshCw } from 'lucide-react'
+import { Brain, Play, RefreshCw } from 'lucide-react'
 import Header from './components/Header'
 import GameView from './components/GameView'
 import EditorView from './components/EditorView'
@@ -11,6 +11,7 @@ import { useChessGame } from './hooks/useChessGame'
 import { useChessEditor } from './hooks/useChessEditor'
 import { useStockfishAnalysis } from './hooks/useStockfishAnalysis'
 import { useBotPlayer } from './hooks/useBotPlayer'
+import { useCoach } from './hooks/useCoach'
 
 function App() {
   const [mode, setMode] = useState('game')
@@ -22,13 +23,15 @@ function App() {
   const bot = useBotPlayer()
 
   const { analysis, loading, error, analyze, clear } = useStockfishAnalysis()
+  const { coachExplanation, coachLoading, explainMove, clearCoach } = useCoach()
 
   const activeFen = mode === 'editor' ? editor.fen : game.fen
 
   useEffect(() => {
     clear()
+    clearCoach()
     setSelectedMoveIndex(0)
-  }, [activeFen, clear])
+  }, [activeFen, clear, clearCoach])
 
   // Reseta ao entrar no modo Bot
   useEffect(() => {
@@ -46,7 +49,6 @@ function App() {
   function handleStartBotGame() {
     if (!game.playerColor) return
     setBotGameStarted(true)
-    // Se escolheu pretas, o bot (brancas) joga primeiro
     if (game.playerColor === 'b') {
       const timer = setTimeout(() => {
         bot.requestMove(game.fen).then((result) => {
@@ -71,7 +73,6 @@ function App() {
     
     const botColor = game.playerColor === 'w' ? 'b' : 'w'
     
-    // Só joga se for a vez do bot
     if (game.turn !== botColor) return
     if (bot.thinking) return
 
@@ -89,11 +90,20 @@ function App() {
     return () => clearTimeout(timer)
   }, [game.fen, game.turn, game.isGameOver, game.playerColor, mode, botGameStarted])
 
+  // Quando seleciona um lance, chama o coach automaticamente
   const handleSelectMove = useCallback((index) => {
     setSelectedMoveIndex(index)
-  }, [])
+    
+    // Pega o lance selecionado e pede explicação para a IA
+    const lines = analysis?.lines || []
+    const selectedLine = lines[index]
+    if (selectedLine?.move && activeFen) {
+      explainMove(activeFen, selectedLine.move, selectedLine.evaluation)
+    }
+  }, [analysis, activeFen, explainMove])
 
   function handleAnalyze() {
+    clearCoach()
     analyze(activeFen)
   }
 
@@ -149,7 +159,6 @@ function App() {
               {/* Modo Bot: configuração antes de começar */}
               {isBotMode && !botGameStarted && (
                 <>
-                  {/* Seletor de cor */}
                   <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-white/10 p-4">
                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
                       Escolha sua cor
@@ -180,14 +189,11 @@ function App() {
                     </div>
                   </div>
 
-                  {/* Dificuldade */}
                   <BotDifficultySelector
                     difficulty={bot.difficulty}
                     onChange={bot.setDifficulty}
-                    presets={bot.difficultyPresets}
                   />
 
-                  {/* Botão Iniciar */}
                   <button
                     onClick={handleStartBotGame}
                     disabled={!game.playerColor}
@@ -199,7 +205,7 @@ function App() {
                 </>
               )}
 
-              {/* Modo Bot: durante o jogo, mostra botão Novo Jogo */}
+              {/* Modo Bot: durante o jogo */}
               {isBotMode && botGameStarted && (
                 <button
                   onClick={handleBotReset}
@@ -210,7 +216,6 @@ function App() {
                 </button>
               )}
 
-              {/* Bot pensando */}
               {isBotMode && bot.thinking && (
                 <div className="bg-cyan-500/10 backdrop-blur-sm rounded-xl border border-cyan-500/20 p-3 flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
@@ -234,6 +239,8 @@ function App() {
                 error={error}
                 selected={selectedMoveIndex}
                 onSelect={handleSelectMove}
+                coachExplanation={coachExplanation}
+                coachLoading={coachLoading}
               />
 
               <AdvancedTools fen={activeFen} onImportFen={handleImportFen} />

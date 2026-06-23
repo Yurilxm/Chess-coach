@@ -5,6 +5,64 @@ from stockfish import Stockfish, StockfishException
 from typing import Optional, List
 import os
 import chess
+from google import genai
+
+# Configurar Gemini
+GEMINI_API_KEY = "SUA_CHAVE_DE_API_DO_GEMINI_AQUI"  # Substitua pela sua chave de API do Gemini
+gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+
+
+def get_coach_explanation(fen: str, move: str, evaluation: dict = None):
+    """Usa Gemini para explicar um lance de xadrez."""
+    try:
+        board = chess.Board(fen) if chess.Board(fen).is_valid() else None
+        
+        move_san = move
+        if board:
+            try:
+                chess_move = chess.Move.from_uci(move)
+                if chess_move in board.legal_moves:
+                    move_san = board.san(chess_move)
+            except:
+                pass
+        
+        eval_text = ""
+        if evaluation:
+            if evaluation.get("type") == "mate":
+                eval_text = f"Mate em {evaluation['value']} lances"
+            else:
+                cp = evaluation.get("value", 0)
+                if cp > 0:
+                    eval_text = f"Vantagem das brancas: +{cp/100:.2f}"
+                elif cp < 0:
+                    eval_text = f"Vantagem das pretas: {cp/100:.2f}"
+                else:
+                    eval_text = "Posição equilibrada"
+        
+        prompt = f"""Você é um coach de xadrez experiente. Explique o lance {move_san} (UCI: {move}) na posição atual.
+
+Posição FEN: {fen}
+Avaliação do motor: {eval_text}
+
+Explique em português, de forma clara e educativa:
+1. Qual o objetivo estratégico deste lance
+2. Que peças são desenvolvidas ou ameaçadas
+3. Qual o plano por trás deste lance
+4. Pontos de atenção (riscos ou oportunidades)
+
+Seja conciso (3-5 frases). Use termos de xadrez mas explique-os brevemente.
+Não use markdown, apenas texto puro."""
+
+        response = gemini_client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt,
+        )
+        
+        return response.text.strip()
+    
+    except Exception as e:
+        print(f"Erro no Gemini: {e}")
+        return None
 
 app = FastAPI(title="Chess Coach API")
 
@@ -69,6 +127,29 @@ class PlayResponse(BaseModel):
     from_square: str
     to_square: str
     promotion: Optional[str] = None
+
+class CoachRequest(BaseModel):
+    fen: str
+    move: str
+    evaluation: Optional[dict] = None
+
+
+class CoachResponse(BaseModel):
+    explanation: str
+    loading: bool = False
+
+
+@app.post("/coach", response_model=CoachResponse)
+async def coach_explain(request: CoachRequest):
+    if not request.fen or not request.move:
+        return {"explanation": "Posição ou lance inválido.", "loading": False}
+    
+    explanation = get_coach_explanation(request.fen, request.move, request.evaluation)
+    
+    if explanation:
+        return {"explanation": explanation, "loading": False}
+    else:
+        return {"explanation": "Não foi possível gerar a explicação neste momento.", "loading": False}
 
 
 def get_engine(depth=ANALYSIS_DEPTH, multi_pv=MULTI_PV, skill=None):

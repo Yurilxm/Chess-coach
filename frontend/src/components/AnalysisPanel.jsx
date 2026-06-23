@@ -18,17 +18,14 @@ function formatMate(mate) {
 
 function getEvaluationText(evaluation) {
   if (!evaluation) return 'Avaliação indisponível'
-
   if (evaluation.type === 'mate') {
     const mateIn = evaluation.value
     if (mateIn > 0) return `Vantagem decisiva — mate em ${mateIn} lances`
     if (mateIn < 0) return `Desvantagem decisiva — sofre mate em ${Math.abs(mateIn)} lances`
     return 'Posição de mate'
   }
-
   const cp = evaluation.value
   const abs = Math.abs(cp)
-  
   if (abs < 30) return 'Posição equilibrada'
   if (abs < 70) return cp > 0 ? 'Ligeira vantagem das brancas' : 'Ligeira vantagem das pretas'
   if (abs < 150) return cp > 0 ? 'Vantagem clara das brancas' : 'Vantagem clara das pretas'
@@ -37,14 +34,12 @@ function getEvaluationText(evaluation) {
 
 function getAdvantageText(evaluation) {
   if (!evaluation) return 'Avaliação indisponível'
-  
   if (evaluation.type === 'mate') {
     const mateIn = evaluation.value
     if (mateIn > 0) return `As brancas têm mate forçado em ${mateIn} lances`
     if (mateIn < 0) return `As pretas têm mate forçado em ${Math.abs(mateIn)} lances`
     return 'Posição de mate'
   }
-
   const cp = evaluation.value
   if (cp === 0) return 'A posição está completamente equilibrada'
   if (cp > 0) return `As brancas estão melhores (${formatCp(cp)})`
@@ -53,24 +48,16 @@ function getAdvantageText(evaluation) {
 
 function getRiskText(lines, selectedIndex) {
   if (!lines || lines.length < 2) return 'Análise de risco indisponível'
-
   const selected = lines[selectedIndex]
   const best = lines[0]
-  
   if (!selected || !best) return 'Análise de risco indisponível'
-
-  // Se a opção selecionada é a melhor, compara com a segunda
   const compareWith = selectedIndex === 0 ? lines[1] : best
-  
   if (!compareWith) return 'Análise de risco indisponível'
-
   const selectedEval = selected.evaluation
   const compareEval = compareWith.evaluation
-
   if (selectedEval.type !== compareEval.type) {
     return 'Atenção: esta opção leva a uma situação drasticamente diferente da melhor linha'
   }
-
   if (selectedEval.type === 'mate') {
     const diff = selectedEval.value - compareEval.value
     if (selectedIndex === 0) {
@@ -78,7 +65,6 @@ function getRiskText(lines, selectedIndex) {
     }
     return diff >= 3 ? 'Esta opção é pior que a melhor linha' : 'Esta opção é próxima da melhor linha'
   }
-
   const diff = selectedEval.value - compareEval.value
   if (selectedIndex === 0) {
     if (diff < -150) return 'Alerta: a segunda opção é muito inferior. Jogue o melhor lance com precisão!'
@@ -86,14 +72,13 @@ function getRiskText(lines, selectedIndex) {
     if (diff < -30) return 'Existem alternativas razoáveis, mas o melhor lance é claramente superior'
     return 'Há várias opções viáveis nesta posição'
   }
-  
   if (diff > 150) return 'Alerta: esta opção é muito inferior à melhor linha'
   if (diff > 70) return 'Esta opção é consideravelmente pior que a melhor'
   if (diff > 30) return 'Esta opção é razoável, mas inferior à melhor'
   return 'Esta opção é quase tão boa quanto a melhor'
 }
 
-function AnalysisPanel({ fen, analysis, loading, error, selected = 0, onSelect }) {
+function AnalysisPanel({ fen, analysis, loading, error, selected = 0, onSelect, coachExplanation, coachLoading }) {
   if (loading) {
     return (
       <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-white/10 p-6 flex flex-col items-center gap-3">
@@ -136,10 +121,8 @@ function AnalysisPanel({ fen, analysis, loading, error, selected = 0, onSelect }
           Coach Stockfish
         </div>
 
-        {/* Barra de avaliação usa a avaliação da opção SELECIONADA */}
         <EvalBar evaluation={selectedEval || analysis.evaluation} orientation="horizontal" />
 
-        {/* Texto de avaliação também usa a opção selecionada */}
         {selectedEval && (
           <div className="text-center">
             <span className={`text-sm font-semibold ${
@@ -168,14 +151,12 @@ function AnalysisPanel({ fen, analysis, loading, error, selected = 0, onSelect }
               {options.map((line, i) => {
                 const info = describeUciMove(fen, line.move)
                 const isSelected = i === selected
-                
                 let evalBadge = ''
                 if (line.evaluation?.type === 'mate') {
                   evalBadge = `M${line.evaluation.value}`
                 } else if (line.evaluation?.type === 'cp') {
                   evalBadge = formatCp(line.evaluation.value)
                 }
-
                 return (
                   <button
                     key={line.move + i}
@@ -192,9 +173,7 @@ function AnalysisPanel({ fen, analysis, loading, error, selected = 0, onSelect }
                       </span>
                       {evalBadge && (
                         <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
-                          isSelected 
-                            ? 'bg-emerald-500/20 text-emerald-300' 
-                            : 'bg-white/5 text-slate-500'
+                          isSelected ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/5 text-slate-500'
                         }`}>
                           {evalBadge}
                         </span>
@@ -224,29 +203,44 @@ function AnalysisPanel({ fen, analysis, loading, error, selected = 0, onSelect }
               {moveInfo ? moveInfo.text : (
                 <>
                   <span className="font-mono text-slate-400">{selectedMove}</span>
-                  <span className="block text-xs text-slate-500 mt-1">
-                    Notação UCI do motor
-                  </span>
+                  <span className="block text-xs text-slate-500 mt-1">Notação UCI do motor</span>
                 </>
               )}
             </p>
 
-            <div className="grid grid-cols-1 gap-2 pt-2 border-t border-white/5">
-              <div className="flex items-start gap-2">
-                <ThumbsUp className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  <span className="text-slate-300 font-medium">Vantagem: </span>
-                  {advantageText}
-                </p>
+            {/* Explicação da IA ou Fallback */}
+            {coachLoading ? (
+              <div className="flex items-center gap-2 py-3">
+                <Loader2 className="w-4 h-4 text-violet-400 animate-spin" />
+                <span className="text-xs text-slate-400">Coach analisando o lance...</span>
               </div>
-              <div className="flex items-start gap-2">
-                <ShieldAlert className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  <span className="text-slate-300 font-medium">Risco: </span>
-                  {riskText}
-                </p>
+            ) : coachExplanation ? (
+              <div className="bg-violet-500/5 rounded-xl p-3 border border-violet-500/10">
+                <div className="flex items-start gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-violet-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {coachExplanation}
+                  </p>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-2 pt-2 border-t border-white/5">
+                <div className="flex items-start gap-2">
+                  <ThumbsUp className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    <span className="text-slate-300 font-medium">Vantagem: </span>
+                    {advantageText}
+                  </p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ShieldAlert className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    <span className="text-slate-300 font-medium">Risco: </span>
+                    {riskText}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
