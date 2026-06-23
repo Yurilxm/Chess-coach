@@ -2,22 +2,30 @@ import { useCallback, useRef, useState } from 'react'
 
 const API_URL = 'http://localhost:8000/play'
 
-const DIFFICULTY_PRESETS = {
-  beginner:     { label: 'Iniciante (1350)',   value: 'beginner' },
-  casual:       { label: 'Casual (1500)',      value: 'casual' },
-  intermediate: { label: 'Intermediário (1800)', value: 'intermediate' },
-  advanced:     { label: 'Avançado (2100)',     value: 'advanced' },
-  expert:       { label: 'Especialista (2500)', value: 'expert' },
-  stockfish:    { label: 'Stockfish (3000)',    value: 'stockfish' },
+export const DIFFICULTY_LEVELS = {
+  200:  { name: 'Primeiros passos',  desc: 'Lances aleatórios. Ideal para aprender.' },
+  400:  { name: 'Iniciante',          desc: 'Lances básicos, sem cálculo profundo.' },
+  600:  { name: 'Aprendiz',           desc: 'Captura peças desprotegidas.' },
+  800:  { name: 'Praticante',         desc: 'Controla o centro e desenvolve peças.' },
+  1000: { name: 'Intermediário',      desc: 'Calcula táticas simples e pune erros.' },
+  1200: { name: 'Competidor',         desc: 'Boa visão tática. Aproveita garfos.' },
+  1400: { name: 'Avançado',           desc: 'Sólido estrategicamente.' },
+  1600: { name: 'Especialista',       desc: 'Calcula variantes longas.' },
+  1800: { name: 'Mestre',             desc: 'Explora fraquezas mínimas.' },
+  2000: { name: 'Mestre Elite',       desc: 'Força de clube. Quase sem erros.' },
+  2200: { name: 'Desafiante',         desc: 'Nível de campeonato.' },
+  2400: { name: 'Grão-Mestre',        desc: 'Força de torneio internacional.' },
+  2600: { name: 'Lenda',              desc: 'Nível de elite mundial.' },
+  3000: { name: 'Stockfish Máximo',   desc: 'Força total. Desafio definitivo.' },
 }
 
 export function useBotPlayer() {
-  const [difficulty, setDifficulty] = useState('intermediate')
+  const [difficulty, setDifficulty] = useState(1000)
   const [thinking, setThinking] = useState(false)
   const thinkingRef = useRef(false)
 
   const requestMove = useCallback(async (fen) => {
-    if (thinkingRef.current) return null // Evita múltiplas chamadas
+    if (thinkingRef.current) return null
     thinkingRef.current = true
     setThinking(true)
     
@@ -44,6 +52,5 @@ export function useBotPlayer() {
     setDifficulty,
     thinking,
     requestMove,
-    difficultyPresets: DIFFICULTY_PRESETS,
   }
 }

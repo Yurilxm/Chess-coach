@@ -2,8 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from stockfish import Stockfish, StockfishException
-from typing import Optional
+from typing import Optional, List
 import os
+import chess
 
 app = FastAPI(title="Chess Coach API")
 
@@ -18,27 +19,39 @@ app.add_middleware(
 BASE_DIR = os.path.dirname(__file__)
 STOCKFISH_PATH = os.path.join(BASE_DIR, "engine", "stockfish.exe")
 
-ANALYSIS_DEPTH = 15
+ANALYSIS_DEPTH = 18
 MULTI_PV = 3
 
-# ELO mínimo do Stockfish é 1320
+# Níveis do Chess Coach (rating interno, não é ELO real do Stockfish)
+# Usamos apenas Skill Level + Depth para progressão educativa
 DIFFICULTY_LEVELS = {
-    "beginner":     {"elo": 1350, "skill": 0,  "depth": 5},
-    "casual":       {"elo": 1500, "skill": 5,  "depth": 8},
-    "intermediate": {"elo": 1800, "skill": 10, "depth": 12},
-    "advanced":     {"elo": 2100, "skill": 15, "depth": 15},
-    "expert":       {"elo": 2500, "skill": 20, "depth": 18},
-    "stockfish":    {"elo": 3000, "skill": 20, "depth": 22},
+    200:  {"skill": 0,  "depth": 1,  "name": "Primeiros passos",  "desc": "O computador joga lances aleatórios. Ideal para aprender os movimentos."},
+    400:  {"skill": 0,  "depth": 2,  "name": "Iniciante",          "desc": "Lances básicos, sem cálculo profundo. Perfeito para praticar."},
+    600:  {"skill": 1,  "depth": 2,  "name": "Aprendiz",           "desc": "Começa a capturar peças desprotegidas. Cuidado com os descuidos."},
+    800:  {"skill": 2,  "depth": 3,  "name": "Praticante",         "desc": "Já controla o centro e desenvolve as peças corretamente."},
+    1000: {"skill": 4,  "depth": 4,  "name": "Intermediário",      "desc": "Calcula algumas táticas simples e pune erros graves."},
+    1200: {"skill": 6,  "depth": 5,  "name": "Competidor",         "desc": "Boa visão tática. Aproveita cravações e garfos."},
+    1400: {"skill": 8,  "depth": 6,  "name": "Avançado",           "desc": "Sólido estrategicamente. Difícil de surpreender."},
+    1600: {"skill": 10, "depth": 8,  "name": "Especialista",       "desc": "Calcula variantes longas e tem bom jogo posicional."},
+    1800: {"skill": 12, "depth": 10, "name": "Mestre",             "desc": "Jogo de alto nível. Explora fraquezas mínimas."},
+    2000: {"skill": 15, "depth": 12, "name": "Mestre Elite",       "desc": "Força de clube. Praticamente não comete erros."},
+    2200: {"skill": 18, "depth": 15, "name": "Desafiante",         "desc": "Nível de campeonato. Cada lance é calculado."},
+    2400: {"skill": 20, "depth": 18, "name": "Grão-Mestre",        "desc": "Força de torneio internacional."},
+    2600: {"skill": 20, "depth": 20, "name": "Lenda",              "desc": "Nível de elite mundial. Quase imbatível."},
+    3000: {"skill": 20, "depth": 24, "name": "Stockfish Máximo",   "desc": "Força total do motor. O desafio definitivo."},
 }
+
+DEFAULT_DIFFICULTY = 1000
 
 
 class PositionRequest(BaseModel):
     fen: str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    history: Optional[List[str]] = None
 
 
 class PlayRequest(BaseModel):
     fen: str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-    difficulty: str = "intermediate"
+    difficulty: int = DEFAULT_DIFFICULTY
 
 
 class AnalysisResponse(BaseModel):
@@ -47,6 +60,7 @@ class AnalysisResponse(BaseModel):
     evaluation: dict
     top_moves: list
     lines: list = []
+    warnings: list = []
 
 
 class PlayResponse(BaseModel):
@@ -54,38 +68,123 @@ class PlayResponse(BaseModel):
     move: str
     from_square: str
     to_square: str
-    promotion: Optional[str] = None  # CORRIGIDO: Optional[str]
+    promotion: Optional[str] = None
 
 
-def get_engine(depth=ANALYSIS_DEPTH, multi_pv=MULTI_PV, skill=None, elo=None):
-    """Cria e configura uma instância do Stockfish."""
+def get_engine(depth=ANALYSIS_DEPTH, multi_pv=MULTI_PV, skill=None):
+    """Cria e configura uma instância do Stockfish. Usa apenas Skill Level, sem UCI_Elo."""
     params = {
         "MultiPV": multi_pv,
         "Threads": 2,
-        "Hash": 128,
+        "Hash": 256,
     }
     if skill is not None:
         params["Skill Level"] = skill
-    if elo is not None:
-        params["UCI_Elo"] = elo
-        params["UCI_LimitStrength"] = True
     
     engine = Stockfish(path=STOCKFISH_PATH, depth=depth, parameters=params)
     engine.set_turn_perspective(False)
     return engine
 
 
-def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int = MULTI_PV):
-    engine = None
+def get_position_info(fen: str):
+    """Analisa a posição usando python-chess."""
     try:
+        board = chess.Board(fen)
+        return {
+            "is_check": board.is_check(),
+            "is_checkmate": board.is_checkmate(),
+            "is_stalemate": board.is_stalemate(),
+            "is_insufficient_material": board.is_insufficient_material(),
+            "is_game_over": board.is_game_over(),
+            "fullmove_number": board.fullmove_number,
+            "halfmove_clock": board.halfmove_clock,
+            "turn": "white" if board.turn == chess.WHITE else "black",
+            "can_claim_threefold": board.can_claim_threefold_repetition(),
+            "can_claim_fifty_moves": board.can_claim_fifty_moves(),
+        }
+    except:
+        return None
+
+
+def check_repetition_danger(fen: str, history_fens: list):
+    """Verifica se há perigo de repetição tripla."""
+    if not history_fens or len(history_fens) < 4:
+        return []
+    
+    try:
+        board = chess.Board(fen)
+        current_fen_short = " ".join(fen.split(" ")[:4])
+        
+        count = 1
+        for hist_fen in history_fens:
+            hist_short = " ".join(hist_fen.split(" ")[:4])
+            if hist_short == current_fen_short:
+                count += 1
+        
+        if count >= 2:
+            dangerous_moves = []
+            for move in board.legal_moves:
+                board.push(move)
+                future_fen = " ".join(board.fen().split(" ")[:4])
+                future_count = 1
+                for hist_fen in history_fens:
+                    hist_short = " ".join(hist_fen.split(" ")[:4])
+                    if hist_short == future_fen:
+                        future_count += 1
+                if future_count >= 3:
+                    dangerous_moves.append(move.uci())
+                board.pop()
+            return dangerous_moves
+        
+        return []
+    except:
+        return []
+
+
+def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int = MULTI_PV, history_fens: list = None):
+    """Análise profissional com detecção de repetição e avisos."""
+    engine = None
+    warnings = []
+    
+    try:
+        pos_info = get_position_info(fen)
+        
+        if pos_info:
+            if pos_info["is_checkmate"]:
+                return {
+                    "best_move": None, "evaluation": {"type": "mate", "value": 0},
+                    "top_moves": [], "lines": [],
+                    "warnings": ["Xeque-mate! A partida terminou."],
+                }
+            if pos_info["is_stalemate"]:
+                return {
+                    "best_move": None, "evaluation": {"type": "cp", "value": 0},
+                    "top_moves": [], "lines": [],
+                    "warnings": ["Empate por afogamento (stalemate)."],
+                }
+            if pos_info["is_insufficient_material"]:
+                return {
+                    "best_move": None, "evaluation": {"type": "cp", "value": 0},
+                    "top_moves": [], "lines": [],
+                    "warnings": ["Empate por material insuficiente."],
+                }
+            if pos_info["can_claim_fifty_moves"]:
+                warnings.append("Regra dos 50 lances: empate disponível.")
+            if pos_info["can_claim_threefold"]:
+                warnings.append("Repetição tripla: empate disponível.")
+        
+        dangerous_moves = []
+        if history_fens:
+            dangerous_moves = check_repetition_danger(fen, history_fens)
+            if dangerous_moves:
+                warnings.append("Atenção: alguns lances podem levar a empate por repetição.")
+        
         engine = get_engine(depth=depth, multi_pv=multi_pv)
 
         if not engine.is_fen_valid(fen):
             return {
-                "best_move": None,
-                "evaluation": {"type": "cp", "value": 0},
-                "top_moves": [],
-                "lines": [],
+                "best_move": None, "evaluation": {"type": "cp", "value": 0},
+                "top_moves": [], "lines": [], "warnings": ["FEN inválido."],
             }
 
         engine.set_fen_position(fen)
@@ -96,43 +195,48 @@ def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int 
             move = entry.get("Move")
             if not move:
                 continue
+            
+            is_dangerous = move in dangerous_moves
+            
             if entry.get("Mate") is not None:
                 evaluation = {"type": "mate", "value": entry["Mate"]}
             else:
-                evaluation = {"type": "cp", "value": entry.get("Centipawn") or 0}
-            lines.append({"move": move, "evaluation": evaluation})
+                cp_value = entry.get("Centipawn") or 0
+                if is_dangerous and cp_value > -50:
+                    cp_value = max(cp_value - 80, -50)
+                evaluation = {"type": "cp", "value": cp_value}
+            
+            lines.append({
+                "move": move,
+                "evaluation": evaluation,
+                "dangerous": is_dangerous,
+            })
 
         if not lines:
             return {
-                "best_move": None,
-                "evaluation": {"type": "cp", "value": 0},
-                "top_moves": [],
-                "lines": [],
+                "best_move": None, "evaluation": {"type": "cp", "value": 0},
+                "top_moves": [], "lines": [],
+                "warnings": warnings + ["Nenhum lance legal disponível."],
             }
 
+        safe_lines = [l for l in lines if not l.get("dangerous")]
+        dangerous_lines = [l for l in lines if l.get("dangerous")]
+        sorted_lines = safe_lines + dangerous_lines
+        
         return {
-            "best_move": lines[0]["move"],
-            "evaluation": lines[0]["evaluation"],
-            "top_moves": [line["move"] for line in lines],
-            "lines": lines,
+            "best_move": sorted_lines[0]["move"],
+            "evaluation": sorted_lines[0]["evaluation"],
+            "top_moves": [line["move"] for line in sorted_lines],
+            "lines": [{"move": l["move"], "evaluation": l["evaluation"]} for l in sorted_lines],
+            "warnings": warnings,
         }
 
     except StockfishException as e:
-        print(f"Stockfish travou com esta posição: {e}")
-        return {
-            "best_move": None,
-            "evaluation": {"type": "cp", "value": 0},
-            "top_moves": [],
-            "lines": [],
-        }
+        print(f"Stockfish travou: {e}")
+        return {"best_move": None, "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": [str(e)]}
     except Exception as e:
-        print(f"Erro inesperado na análise: {e}")
-        return {
-            "best_move": None,
-            "evaluation": {"type": "cp", "value": 0},
-            "top_moves": [],
-            "lines": [],
-        }
+        print(f"Erro inesperado: {e}")
+        return {"best_move": None, "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": [str(e)]}
     finally:
         if engine is not None:
             try:
@@ -141,39 +245,28 @@ def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int 
                 pass
 
 
-def play_bot_move(fen: str, difficulty: str = "intermediate"):
-    """Obtém o melhor lance do bot para a posição dada."""
-    config = DIFFICULTY_LEVELS.get(difficulty, DIFFICULTY_LEVELS["intermediate"])
+def play_bot_move(fen: str, difficulty: int = DEFAULT_DIFFICULTY):
+    """Obtém o melhor lance do bot baseado na dificuldade."""
+    config = DIFFICULTY_LEVELS.get(difficulty, DIFFICULTY_LEVELS[DEFAULT_DIFFICULTY])
     
     engine = None
     try:
-        engine = get_engine(
-            depth=config["depth"],
-            multi_pv=1,
-            skill=config["skill"],
-            elo=config["elo"]
-        )
+        engine = get_engine(depth=config["depth"], multi_pv=1, skill=config["skill"])
 
         if not engine.is_fen_valid(fen):
-            print(f"FEN inválido: {fen}")
             return None
 
         engine.set_fen_position(fen)
         best_move = engine.get_best_move()
 
         if not best_move or len(best_move) < 4:
-            print(f"Sem lances disponíveis para: {fen}")
             return None
-
-        from_sq = best_move[:2]
-        to_sq = best_move[2:4]
-        promotion = best_move[4] if len(best_move) > 4 else None
 
         return {
             "move": best_move,
-            "from_square": from_sq,
-            "to_square": to_sq,
-            "promotion": promotion,
+            "from_square": best_move[:2],
+            "to_square": best_move[2:4],
+            "promotion": best_move[4] if len(best_move) > 4 else None,
         }
 
     except Exception as e:
@@ -189,21 +282,15 @@ def play_bot_move(fen: str, difficulty: str = "intermediate"):
 
 @app.get("/")
 async def root():
-    return {"message": "Chess Coach API", "status": "running"}
+    return {"message": "Chess Coach API", "status": "running", "version": "2.0"}
 
 
 @app.post("/analyze", response_model=AnalysisResponse)
 async def analyze_position(request: PositionRequest):
     if not request.fen or "/" not in request.fen:
-        return {
-            "fen": request.fen,
-            "best_move": "",
-            "evaluation": {"type": "cp", "value": 0},
-            "top_moves": [],
-            "lines": [],
-        }
+        return {"fen": request.fen, "best_move": "", "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": ["FEN inválido."]}
 
-    result = analyze_with_stockfish(request.fen)
+    result = analyze_with_stockfish(request.fen, history_fens=request.history)
 
     return {
         "fen": request.fen,
@@ -211,6 +298,7 @@ async def analyze_position(request: PositionRequest):
         "evaluation": result["evaluation"],
         "top_moves": result["top_moves"],
         "lines": result["lines"],
+        "warnings": result.get("warnings", []),
     }
 
 
@@ -219,13 +307,7 @@ async def play(request: PlayRequest):
     result = play_bot_move(request.fen, request.difficulty)
     
     if result is None:
-        return {
-            "fen": request.fen,
-            "move": "",
-            "from_square": "",
-            "to_square": "",
-            "promotion": None,
-        }
+        return {"fen": request.fen, "move": "", "from_square": "", "to_square": "", "promotion": None}
     
     return {
         "fen": request.fen,
@@ -238,4 +320,4 @@ async def play(request: PlayRequest):
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "stockfish_path": STOCKFISH_PATH}
+    return {"status": "ok", "stockfish_exists": os.path.exists(STOCKFISH_PATH)}

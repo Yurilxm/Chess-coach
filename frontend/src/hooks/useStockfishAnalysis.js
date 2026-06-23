@@ -7,15 +7,20 @@ export function useStockfishAnalysis() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const analyze = useCallback(async (fen) => {
+  const analyze = useCallback(async (fen, historyFens = null) => {
     if (!fen) return
     setLoading(true)
     setError(null)
     try {
+      const body = { fen }
+      if (historyFens && historyFens.length > 0) {
+        body.history = historyFens
+      }
+      
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fen }),
+        body: JSON.stringify(body),
       })
       if (!response.ok) throw new Error('Falha na análise')
       const data = await response.json()

@@ -1,12 +1,5 @@
 import { evalDescriptionPt, evalToWhitePercent, formatEvalScore } from '../utils/evaluation'
 
-/**
- * orientation="vertical": barra compacta ao lado do tabuleiro (sempre do
- * mesmo tamanho — só o preenchimento interno muda, nunca a altura do
- * elemento).
- * orientation="horizontal": versão com texto explicativo, usada dentro do
- * painel de análise.
- */
 function EvalBar({ evaluation, orientation = 'vertical' }) {
   const whitePercent = evalToWhitePercent(evaluation)
   const description = evalDescriptionPt(evaluation)
@@ -30,7 +23,6 @@ function EvalBar({ evaluation, orientation = 'vertical' }) {
     )
   }
 
-  // Vertical: container de tamanho fixo, só a altura do preenchimento muda
   return (
     <div className="hidden sm:flex flex-col items-center gap-2 w-9 flex-shrink-0">
       <span className="text-[10px] font-bold text-slate-300">B</span>
