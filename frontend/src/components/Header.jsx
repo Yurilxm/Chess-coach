@@ -3,8 +3,8 @@ import ModeSwitcher from './ModeSwitcher'
 
 function Header({ mode, onModeChange }) {
   const subtitles = {
-    game: 'Aprenda xadrez com análise inteligente',
-    bot: 'Desafie o computador',
+    game: 'Pratique e aprimore seu conhecimento',
+    bot: 'Coloque em prática o que você aprendeu',
     editor: 'Monte posições livremente',
   }
 

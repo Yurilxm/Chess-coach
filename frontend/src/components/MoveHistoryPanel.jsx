@@ -3,7 +3,7 @@ function MoveHistoryPanel({ history }) {
   const rows = Math.ceil(history.length / 2)
 
   return (
-    <div className="w-full max-h-48 overflow-y-auto rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-white/10 p-3">
+    <div className="w-full max-h-48 overflow-y-auto rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-white/10 p-2">
       <table className="w-full text-sm">
         <thead>
           <tr className="text-slate-500 text-xs border-b border-white/10">

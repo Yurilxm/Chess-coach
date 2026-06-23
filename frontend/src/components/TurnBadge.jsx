@@ -1,28 +1,4 @@
-/**
- * Traduz o motivo do fim de jogo para texto em português.
- */
-function getGameOverText(reason, turn) {
-  const winner = turn === 'w' ? 'Pretas' : 'Brancas'
-  
-  switch (reason) {
-    case 'checkmate':
-      return `Xeque-mate! ${winner} vencem`
-    case 'stalemate':
-      return 'Empate por afogamento (stalemate)'
-    case 'threefold':
-      return 'Empate por repetição tripla'
-    case 'fiftyMoves':
-      return 'Empate pela regra dos 50 lances'
-    case 'insufficient':
-      return 'Empate por material insuficiente'
-    case 'draw':
-      return 'Empate'
-    default:
-      return 'Fim de jogo'
-  }
-}
-
-function TurnBadge({ turn, moveLabel, gameOver = false, gameOverReason = null }) {
+function TurnBadge({ turn, moveLabel, gameOver = false, gameOverReason = null, botLabel = null }) {
   const isWhite = turn === 'w'
 
   return (
@@ -61,6 +37,13 @@ function TurnBadge({ turn, moveLabel, gameOver = false, gameOverReason = null })
         </span>
       )}
 
+      {/* Label do modo Bot */}
+      {botLabel && !gameOver && (
+        <span className="text-xs font-medium text-cyan-400 border-l border-white/10 pl-3">
+          {botLabel}
+        </span>
+      )}
+
       {gameOver && gameOverReason === 'fiftyMoves' && (
         <span className="text-xs text-slate-400 border-l border-white/10 pl-3">
           50 lances sem captura ou peão
@@ -68,6 +51,27 @@ function TurnBadge({ turn, moveLabel, gameOver = false, gameOverReason = null })
       )}
     </div>
   )
+}
+
+function getGameOverText(reason, turn) {
+  const winner = turn === 'w' ? 'Pretas' : 'Brancas'
+  
+  switch (reason) {
+    case 'checkmate':
+      return `Xeque-mate! ${winner} vencem`
+    case 'stalemate':
+      return 'Empate por afogamento (stalemate)'
+    case 'threefold':
+      return 'Empate por repetição tripla'
+    case 'fiftyMoves':
+      return 'Empate pela regra dos 50 lances'
+    case 'insufficient':
+      return 'Empate por material insuficiente'
+    case 'draw':
+      return 'Empate'
+    default:
+      return 'Fim de jogo'
+  }
 }
 
 export default TurnBadge

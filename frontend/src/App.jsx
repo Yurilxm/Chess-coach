@@ -218,16 +218,6 @@ function App() {
                 </div>
               )}
 
-              {/* Info do jogador */}
-              {isBotMode && botGameStarted && game.playerColor && !game.isGameOver && (
-                <div className="bg-slate-900/40 backdrop-blur-sm rounded-xl border border-white/5 p-3 flex items-center gap-2">
-                  <User className="w-3.5 h-3.5 text-slate-400" />
-                  <span className="text-xs text-slate-400">
-                    Você joga de {game.playerColor === 'w' ? 'brancas' : 'pretas'}
-                  </span>
-                </div>
-              )}
-
               <button
                 onClick={handleAnalyze}
                 disabled={!activeFen || loading}
