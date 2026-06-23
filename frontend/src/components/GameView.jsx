@@ -21,7 +21,6 @@ function GameView({ game, boardWidth = 520, bestMoveUci, isBotMode = false, onBo
 
   const captured = useMemo(() => getCapturedPieces(game.history), [game.history])
   
-  // Abertura só aparece nos primeiros 10 lances (20 meios-lances)
   const opening = useMemo(() => {
     if (game.history.length > 20) return null
     return detectOpening(game.history)
@@ -80,7 +79,14 @@ function GameView({ game, boardWidth = 520, bestMoveUci, isBotMode = false, onBo
       
       <OpeningBadge opening={opening} />
 
-      <div className="relative" style={{ width: boardWidth, paddingBottom: hasCapturedPieces ? '10px' : '0' }}>
+      <div 
+        className="relative" 
+        style={{ 
+          width: boardWidth, 
+          marginTop: hasCapturedPieces ? '22px' : '0',
+          marginBottom: hasCapturedPieces ? '6px' : '0',
+        }}
+      >
         <div className="absolute -top-6 right-0">
           <CapturedPieces pieces={blackCaptured} color="w" />
         </div>
@@ -105,7 +111,6 @@ function GameView({ game, boardWidth = 520, bestMoveUci, isBotMode = false, onBo
         </div>
       </div>
 
-      {/* Modo Normal: Nova partida + Desfazer + Girar */}
       {!isBotMode && (
         <div className={`flex gap-2 ${hasCapturedPieces ? 'mt-5' : ''}`}>
           <SecondaryButton icon={RefreshCw} onClick={handleReset}>
@@ -120,8 +125,7 @@ function GameView({ game, boardWidth = 520, bestMoveUci, isBotMode = false, onBo
         </div>
       )}
 
-      {/* Histórico com margem adequada */}
-      <div className={`w-full ${hasCapturedPieces ? 'mt-3' : ''}`}>
+      <div className={`w-full ${hasCapturedPieces ? 'mt-5' : ''}`}>
         <MoveHistoryPanel history={game.history} />
       </div>
 
