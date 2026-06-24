@@ -7,11 +7,13 @@ import EvalBar from './components/EvalBar'
 import AnalysisPanel from './components/AnalysisPanel'
 import AdvancedTools from './components/AdvancedTools'
 import BotDifficultySelector from './components/BotDifficultySelector'
+import GameReviewModal from './components/GameReviewModal'
 import { useChessGame } from './hooks/useChessGame'
 import { useChessEditor } from './hooks/useChessEditor'
 import { useStockfishAnalysis } from './hooks/useStockfishAnalysis'
 import { useBotPlayer } from './hooks/useBotPlayer'
 import { useCoach } from './hooks/useCoach'
+import { useGameReview } from './hooks/useGameReview'
 
 function App() {
   const [mode, setMode] = useState('game')
@@ -24,6 +26,7 @@ function App() {
 
   const { analysis, loading, error, analyze, clear } = useStockfishAnalysis()
   const { coachExplanation, coachLoading, explainMove, clearCoach } = useCoach()
+  const { review, reviewLoading, requestReview, clearReview } = useGameReview()
 
   const activeFen = mode === 'editor' ? editor.fen : game.fen
 
@@ -33,22 +36,23 @@ function App() {
     setSelectedMoveIndex(0)
   }, [activeFen, clear, clearCoach])
 
-  // Reseta ao entrar no modo Bot
   useEffect(() => {
     if (mode === 'bot') {
       game.reset()
       game.setPlayerColor(null)
       setBotGameStarted(false)
+      clearReview()
     } else {
       game.setPlayerColor(null)
       setBotGameStarted(false)
+      clearReview()
     }
   }, [mode])
 
-  // Iniciar jogo contra o bot
   function handleStartBotGame() {
     if (!game.playerColor) return
     setBotGameStarted(true)
+    clearReview()
     if (game.playerColor === 'b') {
       const timer = setTimeout(() => {
         bot.requestMove(game.fen).then((result) => {
@@ -64,7 +68,6 @@ function App() {
     }
   }
 
-  // Bot joga automaticamente após cada lance do jogador
   useEffect(() => {
     if (mode !== 'bot') return
     if (!botGameStarted) return
@@ -90,11 +93,19 @@ function App() {
     return () => clearTimeout(timer)
   }, [game.fen, game.turn, game.isGameOver, game.playerColor, mode, botGameStarted])
 
-  // Quando seleciona um lance, chama o coach automaticamente
+  // Quando a partida contra o bot terminar, pede revisão
+  useEffect(() => {
+    if (mode !== 'bot') return
+    if (!botGameStarted) return
+    if (!game.isGameOver) return
+    if (review || reviewLoading) return
+    if (game.history.length === 0) return
+    
+    requestReview(game.history, game.playerColor)
+  }, [game.isGameOver, mode, botGameStarted])
+
   const handleSelectMove = useCallback((index) => {
     setSelectedMoveIndex(index)
-    
-    // Pega o lance selecionado e pede explicação para a IA
     const lines = analysis?.lines || []
     const selectedLine = lines[index]
     if (selectedLine?.move && activeFen) {
@@ -116,6 +127,7 @@ function App() {
     game.reset()
     game.setPlayerColor(null)
     setBotGameStarted(false)
+    clearReview()
   }
 
   const selectedBestMove = analysis?.lines?.[selectedMoveIndex]?.move 
@@ -156,7 +168,6 @@ function App() {
             </div>
 
             <div className="flex flex-col gap-4 w-full max-w-[380px]">
-              {/* Modo Bot: configuração antes de começar */}
               {isBotMode && !botGameStarted && (
                 <>
                   <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-white/10 p-4">
@@ -205,7 +216,6 @@ function App() {
                 </>
               )}
 
-              {/* Modo Bot: durante o jogo */}
               {isBotMode && botGameStarted && (
                 <button
                   onClick={handleBotReset}
@@ -259,6 +269,12 @@ function App() {
           </div>
         </div>
       </main>
+
+      <GameReviewModal 
+        review={review}
+        loading={reviewLoading}
+        onClose={clearReview}
+      />
     </div>
   )
 }

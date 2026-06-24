@@ -64,6 +64,150 @@ Não use markdown, apenas texto puro."""
         print(f"Erro no Gemini: {e}")
         return None
 
+
+def review_game(history: list, player_color: str = 'w'):
+    """Analisa uma partida completa e gera resumo."""
+    try:
+        if not history or len(history) < 2:
+            return None
+        
+        total_moves = len(history)
+        player_moves = [m for m in history if m.get('color') == player_color]
+        opponent_moves = [m for m in history if m.get('color') != player_color]
+        
+        captures_by_player = len([m for m in player_moves if m.get('captured')])
+        captures_by_opponent = len([m for m in opponent_moves if m.get('captured')])
+        
+        # Resultado
+        last_fen = history[-1].get('after', '') if history[-1].get('after') else ''
+        result = "Desconhecido"
+        if last_fen:
+            try:
+                board = chess.Board(last_fen)
+                if board.is_checkmate():
+                    last_move = history[-1]
+                    winner = last_move.get('color', '')
+                    result = "Vitória" if winner == player_color else "Derrota"
+                elif board.is_stalemate():
+                    result = "Empate por afogamento"
+                elif board.is_insufficient_material():
+                    result = "Empate por material insuficiente"
+                elif board.can_claim_threefold_repetition():
+                    result = "Empate por repetição"
+                elif board.can_claim_fifty_moves():
+                    result = "Empate por 50 lances"
+                else:
+                    result = "Partida finalizada"
+            except:
+                pass
+        
+        # Abertura (pega os primeiros 20 meios-lances)
+        opening_name = "Não identificada"
+        opening_code = ""
+        opening_moves = history[:20]
+        
+        # Análise de erros com Stockfish
+        mistakes = []
+        engine = None
+        try:
+            engine = get_engine(depth=12, multi_pv=1)
+            temp_board = chess.Board()
+            
+            for i, move in enumerate(player_moves):
+                if move.get('from') and move.get('to'):
+                    uci = move['from'] + move['to']
+                    promotion = move.get('promotion', '')
+                    if promotion:
+                        uci += promotion
+                    try:
+                        chess_move = chess.Move.from_uci(uci)
+                        if chess_move in temp_board.legal_moves:
+                            temp_board.push(chess_move)
+                            fen = temp_board.fen()
+                            
+                            if engine.is_fen_valid(fen):
+                                engine.set_fen_position(fen)
+                                top = engine.get_top_moves(3)
+                                
+                                best_move = top[0].get('Move', '') if top else ''
+                                best_cp = top[0].get('Centipawn', 0) if top else 0
+                                
+                                if best_move and uci.rstrip('qrnb') != best_move:
+                                    cp_diff = 200
+                                    for t in top:
+                                        if t.get('Move') == uci:
+                                            cp_diff = best_cp - (t.get('Centipawn') or 0)
+                                            break
+                                    
+                                    if abs(cp_diff) > 80:
+                                        severity = 'grave' if abs(cp_diff) > 200 else 'moderado'
+                                        mistakes.append({
+                                            'move_number': i + 1,
+                                            'move_uci': uci,
+                                            'move_san': move.get('san', uci),
+                                            'best_move': best_move,
+                                            'cp_loss': abs(cp_diff),
+                                            'severity': severity,
+                                        })
+                    except:
+                        break
+        finally:
+            if engine:
+                try:
+                    engine.send_quit_command()
+                except:
+                    pass
+        
+        stats = {
+            'total_moves': total_moves,
+            'captures_by_player': captures_by_player,
+            'captures_by_opponent': captures_by_opponent,
+            'mistakes': len(mistakes),
+            'grave_mistakes': len([m for m in mistakes if m['severity'] == 'grave']),
+            'moderate_mistakes': len([m for m in mistakes if m['severity'] == 'moderado']),
+        }
+        
+        # Resumo com Gemini
+        summary = ""
+        try:
+            mistakes_text = ""
+            for m in mistakes[:5]:
+                mistakes_text += f"Lance {m['move_number']}: {m['move_san']} (melhor: {m['best_move']}, -{m['cp_loss']/100:.1f})\n"
+            
+            prompt = f"""Você é um coach de xadrez. Resumo profissional da partida:
+
+Resultado: {result}
+Lances totais: {total_moves}
+Suas capturas: {captures_by_player}
+Capturas do oponente: {captures_by_opponent}
+Erros graves: {stats['grave_mistakes']}
+Erros moderados: {stats['moderate_mistakes']}
+
+{mistakes_text if mistakes_text else 'Nenhum erro grave.'}
+
+Escreva 4-6 frases em português analisando o desempenho e dando 2-3 dicas específicas. Seja encorajador mas honesto. Texto puro, sem markdown."""
+            
+            response = gemini_client.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=prompt,
+            )
+            summary = response.text.strip()
+        except:
+            summary = "Análise indisponível no momento. Revise os erros manualmente."
+        
+        return {
+            'result': result,
+            'opening': {'name': opening_name, 'code': opening_code},
+            'stats': stats,
+            'mistakes': mistakes[:10],
+            'summary': summary,
+        }
+    
+    except Exception as e:
+        print(f"Erro na revisão: {e}")
+        return None
+
+
 app = FastAPI(title="Chess Coach API")
 
 app.add_middleware(
@@ -80,8 +224,6 @@ STOCKFISH_PATH = os.path.join(BASE_DIR, "engine", "stockfish.exe")
 ANALYSIS_DEPTH = 18
 MULTI_PV = 3
 
-# Níveis do Chess Coach (rating interno, não é ELO real do Stockfish)
-# Usamos apenas Skill Level + Depth para progressão educativa
 DIFFICULTY_LEVELS = {
     200:  {"skill": 0,  "depth": 1,  "name": "Primeiros passos",  "desc": "O computador joga lances aleatórios. Ideal para aprender os movimentos."},
     400:  {"skill": 0,  "depth": 2,  "name": "Iniciante",          "desc": "Lances básicos, sem cálculo profundo. Perfeito para praticar."},
@@ -128,6 +270,7 @@ class PlayResponse(BaseModel):
     to_square: str
     promotion: Optional[str] = None
 
+
 class CoachRequest(BaseModel):
     fen: str
     move: str
@@ -136,6 +279,20 @@ class CoachRequest(BaseModel):
 
 class CoachResponse(BaseModel):
     explanation: str
+    loading: bool = False
+
+
+class ReviewRequest(BaseModel):
+    history: list
+    player_color: str = 'w'
+
+
+class ReviewResponse(BaseModel):
+    result: str
+    opening: dict
+    stats: dict
+    mistakes: list
+    summary: str
     loading: bool = False
 
 
@@ -152,8 +309,31 @@ async def coach_explain(request: CoachRequest):
         return {"explanation": "Não foi possível gerar a explicação neste momento.", "loading": False}
 
 
+@app.post("/review", response_model=ReviewResponse)
+async def review_game_endpoint(request: ReviewRequest):
+    result = review_game(request.history, request.player_color)
+    
+    if result is None:
+        return {
+            "result": "Erro",
+            "opening": {"name": "", "code": ""},
+            "stats": {},
+            "mistakes": [],
+            "summary": "Não foi possível analisar a partida.",
+            "loading": False,
+        }
+    
+    return {
+        "result": result["result"],
+        "opening": result["opening"],
+        "stats": result["stats"],
+        "mistakes": result["mistakes"],
+        "summary": result["summary"],
+        "loading": False,
+    }
+
+
 def get_engine(depth=ANALYSIS_DEPTH, multi_pv=MULTI_PV, skill=None):
-    """Cria e configura uma instância do Stockfish. Usa apenas Skill Level, sem UCI_Elo."""
     params = {
         "MultiPV": multi_pv,
         "Threads": 2,
@@ -168,7 +348,6 @@ def get_engine(depth=ANALYSIS_DEPTH, multi_pv=MULTI_PV, skill=None):
 
 
 def get_position_info(fen: str):
-    """Analisa a posição usando python-chess."""
     try:
         board = chess.Board(fen)
         return {
@@ -188,20 +367,16 @@ def get_position_info(fen: str):
 
 
 def check_repetition_danger(fen: str, history_fens: list):
-    """Verifica se há perigo de repetição tripla."""
     if not history_fens or len(history_fens) < 4:
         return []
-    
     try:
         board = chess.Board(fen)
         current_fen_short = " ".join(fen.split(" ")[:4])
-        
         count = 1
         for hist_fen in history_fens:
             hist_short = " ".join(hist_fen.split(" ")[:4])
             if hist_short == current_fen_short:
                 count += 1
-        
         if count >= 2:
             dangerous_moves = []
             for move in board.legal_moves:
@@ -216,39 +391,23 @@ def check_repetition_danger(fen: str, history_fens: list):
                     dangerous_moves.append(move.uci())
                 board.pop()
             return dangerous_moves
-        
         return []
     except:
         return []
 
 
 def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int = MULTI_PV, history_fens: list = None):
-    """Análise profissional com detecção de repetição e avisos."""
     engine = None
     warnings = []
-    
     try:
         pos_info = get_position_info(fen)
-        
         if pos_info:
             if pos_info["is_checkmate"]:
-                return {
-                    "best_move": None, "evaluation": {"type": "mate", "value": 0},
-                    "top_moves": [], "lines": [],
-                    "warnings": ["Xeque-mate! A partida terminou."],
-                }
+                return {"best_move": None, "evaluation": {"type": "mate", "value": 0}, "top_moves": [], "lines": [], "warnings": ["Xeque-mate! A partida terminou."]}
             if pos_info["is_stalemate"]:
-                return {
-                    "best_move": None, "evaluation": {"type": "cp", "value": 0},
-                    "top_moves": [], "lines": [],
-                    "warnings": ["Empate por afogamento (stalemate)."],
-                }
+                return {"best_move": None, "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": ["Empate por afogamento (stalemate)."]}
             if pos_info["is_insufficient_material"]:
-                return {
-                    "best_move": None, "evaluation": {"type": "cp", "value": 0},
-                    "top_moves": [], "lines": [],
-                    "warnings": ["Empate por material insuficiente."],
-                }
+                return {"best_move": None, "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": ["Empate por material insuficiente."]}
             if pos_info["can_claim_fifty_moves"]:
                 warnings.append("Regra dos 50 lances: empate disponível.")
             if pos_info["can_claim_threefold"]:
@@ -261,12 +420,8 @@ def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int 
                 warnings.append("Atenção: alguns lances podem levar a empate por repetição.")
         
         engine = get_engine(depth=depth, multi_pv=multi_pv)
-
         if not engine.is_fen_valid(fen):
-            return {
-                "best_move": None, "evaluation": {"type": "cp", "value": 0},
-                "top_moves": [], "lines": [], "warnings": ["FEN inválido."],
-            }
+            return {"best_move": None, "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": ["FEN inválido."]}
 
         engine.set_fen_position(fen)
         top = engine.get_top_moves(multi_pv)
@@ -276,9 +431,7 @@ def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int 
             move = entry.get("Move")
             if not move:
                 continue
-            
             is_dangerous = move in dangerous_moves
-            
             if entry.get("Mate") is not None:
                 evaluation = {"type": "mate", "value": entry["Mate"]}
             else:
@@ -286,78 +439,47 @@ def analyze_with_stockfish(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int 
                 if is_dangerous and cp_value > -50:
                     cp_value = max(cp_value - 80, -50)
                 evaluation = {"type": "cp", "value": cp_value}
-            
-            lines.append({
-                "move": move,
-                "evaluation": evaluation,
-                "dangerous": is_dangerous,
-            })
+            lines.append({"move": move, "evaluation": evaluation, "dangerous": is_dangerous})
 
         if not lines:
-            return {
-                "best_move": None, "evaluation": {"type": "cp", "value": 0},
-                "top_moves": [], "lines": [],
-                "warnings": warnings + ["Nenhum lance legal disponível."],
-            }
+            return {"best_move": None, "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": warnings + ["Nenhum lance legal disponível."]}
 
         safe_lines = [l for l in lines if not l.get("dangerous")]
         dangerous_lines = [l for l in lines if l.get("dangerous")]
         sorted_lines = safe_lines + dangerous_lines
         
-        return {
-            "best_move": sorted_lines[0]["move"],
-            "evaluation": sorted_lines[0]["evaluation"],
-            "top_moves": [line["move"] for line in sorted_lines],
-            "lines": [{"move": l["move"], "evaluation": l["evaluation"]} for l in sorted_lines],
-            "warnings": warnings,
-        }
-
-    except StockfishException as e:
-        print(f"Stockfish travou: {e}")
-        return {"best_move": None, "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": [str(e)]}
+        return {"best_move": sorted_lines[0]["move"], "evaluation": sorted_lines[0]["evaluation"], "top_moves": [line["move"] for line in sorted_lines], "lines": [{"move": l["move"], "evaluation": l["evaluation"]} for l in sorted_lines], "warnings": warnings}
     except Exception as e:
-        print(f"Erro inesperado: {e}")
+        print(f"Erro: {e}")
         return {"best_move": None, "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": [str(e)]}
     finally:
-        if engine is not None:
+        if engine:
             try:
                 engine.send_quit_command()
-            except Exception:
+            except:
                 pass
 
 
 def play_bot_move(fen: str, difficulty: int = DEFAULT_DIFFICULTY):
-    """Obtém o melhor lance do bot baseado na dificuldade."""
     config = DIFFICULTY_LEVELS.get(difficulty, DIFFICULTY_LEVELS[DEFAULT_DIFFICULTY])
-    
     engine = None
     try:
         engine = get_engine(depth=config["depth"], multi_pv=1, skill=config["skill"])
-
         if not engine.is_fen_valid(fen):
             return None
-
         engine.set_fen_position(fen)
         best_move = engine.get_best_move()
-
         if not best_move or len(best_move) < 4:
             return None
-
-        return {
-            "move": best_move,
-            "from_square": best_move[:2],
-            "to_square": best_move[2:4],
-            "promotion": best_move[4] if len(best_move) > 4 else None,
-        }
-
+        return {"move": best_move, "from_square": best_move[:2], "to_square": best_move[2:4], "promotion": best_move[4] if len(best_move) > 4 else None}
     except Exception as e:
         print(f"Erro ao jogar como bot: {e}")
         return None
     finally:
-        if engine is not None:
+        if engine:
             try:
                 engine.send_quit_command()
-            except Exception:
+            except:
                 pass
 
 
@@ -370,33 +492,16 @@ async def root():
 async def analyze_position(request: PositionRequest):
     if not request.fen or "/" not in request.fen:
         return {"fen": request.fen, "best_move": "", "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": ["FEN inválido."]}
-
     result = analyze_with_stockfish(request.fen, history_fens=request.history)
-
-    return {
-        "fen": request.fen,
-        "best_move": result["best_move"] or "",
-        "evaluation": result["evaluation"],
-        "top_moves": result["top_moves"],
-        "lines": result["lines"],
-        "warnings": result.get("warnings", []),
-    }
+    return {"fen": request.fen, "best_move": result["best_move"] or "", "evaluation": result["evaluation"], "top_moves": result["top_moves"], "lines": result["lines"], "warnings": result.get("warnings", [])}
 
 
 @app.post("/play", response_model=PlayResponse)
 async def play(request: PlayRequest):
     result = play_bot_move(request.fen, request.difficulty)
-    
     if result is None:
         return {"fen": request.fen, "move": "", "from_square": "", "to_square": "", "promotion": None}
-    
-    return {
-        "fen": request.fen,
-        "move": result["move"],
-        "from_square": result["from_square"],
-        "to_square": result["to_square"],
-        "promotion": result["promotion"],
-    }
+    return {"fen": request.fen, "move": result["move"], "from_square": result["from_square"], "to_square": result["to_square"], "promotion": result["promotion"]}
 
 
 @app.get("/health")

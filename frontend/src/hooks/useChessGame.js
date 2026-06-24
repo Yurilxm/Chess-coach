@@ -17,23 +17,40 @@ export function useChessGame(initialFen) {
 
   const getGameOverReason = useCallback(() => {
     const chess = chessRef.current
-    if (!chess.isGameOver()) return null
+    
+    // Xeque-mate
     if (chess.isCheckmate()) return 'checkmate'
+    
+    // Afogamento
     if (chess.isStalemate()) return 'stalemate'
-    if (chess.isThreefoldRepetition()) return 'threefold'
+    
+    // Material insuficiente
     if (chess.isInsufficientMaterial()) return 'insufficient'
+    
+    // 50 lances (halfMoves >= 100 meios-lances)
     const fenParts = chess.fen().split(' ')
-    const halfMoves = parseInt(fenParts[4], 10)
+    const halfMoves = parseInt(fenParts[4], 10) || 0
     if (halfMoves >= 100) return 'fiftyMoves'
+    
+    // Repetição tripla - verifica via histórico interno do chess.js
+    if (chess.isThreefoldRepetition()) return 'threefold'
+    
+    // Draw genérico
     if (chess.isDraw()) return 'draw'
-    return 'gameOver'
+    
+    // Se não tem lances legais e não é xeque = afogamento
+    if (chess.isGameOver() && !chess.isCheck()) return 'stalemate'
+    
+    // Se não tem lances legais e está em xeque = mate
+    if (chess.isGameOver() && chess.isCheck()) return 'checkmate'
+    
+    return null
   }, [])
 
   const attemptMove = useCallback((from, to, options = {}) => {
     const chess = chessRef.current
     const piece = chess.get(from)
     
-    // Só verifica cor se não for skipColorCheck (usado pelo bot)
     if (!options.skipColorCheck && playerColor && piece?.color !== playerColor) {
       return { illegal: true }
     }
@@ -52,7 +69,9 @@ export function useChessGame(initialFen) {
       if (move) {
         setLastMove([from, to])
         refreshFromChess()
-        return { move }
+        
+        // Verifica se o jogo acabou após este lance
+        return { move, gameOver: chess.isGameOver() }
       }
     } catch {
       // lance ilegal
