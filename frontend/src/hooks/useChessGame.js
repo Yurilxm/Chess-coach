@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
-import { createChess, START_FEN, buildDests } from '../utils/chessHelpers'
+import { createChess, START_FEN, buildDests, computeEditorDests, applyVirtualMove } from '../utils/chessHelpers'
 
 export function useChessGame(initialFen) {
   const chessRef = useRef(createChess(initialFen))
@@ -9,6 +9,12 @@ export function useChessGame(initialFen) {
   const [pendingPromotion, setPendingPromotion] = useState(null)
   const [playerColor, setPlayerColor] = useState(null)
 
+  // Fila de pré-jogadas. Em vez de guardar só UMA pré-jogada (que era
+  // sobrescrita a cada novo clique), guardamos uma lista: a primeira da
+  // fila é executada quando chega a vez do jogador, e assim por diante.
+  const [premoveQueue, setPremoveQueue] = useState([])
+  const premoveQueueRef = useRef([])
+
   const refreshFromChess = useCallback(() => {
     const chess = chessRef.current
     setFen(chess.fen())
@@ -17,35 +23,96 @@ export function useChessGame(initialFen) {
 
   const getGameOverReason = useCallback(() => {
     const chess = chessRef.current
-    
-    // Xeque-mate
     if (chess.isCheckmate()) return 'checkmate'
-    
-    // Afogamento
     if (chess.isStalemate()) return 'stalemate'
-    
-    // Material insuficiente
     if (chess.isInsufficientMaterial()) return 'insufficient'
-    
-    // 50 lances (halfMoves >= 100 meios-lances)
     const fenParts = chess.fen().split(' ')
     const halfMoves = parseInt(fenParts[4], 10) || 0
     if (halfMoves >= 100) return 'fiftyMoves'
-    
-    // Repetição tripla - verifica via histórico interno do chess.js
     if (chess.isThreefoldRepetition()) return 'threefold'
-    
-    // Draw genérico
     if (chess.isDraw()) return 'draw'
-    
-    // Se não tem lances legais e não é xeque = afogamento
     if (chess.isGameOver() && !chess.isCheck()) return 'stalemate'
-    
-    // Se não tem lances legais e está em xeque = mate
     if (chess.isGameOver() && chess.isCheck()) return 'checkmate'
-    
     return null
   }, [])
+
+  const syncPremoveQueue = useCallback((next) => {
+    premoveQueueRef.current = next
+    setPremoveQueue(next)
+  }, [])
+
+  // Adiciona uma pré-jogada ao final da fila
+  const addPremove = useCallback((from, to, promotion) => {
+    syncPremoveQueue([...premoveQueueRef.current, { from, to, promotion: promotion || 'q' }])
+  }, [syncPremoveQueue])
+
+  // Remove só a última pré-jogada enfileirada (útil para um botão de "desfazer pré-jogada")
+  const removeLastPremove = useCallback(() => {
+    syncPremoveQueue(premoveQueueRef.current.slice(0, -1))
+  }, [syncPremoveQueue])
+
+  // Limpa toda a fila de pré-jogadas
+  const clearPremoves = useCallback(() => {
+    syncPremoveQueue([])
+  }, [syncPremoveQueue])
+
+  // Destinos válidos para a PRÓXIMA pré-jogada: projeta a posição atual real
+  // + todas as pré-jogadas já enfileiradas (aplicadas virtualmente, sem
+  // validação de turno/xeque), e então calcula o padrão de movimento de
+  // cada peça do jogador com computeEditorDests (que respeita o jeito que
+  // cada peça se move, mas não depende de "de quem é a vez"). Isso resolve
+  // o bug do peão "andando pro lado": antes os destinos vinham de
+  // buildDests(chess), que usa chess.moves() — ou seja, os lances de quem
+  // TEM a vez agora (o bot), não os do jogador.
+  const getPremoveDests = useCallback(() => {
+    if (!playerColor) return new Map()
+
+    const virtual = createChess(chessRef.current.fen())
+    for (const pm of premoveQueueRef.current) {
+      applyVirtualMove(virtual, pm.from, pm.to, pm.promotion)
+    }
+
+    const allDests = computeEditorDests(virtual)
+    const filtered = new Map()
+    for (const [square, targets] of allDests) {
+      const piece = virtual.get(square)
+      if (piece?.color === playerColor) filtered.set(square, targets)
+    }
+    return filtered
+  }, [playerColor])
+
+  // Tira a primeira pré-jogada da fila e tenta executá-la como um lance
+  // REAL e validado (chess.move). Se a posição mudou e ela deixou de ser
+  // legal (ex: o bot capturou a peça envolvida), a fila inteira é
+  // descartada, porque o "plano" do jogador não é mais válido.
+  const executeNextPremove = useCallback(() => {
+    const queue = premoveQueueRef.current
+    if (queue.length === 0) return null
+
+    const [next, ...rest] = queue
+    const chess = chessRef.current
+    const piece = chess.get(next.from)
+
+    if (!piece || (playerColor && piece.color !== playerColor)) {
+      syncPremoveQueue([])
+      return null
+    }
+
+    try {
+      const move = chess.move({ from: next.from, to: next.to, promotion: next.promotion || 'q' })
+      if (move) {
+        syncPremoveQueue(rest)
+        setLastMove([next.from, next.to])
+        refreshFromChess()
+        return { move, gameOver: chess.isGameOver() }
+      }
+    } catch {
+      // Lance deixou de ser legal
+    }
+
+    syncPremoveQueue([])
+    return null
+  }, [refreshFromChess, playerColor, syncPremoveQueue])
 
   const attemptMove = useCallback((from, to, options = {}) => {
     const chess = chessRef.current
@@ -69,8 +136,6 @@ export function useChessGame(initialFen) {
       if (move) {
         setLastMove([from, to])
         refreshFromChess()
-        
-        // Verifica se o jogo acabou após este lance
         return { move, gameOver: chess.isGameOver() }
       }
     } catch {
@@ -112,8 +177,9 @@ export function useChessGame(initialFen) {
     chessRef.current = createChess(fenToLoad || START_FEN)
     setLastMove(null)
     setPendingPromotion(null)
+    clearPremoves()
     refreshFromChess()
-  }, [refreshFromChess])
+  }, [refreshFromChess, clearPremoves])
 
   const loadFen = useCallback((newFen) => {
     if (!newFen || newFen === chessRef.current.fen()) return
@@ -135,6 +201,12 @@ export function useChessGame(initialFen) {
     pendingPromotion,
     playerColor,
     setPlayerColor,
+    premoveQueue,
+    addPremove,
+    removeLastPremove,
+    clearPremoves,
+    executeNextPremove,
+    getPremoveDests,
     turn: chess.turn(),
     isGameOver: chess.isGameOver(),
     gameOverReason: getGameOverReason(),

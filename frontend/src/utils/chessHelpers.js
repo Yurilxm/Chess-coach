@@ -53,6 +53,11 @@ const KING_OFFSETS = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1]
  * bispo na diagonal...) e bloqueio por outras peças no caminho. Diferente
  * de buildDests(), ignora de quem é a vez e regras de xeque — afinal, no
  * editor você pode mover qualquer peça, de qualquer cor, a qualquer momento.
+ *
+ * Também é reaproveitada para calcular destinos de PRÉ-JOGADAS (ver
+ * getPremoveDests em useChessGame), já que durante o turno do bot o
+ * jogador também precisa de destinos baseados em padrão de peça, não em
+ * regras de turno/xeque.
  */
 export function computeEditorDests(chess) {
   const dests = new Map()
@@ -114,6 +119,30 @@ export function computeEditorDests(chess) {
   }
 
   return dests
+}
+
+/**
+ * Aplica um lance "virtualmente" num tabuleiro, sem passar pela validação
+ * de regras/turno do chess.js (.move()). Usado só para projetar a posição
+ * resultante de pré-jogadas ainda não confirmadas, e assim calcular os
+ * destinos da PRÓXIMA pré-jogada da fila.
+ *
+ * Limitação intencional: não trata roque (movimento da torre) nem captura
+ * en passant — para o propósito de pré-jogada (estimativa visual), isso
+ * é aceitável e é a mesma simplificação usada por engines de UI de xadrez.
+ */
+export function applyVirtualMove(chess, from, to, promotion) {
+  const piece = chess.get(from)
+  if (!piece) return false
+
+  const isPromotion =
+    piece.type === 'p' &&
+    ((piece.color === 'w' && to[1] === '8') || (piece.color === 'b' && to[1] === '1'))
+
+  chess.remove(from)
+  chess.remove(to) // remove a peça capturada, se houver
+  chess.put({ type: isPromotion ? (promotion || 'q') : piece.type, color: piece.color }, to)
+  return true
 }
 
 /**

@@ -61,6 +61,9 @@ function App() {
               skipColorCheck: true,
               promotion: result.promotion,
             })
+            setTimeout(() => {
+              game.executeNextPremove()
+            }, 100)
           }
         })
       }, 500)
@@ -68,6 +71,7 @@ function App() {
     }
   }
 
+  // Bot joga automaticamente + executa premove
   useEffect(() => {
     if (mode !== 'bot') return
     if (!botGameStarted) return
@@ -86,6 +90,9 @@ function App() {
             skipColorCheck: true,
             promotion: result.promotion,
           })
+          setTimeout(() => {
+            game.executeNextPremove()
+          }, 100)
         }
       })
     }, 400)
@@ -93,7 +100,7 @@ function App() {
     return () => clearTimeout(timer)
   }, [game.fen, game.turn, game.isGameOver, game.playerColor, mode, botGameStarted])
 
-  // Quando a partida contra o bot terminar, pede revisão
+  // Revisão pós-partida
   useEffect(() => {
     if (mode !== 'bot') return
     if (!botGameStarted) return
