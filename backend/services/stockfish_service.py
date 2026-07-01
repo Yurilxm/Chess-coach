@@ -2,22 +2,54 @@ from stockfish import Stockfish, StockfishException
 from config.settings import STOCKFISH_PATH, ANALYSIS_DEPTH, MULTI_PV
 from chess_logic.game_rules import get_position_info
 from chess_logic.repetition import check_repetition_danger
+import atexit
 
+# Engine persistente reutilizada em todas as chamadas
+_engine = None
 
-def get_engine(depth=ANALYSIS_DEPTH, multi_pv=MULTI_PV, skill=None):
-    params = {"Threads": 2, "Hash": 256}
+def _get_or_create_engine(depth=ANALYSIS_DEPTH, multi_pv=MULTI_PV, skill=None):
+    """Retorna uma engine persistente, reconfigurando parâmetros conforme necessário."""
+    global _engine
+    
+    params = {"Threads": 4, "Hash": 512}
     if multi_pv > 1:
         params["MultiPV"] = multi_pv
     if skill is not None and skill > 0:
         params["Skill Level"] = skill
     
-    engine = Stockfish(path=STOCKFISH_PATH, depth=depth, parameters=params)
-    engine.set_turn_perspective(False)
-    return engine
+    if _engine is None:
+        _engine = Stockfish(path=STOCKFISH_PATH, depth=depth, parameters=params)
+        _engine.set_turn_perspective(False)
+    else:
+        # Atualiza parâmetros sem recriar a engine
+        try:
+            _engine.set_depth(depth)
+            if multi_pv > 1:
+                _engine.update_engine_parameters({"MultiPV": multi_pv})
+            if skill is not None and skill > 0:
+                _engine.update_engine_parameters({"Skill Level": skill})
+        except:
+            pass
+    
+    return _engine
+
+
+def _cleanup_engine():
+    """Fecha a engine ao encerrar o processo."""
+    global _engine
+    if _engine:
+        try:
+            _engine.send_quit_command()
+        except:
+            pass
+        _engine = None
+
+
+atexit.register(_cleanup_engine)
 
 
 def analyze_position(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int = MULTI_PV, history_fens: list = None):
-    engine = None
+    """Análise de posição usando engine persistente."""
     warnings = []
     try:
         pos_info = get_position_info(fen)
@@ -39,7 +71,8 @@ def analyze_position(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int = MULT
             if dangerous_moves:
                 warnings.append("Alguns lances podem levar a empate por repetição.")
         
-        engine = get_engine(depth=depth, multi_pv=multi_pv)
+        engine = _get_or_create_engine(depth=depth, multi_pv=multi_pv)
+        
         if not engine.is_fen_valid(fen):
             return {"best_move": None, "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": ["FEN inválido."]}
 
@@ -72,9 +105,3 @@ def analyze_position(fen: str, depth: int = ANALYSIS_DEPTH, multi_pv: int = MULT
     except Exception as e:
         print(f"Erro: {e}")
         return {"best_move": None, "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": [str(e)]}
-    finally:
-        if engine:
-            try:
-                engine.send_quit_command()
-            except:
-                pass

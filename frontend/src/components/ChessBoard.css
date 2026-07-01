@@ -7,7 +7,6 @@
   letter-spacing: 0.02em;
 }
 
-/* Coordenadas claras nas casas escuras, escuras nas claras */
 .cg-wrap coords coord {
   opacity: 0.85 !important;
   text-shadow: 
@@ -16,11 +15,15 @@
   color: #e2e8f0 !important;
 }
 
-/* Nas casas claras, deixa a coordenada mais escura */
 .cg-wrap .light coords coord,
 .cg-wrap .white coords coord {
   color: #475569 !important;
   text-shadow: 
     0 0 2px rgba(255, 255, 255, 0.6),
     0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+/* Hitbox maior para peças - facilita clicar */
+.cg-wrap piece {
+  cursor: pointer !important;
 }

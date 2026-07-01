@@ -1,10 +1,11 @@
 import chess
-from services.stockfish_service import get_engine
+from services.stockfish_service import _get_or_create_engine
 from chess_logic.openings import detect_opening_from_history
 from chess_logic.classifications import classify_move
 
 
 def review_game(history: list, player_color: str = 'w'):
+    """Analisa partida completa com engine persistente e depth reduzido."""
     try:
         if not history or len(history) < 2:
             return None
@@ -51,73 +52,64 @@ def review_game(history: list, player_color: str = 'w'):
         # Abertura
         opening_name, opening_code = detect_opening_from_history(history)
         
-        # Análise
         all_moves_analysis = []
-        engine = None
+        engine = _get_or_create_engine(depth=6, multi_pv=1)
+        temp_board = chess.Board()
         
-        try:
-            engine = get_engine(depth=14, multi_pv=1)
-            temp_board = chess.Board()
+        for i, move in enumerate(history):
+            if not move.get('from') or not move.get('to'):
+                continue
             
-            for i, move in enumerate(history):
-                if not move.get('from') or not move.get('to'):
-                    continue
-                
-                uci = move['from'] + move['to']
-                promotion = move.get('promotion', '')
-                if promotion:
-                    uci += promotion
-                
-                move_color = move.get('color', '')
-                is_player_move = move_color == player_color
-                
-                try:
-                    chess_move = chess.Move.from_uci(uci)
-                    if chess_move in temp_board.legal_moves:
-                        fen_before = temp_board.fen()
-                        temp_board.push(chess_move)
-                        fen_after = temp_board.fen()
+            uci = move['from'] + move['to']
+            # SÓ adiciona promoção se realmente tiver (5+ caracteres)
+            promotion = move.get('promotion', '')
+            if promotion:
+                uci += promotion
+            
+            move_color = move.get('color', '')
+            is_player_move = move_color == player_color
+            
+            try:
+                chess_move = chess.Move.from_uci(uci)
+                if chess_move in temp_board.legal_moves:
+                    fen_before = temp_board.fen()
+                    temp_board.push(chess_move)
+                    fen_after = temp_board.fen()
+                    
+                    if engine.is_fen_valid(fen_after):
+                        engine.set_fen_position(fen_after)
+                        top = engine.get_top_moves(3)
                         
-                        if engine.is_fen_valid(fen_after):
-                            engine.set_fen_position(fen_after)
-                            top = engine.get_top_moves(3)
+                        if top:
+                            best_move = top[0].get('Move', '')
+                            best_cp = top[0].get('Centipawn', 0) or 0
                             
-                            if top:
-                                best_move = top[0].get('Move', '')
-                                best_cp = top[0].get('Centipawn', 0) or 0
-                                
-                                cp_after = best_cp
-                                for t in top:
-                                    if t.get('Move') == uci:
-                                        cp_after = t.get('Centipawn', 0) or 0
-                                        break
-                                
-                                engine.set_fen_position(fen_before)
-                                top_before = engine.get_top_moves(1)
-                                cp_before = top_before[0].get('Centipawn', 0) if top_before else 0
-                                
-                                if move_color == 'w':
-                                    cp_loss = cp_before - cp_after
-                                else:
-                                    cp_loss = -(cp_before - cp_after)
-                                
-                                category = classify_move(uci, best_move, cp_loss, is_player_move)
-                                
-                                all_moves_analysis.append({
-                                    'move_number': i + 1, 'move_uci': uci,
-                                    'move_san': move.get('san', uci), 'best_move': best_move,
-                                    'cp_loss': abs(cp_loss), 'category': category,
-                                    'is_player_move': is_player_move, 'color': move_color,
-                                })
-                except:
-                    try:
-                        temp_board.push(chess_move)
-                    except:
-                        pass
-        finally:
-            if engine:
+                            cp_after = best_cp
+                            for t in top:
+                                if t.get('Move') == uci:
+                                    cp_after = t.get('Centipawn', 0) or 0
+                                    break
+                            
+                            engine.set_fen_position(fen_before)
+                            top_before = engine.get_top_moves(1)
+                            cp_before = top_before[0].get('Centipawn', 0) if top_before else 0
+                            
+                            if move_color == 'w':
+                                cp_loss = cp_before - cp_after
+                            else:
+                                cp_loss = -(cp_before - cp_after)
+                            
+                            category = classify_move(uci, best_move, cp_loss, is_player_move)
+                            
+                            all_moves_analysis.append({
+                                'move_number': i + 1, 'move_uci': uci,
+                                'move_san': move.get('san', uci), 'best_move': best_move,
+                                'cp_loss': abs(cp_loss), 'category': category,
+                                'is_player_move': is_player_move, 'color': move_color,
+                            })
+            except:
                 try:
-                    engine.send_quit_command()
+                    temp_board.push(chess_move)
                 except:
                     pass
         
@@ -145,7 +137,6 @@ def review_game(history: list, player_color: str = 'w'):
             'blunders': blunders, 'grave_mistakes': blunders, 'moderate_mistakes': mistake_count,
         }
         
-        # Resumo local (sem Gemini)
         if result == "Vitória":
             summary = f"Resumo: Você venceu com {accuracy}% de precisão! Destaque: Boa efetividade nos lances. Melhoria: Continue praticando táticas para reduzir imprecisões."
         elif result == "Derrota":
@@ -157,6 +148,7 @@ def review_game(history: list, player_color: str = 'w'):
             'result': result, 'result_reason': result_reason,
             'opening': {'name': opening_name, 'code': opening_code},
             'stats': stats, 'mistakes': mistakes[:10], 'summary': summary,
+            'all_moves': all_moves_analysis,  # NOVO: todos os lances para replay
         }
     
     except Exception as e:

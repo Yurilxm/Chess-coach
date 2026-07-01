@@ -99,6 +99,9 @@ function AnalysisPanel({ fen, analysis, loading, error, selected = 0, onSelect, 
 
   if (!analysis) return null
 
+  
+  const analysisFen = analysis.fen || fen
+
   const lines = analysis.lines?.length > 0 
     ? analysis.lines 
     : analysis.top_moves?.map(move => ({ move, evaluation: analysis.evaluation })) || []
@@ -108,7 +111,7 @@ function AnalysisPanel({ fen, analysis, loading, error, selected = 0, onSelect, 
   const selectedMove = selectedLine?.move
   const selectedEval = selectedLine?.evaluation
 
-  const moveInfo = selectedMove ? describeUciMove(fen, selectedMove) : null
+  const moveInfo = selectedMove ? describeUciMove(analysisFen, selectedMove) : null
   const evaluationText = selectedEval ? getEvaluationText(selectedEval) : ''
   const advantageText = selectedEval ? getAdvantageText(selectedEval) : ''
   const riskText = getRiskText(lines, selected)
@@ -149,7 +152,7 @@ function AnalysisPanel({ fen, analysis, loading, error, selected = 0, onSelect, 
             <p className="text-xs text-slate-500 mb-2">Escolha uma opção para entender o lance</p>
             <div className="flex flex-col gap-2">
               {options.map((line, i) => {
-                const info = describeUciMove(fen, line.move)
+                const info = describeUciMove(analysisFen, line.move)
                 const isSelected = i === selected
                 let evalBadge = ''
                 if (line.evaluation?.type === 'mate') {

@@ -1,12 +1,13 @@
 import random
 from config.settings import DIFFICULTY_LEVELS, DEFAULT_DIFFICULTY
-from services.stockfish_service import get_engine
+from services.stockfish_service import _get_or_create_engine
 from chess_logic.openings import get_opening_moves
+import warnings
+warnings.filterwarnings("ignore", message=".*get_top_moves will still return.*")
 
 
 def play_bot_move(fen: str, difficulty: int = DEFAULT_DIFFICULTY):
     config = DIFFICULTY_LEVELS.get(difficulty, DIFFICULTY_LEVELS[DEFAULT_DIFFICULTY])
-    engine = None
     
     try:
         skill = config["skill"]
@@ -32,7 +33,7 @@ def play_bot_move(fen: str, difficulty: int = DEFAULT_DIFFICULTY):
         else:
             multi_pv = 5
         
-        engine = get_engine(depth=depth, multi_pv=multi_pv, skill=skill if skill > 0 else None)
+        engine = _get_or_create_engine(depth=depth, multi_pv=multi_pv, skill=skill if skill > 0 else None)
         
         if not engine.is_fen_valid(fen):
             return None
@@ -109,9 +110,3 @@ def play_bot_move(fen: str, difficulty: int = DEFAULT_DIFFICULTY):
     except Exception as e:
         print(f"Erro ao jogar como bot: {e}")
         return None
-    finally:
-        if engine:
-            try:
-                engine.send_quit_command()
-            except:
-                pass
