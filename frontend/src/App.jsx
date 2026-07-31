@@ -16,6 +16,8 @@ import { useCoach } from './hooks/useCoach'
 import { useGameReview } from './hooks/useGameReview'
 
 function App() {
+  const [replayIndex, setReplayIndex] = useState(null)
+  const [replayFen, setReplayFen] = useState(null)
   const [mode, setMode] = useState('game')
   const [selectedMoveIndex, setSelectedMoveIndex] = useState(0)
   const [botGameStarted, setBotGameStarted] = useState(false)
@@ -281,6 +283,29 @@ function App() {
         review={review}
         loading={reviewLoading}
         onClose={clearReview}
+        onReplayMove={(index) => {
+          if (index === null || index < 0 || index >= (review?.all_moves?.length || 0)) {
+            setReplayIndex(null)
+            setReplayFen(null)
+            return
+          }
+          setReplayIndex(index)
+          // Reconstrói FEN até o lance
+          const temp = new Chess()
+          for (let i = 0; i <= index; i++) {
+            const m = review.all_moves[i]
+            if (m?.move_uci) {
+              const uci = m.move_uci
+              const from = uci.substring(0, 2)
+              const to = uci.substring(2, 4)
+              const promo = uci.length > 4 ? uci.substring(4, 5) : undefined
+              try { promo ? temp.move({ from, to, promotion: promo }) : temp.move({ from, to }) } catch {}
+            }
+          }
+          setReplayFen(temp.fen())
+        }}
+        replayFen={replayFen}
+        replayIndex={replayIndex}
       />
     </div>
   )

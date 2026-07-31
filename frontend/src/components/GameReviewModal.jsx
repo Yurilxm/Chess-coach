@@ -1,4 +1,10 @@
-import { Trophy, Skull, Handshake, Target, X, Loader2, Sparkles, Brain, Crosshair, Zap, ThumbsUp, AlertTriangle, Flame, Diamond } from 'lucide-react'
+import { useState, useMemo } from 'react'
+import { Chess } from 'chess.js'
+import {
+  Trophy, Skull, Handshake, Target, X, Loader2, Sparkles, Brain,
+  Crosshair, Zap, ThumbsUp, AlertTriangle, Flame, Diamond,
+  ChevronLeft, ChevronRight, SkipBack, SkipForward, Play
+} from 'lucide-react'
 
 const RESULT_ICONS = {
   'Vitória': Trophy,
@@ -22,13 +28,83 @@ const CATEGORY_ICONS = {
   'blunder':     { icon: Skull, color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/20', label: 'Blunder' },
 }
 
-function GameReviewModal({ review, loading, onClose }) {
+const PIECE_NAMES = { p: 'Peão', n: 'Cavalo', b: 'Bispo', r: 'Torre', q: 'Dama', k: 'Rei' }
+
+function getMoveDescription(fen, uci) {
+  try {
+    const from = uci.substring(0, 2)
+    const to = uci.substring(2, 4)
+    const promotion = uci.length > 4 ? uci.substring(4, 5) : undefined
+    const temp = new Chess(fen)
+    const move = promotion ? temp.move({ from, to, promotion }) : temp.move({ from, to })
+    if (!move) return null
+    const piece = PIECE_NAMES[move.piece] || 'Peça'
+    let text = `${piece} de ${from} para ${to}`
+    if (move.captured) text += `, capturando ${(PIECE_NAMES[move.captured] || 'peça').toLowerCase()}`
+    return { text, from, to, piece: move.piece, san: move.san }
+  } catch { return null }
+}
+
+function getErrorExplanation(category, cpLoss, moveDesc, bestDesc) {
+  const lossPeoes = (cpLoss / 100).toFixed(1)
+  const base = {
+    'blunder': `Você perdeu ${lossPeoes} peões de vantagem com este lance.`,
+    'mistake': `Este lance custou ${lossPeoes} peões de vantagem.`,
+    'inaccuracy': `Uma pequena imprecisão que cedeu ${lossPeoes} peões.`,
+  }
+  const detail = []
+  if (cpLoss > 200) detail.push('Foi um erro grave que mudou drasticamente a avaliação da posição.')
+  else if (cpLoss > 100) detail.push('Este lance permitiu que o adversário ganhasse vantagem.')
+  if (moveDesc?.captured && !bestDesc?.captured) detail.push('Você capturou uma peça, mas existia um lance melhor.')
+  if (!moveDesc?.captured && bestDesc?.captured) detail.push('Você perdeu uma oportunidade de capturar uma peça adversária.')
+  
+  return (base[category] || base['inaccuracy']) + ' ' + detail.join(' ')
+}
+
+function GameReviewModal({ review, loading, onClose, onReplayMove, replayFen, replayIndex }) {
+  const [selectedError, setSelectedError] = useState(null)
+
   if (!review && !loading) return null
 
   const ResultIcon = RESULT_ICONS[review?.result] || Target
   const resultColor = RESULT_COLORS[review?.result] || 'text-slate-300'
   const accuracy = review?.stats?.accuracy || 0
   const accuracyColor = accuracy >= 80 ? 'text-emerald-400' : accuracy >= 60 ? 'text-amber-400' : 'text-rose-400'
+
+  const allMoves = review?.all_moves || []
+  const mistakes = review?.mistakes || []
+
+  // Encontra a análise do lance selecionado
+  const selectedAnalysis = selectedError !== null ? mistakes[selectedError] : null
+  const selectedMoveData = selectedAnalysis ? allMoves.find(m => m.move_number === selectedAnalysis.move_number) : null
+
+  function handleErrorClick(index) {
+    setSelectedError(selectedError === index ? null : index)
+    const mistake = mistakes[index]
+    if (mistake && onReplayMove) {
+      onReplayMove(mistake.move_number - 1)
+    }
+  }
+
+  function getFenForMove(moveIndex) {
+    if (moveIndex < 0) return null
+    try {
+      const temp = new Chess()
+      for (let i = 0; i <= moveIndex; i++) {
+        const m = review.all_moves?.[i]
+        if (m?.move_uci) {
+          const uci = m.move_uci
+          const from = uci.substring(0, 2)
+          const to = uci.substring(2, 4)
+          const promo = uci.length > 4 ? uci.substring(4, 5) : undefined
+          promo ? temp.move({ from, to, promotion: promo }) : temp.move({ from, to })
+        }
+      }
+      return temp.fen()
+    } catch { return null }
+  }
+
+  const currentFen = replayFen || (review?.all_moves?.length > 0 ? getFenForMove(review.all_moves.length - 1) : null)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -58,13 +134,9 @@ function GameReviewModal({ review, loading, onClose }) {
             {/* Resultado + Precisão */}
             <div className="text-center py-5 bg-slate-800/40 rounded-2xl border border-white/5">
               <ResultIcon className={`w-12 h-12 mx-auto mb-2 ${resultColor}`} />
-              <p className={`text-2xl font-bold ${resultColor}`}>
-                {review.result}
-              </p>
+              <p className={`text-2xl font-bold ${resultColor}`}>{review.result}</p>
               {review.result_reason && (
-                <p className="text-xs text-slate-500 mt-1">
-                  {review.result_reason}
-                </p>
+                <p className="text-xs text-slate-500 mt-1">{review.result_reason}</p>
               )}
               {review.opening?.name && (
                 <p className="text-xs text-cyan-400/80 mt-1">
@@ -79,7 +151,28 @@ function GameReviewModal({ review, loading, onClose }) {
               )}
             </div>
 
-            {/* Classificação dos lances (estilo chess.com) */}
+            {/* Controles de replay */}
+            {allMoves.length > 0 && (
+              <div className="flex items-center justify-center gap-2 bg-slate-800/40 rounded-xl p-2 border border-white/5">
+                <button onClick={() => onReplayMove?.(0)} className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white" title="Início">
+                  <SkipBack className="w-4 h-4" />
+                </button>
+                <button onClick={() => onReplayMove?.((replayIndex ?? allMoves.length - 1) - 1)} className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white" title="Anterior">
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-xs text-slate-400 min-w-[60px] text-center">
+                  Lance {(replayIndex ?? allMoves.length - 1) + 1}/{allMoves.length}
+                </span>
+                <button onClick={() => onReplayMove?.((replayIndex ?? allMoves.length - 1) + 1)} className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white" title="Próximo">
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+                <button onClick={() => onReplayMove?.(allMoves.length - 1)} className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white" title="Final">
+                  <SkipForward className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* Classificação dos lances */}
             {review.stats && (
               <div className="grid grid-cols-4 gap-1.5">
                 {review.stats.brilliant > 0 && (
@@ -138,28 +231,60 @@ function GameReviewModal({ review, loading, onClose }) {
               </div>
             )}
 
-            {/* Lista de erros com categoria */}
-            {review.mistakes?.length > 0 && (
+            {/* Lista de erros clicáveis com explicações */}
+            {mistakes.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Crosshair className="w-4 h-4 text-amber-400" />
                   <span className="text-xs font-semibold text-slate-400 uppercase">Lances para revisar</span>
                 </div>
-                <div className="space-y-1.5">
-                  {review.mistakes.slice(0, 8).map((m, i) => {
+                <div className="space-y-2">
+                  {mistakes.slice(0, 8).map((m, i) => {
                     const cat = CATEGORY_ICONS[m.category] || CATEGORY_ICONS['inaccuracy']
                     const CatIcon = cat.icon
+                    const isExpanded = selectedError === i
+
+                    // Descrição do lance
+                    const currentFenForMove = getFenForMove(m.move_number - 2)
+                    const moveDesc = currentFenForMove ? getMoveDescription(currentFenForMove, m.move_uci) : null
+                    const bestDesc = currentFenForMove ? getMoveDescription(currentFenForMove, m.best_move) : null
+
                     return (
-                      <div key={i} className={`text-xs p-2.5 rounded-lg border ${cat.bg} ${cat.border}`}>
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <CatIcon className={`w-3 h-3 ${cat.color}`} />
-                          <span className={`font-semibold ${cat.color}`}>{cat.label}</span>
-                          <span className="text-slate-500">• Lance {m.move_number}</span>
-                        </div>
-                        <span className="text-slate-300">
-                          {m.move_san} → <span className="text-emerald-400/80">{m.best_move}</span>
-                        </span>
-                        <span className="text-slate-500 ml-1">(-{m.cp_loss/100} peões)</span>
+                      <div key={i}>
+                        <button
+                          onClick={() => handleErrorClick(i)}
+                          className={`w-full text-left text-xs p-2.5 rounded-lg border transition-all ${cat.bg} ${cat.border} hover:scale-[1.02]`}
+                        >
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <CatIcon className={`w-3 h-3 ${cat.color}`} />
+                            <span className={`font-semibold ${cat.color}`}>{cat.label}</span>
+                            <span className="text-slate-500">• Lance {m.move_number}</span>
+                            {isExpanded && <Play className="w-3 h-3 text-violet-400 ml-auto" />}
+                          </div>
+                          <span className="text-slate-300">
+                            {moveDesc ? moveDesc.text : m.move_san} → <span className="text-emerald-400/80">{bestDesc ? bestDesc.text : m.best_move}</span>
+                          </span>
+                          <span className="text-slate-500 ml-1">(-{m.cp_loss/100} peões)</span>
+                        </button>
+                        
+                        {/* Explicação expandida */}
+                        {isExpanded && (
+                          <div className="mt-1.5 ml-2 p-3 bg-slate-800/60 rounded-lg border border-white/5">
+                            <p className="text-xs text-slate-300 leading-relaxed">
+                              {getErrorExplanation(m.category, m.cp_loss || 100, moveDesc, bestDesc)}
+                            </p>
+                            <div className="flex items-center gap-3 mt-2 pt-2 border-t border-white/5">
+                              <div className="flex-1">
+                                <p className="text-[10px] text-rose-400/80 font-medium">Seu lance</p>
+                                <p className="text-xs text-slate-300">{moveDesc ? moveDesc.text : m.move_san}</p>
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-[10px] text-emerald-400/80 font-medium">Melhor lance</p>
+                                <p className="text-xs text-slate-300">{bestDesc ? bestDesc.text : m.best_move}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )
                   })}
@@ -167,7 +292,7 @@ function GameReviewModal({ review, loading, onClose }) {
               </div>
             )}
 
-            {/* Resumo da IA ou Local */}
+            {/* Resumo */}
             {review.summary && (
               <div className="bg-violet-500/5 rounded-2xl p-4 border border-violet-500/10">
                 <div className="flex items-start gap-2">

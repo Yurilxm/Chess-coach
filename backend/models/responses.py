@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 
 class AnalysisResponse(BaseModel):
@@ -30,5 +30,6 @@ class ReviewResponse(BaseModel):
     opening: dict
     stats: dict
     mistakes: list
+    all_moves: list = []
     summary: str
     loading: bool = False
