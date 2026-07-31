@@ -33,10 +33,17 @@ function App() {
   const activeFen = mode === 'editor' ? editor.fen : game.fen
 
   useEffect(() => {
-    clear()
-    clearCoach()
-    setSelectedMoveIndex(0)
-  }, [activeFen, clear, clearCoach])
+      clear()
+      clearCoach()
+      setSelectedMoveIndex(0)
+  }, [activeFen])
+
+  // Explica automaticamente a primeira opção quando a análise chega
+  useEffect(() => {
+      if (analysis?.lines?.[0]?.move && activeFen && !coachExplanation && !coachLoading) {
+          explainMove(activeFen, analysis.lines[0].move, analysis.lines[0].evaluation || analysis.evaluation)
+      }
+  }, [analysis, activeFen])
 
   useEffect(() => {
     if (mode === 'bot') {

@@ -1,6 +1,6 @@
 import chess
 from google import genai
-from config.settings import GEMINI_API_KEY
+from config.settings import GEMINI_API_KEY, GEMINI_MODEL
 
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)
 
@@ -48,7 +48,7 @@ Regras:
 - Texto puro, sem markdown, sem asteriscos."""
 
         response = gemini_client.models.generate_content(
-            model="gemini-2.0-flash",
+            model=GEMINI_MODEL,
             contents=prompt,
         )
         return response.text.strip()

@@ -1,13 +1,17 @@
 import os
+from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(BASE_DIR, '..', '.env'))
+
 STOCKFISH_PATH = os.path.join(BASE_DIR, "engine", "stockfish.exe")
 
 ANALYSIS_DEPTH = 16
 MULTI_PV = 3
 DEFAULT_DIFFICULTY = 1000
 
-GEMINI_API_KEY = "SUA_CHAVE_DE_API_DO_GEMINI_AQUI"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
 
 DIFFICULTY_LEVELS = {
     200:  {"skill": 0,  "depth": 1,  "cp_margin": 200, "error_rate": 0.50, "name": "Primeiros passos"},
