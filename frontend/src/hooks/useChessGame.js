@@ -31,7 +31,11 @@ export function useChessGame(initialFen) {
     if (halfMoves >= 100) return 'fiftyMoves'
     if (chess.isThreefoldRepetition()) return 'threefold'
     if (chess.isDraw()) return 'draw'
-    if (chess.isGameOver() && !chess.isCheck()) return 'stalemate'
+    // Fallback: game over sem xeque que nao caiu em nenhuma categoria
+    // especifica acima (ex: dead position rara). Antes retornava
+    // 'stalemate', que tem semantica propria (afogamento) — o texto
+    // exibido ficava errado. Agora retorna 'draw' generico.
+    if (chess.isGameOver() && !chess.isCheck()) return 'draw'
     if (chess.isGameOver() && chess.isCheck()) return 'checkmate'
     return null
   }, [])

@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Chess } from 'chess.js'
+import ChessBoard from './ChessBoard'
 import {
   Trophy, Skull, Handshake, Target, X, Loader2, Sparkles, Brain,
   Crosshair, Zap, ThumbsUp, AlertTriangle, Flame, Diamond,
@@ -169,6 +170,19 @@ function GameReviewModal({ review, loading, onClose, onReplayMove, replayFen, re
                 <button onClick={() => onReplayMove?.(allMoves.length - 1)} className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white" title="Final">
                   <SkipForward className="w-4 h-4" />
                 </button>
+              </div>
+            )}
+
+            {/* Tabuleiro de replay */}
+            {replayFen && (
+              <div className="flex justify-center py-1">
+                <ChessBoard
+                  fen={replayFen}
+                  boardWidth={280}
+                  showDests={false}
+                  freeMove={false}
+                  dests={new Map()}
+                />
               </div>
             )}
 

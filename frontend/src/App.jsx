@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { Chess } from 'chess.js'
 import { Brain, Play, RefreshCw } from 'lucide-react'
 import Header from './components/Header'
 import GameView from './components/GameView'
