@@ -55,54 +55,62 @@ def review_game(history: list, player_color: str = 'w'):
         for i, move in enumerate(history):
             if not move.get('from') or not move.get('to'):
                 continue
-            
+
             uci = move['from'] + move['to']
-            # SÓ adiciona promoção se realmente tiver (5+ caracteres)
             promotion = move.get('promotion', '')
             if promotion:
                 uci += promotion
-            
+
             move_color = move.get('color', '')
             is_player_move = move_color == player_color
-            
+
             try:
                 chess_move = chess.Move.from_uci(uci)
-                if chess_move in temp_board.legal_moves:
-                    fen_before = temp_board.fen()
-                    temp_board.push(chess_move)
-                    fen_after = temp_board.fen()
-                    
-                    top = engine_analysis(fen_after, depth=6, multi_pv=3)
+            except (ValueError, TypeError) as e:
+                print(f"Lance com UCI invalido '{uci}': {e}")
+                continue
 
-                if top:
-                            best_move = top[0].get('Move', '')
-                            best_cp = top[0].get('Centipawn') or 0
-                            
-                            cp_after = best_cp
-                            for t in top:
-                                if t.get('Move') == uci:
-                                    cp_after = t.get('Centipawn') or 0
-                                    break
-                            
-                            top_before = engine_analysis(fen_before, depth=6, multi_pv=1)
-                            cp_before = (top_before[0].get('Centipawn') or 0) if top_before else 0
+            if chess_move not in temp_board.legal_moves:
+                print(f"Lance '{uci}' nao e legal na posicao atual, ignorado")
+                continue
 
-                            if move_color == 'w':
-                                cp_loss = cp_before - cp_after
-                            else:
-                                cp_loss = -(cp_before - cp_after)
-                            
-                            category = classify_move(uci, best_move, cp_loss, is_player_move)
-                            
-                            all_moves_analysis.append({
-                                'move_number': i + 1, 'move_uci': uci,
-                                'move_san': move.get('san', uci), 'best_move': best_move,
-                                'cp_loss': abs(cp_loss), 'category': category,
-                                'is_player_move': is_player_move, 'color': move_color,
-                            })
+            fen_before = temp_board.fen()
+            temp_board.push(chess_move)
+            fen_after = temp_board.fen()
+
+            try:
+                top = engine_analysis(fen_after, depth=6, multi_pv=3)
+                if not top:
+                    continue
+
+                best_move = top[0].get('Move', '')
+                best_cp = top[0].get('Centipawn') or 0
+
+                cp_after = best_cp
+                for t in top:
+                    if t.get('Move') == uci:
+                        cp_after = t.get('Centipawn') or 0
+                        break
+
+                top_before = engine_analysis(fen_before, depth=6, multi_pv=1)
+                cp_before = (top_before[0].get('Centipawn') or 0) if top_before else 0
+
+                if move_color == 'w':
+                    cp_loss = cp_before - cp_after
+                else:
+                    cp_loss = -(cp_before - cp_after)
+
+                category = classify_move(uci, best_move, cp_loss, is_player_move)
+
+                all_moves_analysis.append({
+                    'move_number': i + 1, 'move_uci': uci,
+                    'move_san': move.get('san', uci), 'best_move': best_move,
+                    'cp_loss': abs(cp_loss), 'category': category,
+                    'is_player_move': is_player_move, 'color': move_color,
+                })
             except Exception as e:
                 print(f"Erro ao analisar lance {i} ({uci}): {e}")
-        
+
         # Estatísticas
         player_analysis = [m for m in all_moves_analysis if m.get('is_player_move')]
         mistakes = [m for m in player_analysis if m['category'] in ['mistake', 'blunder', 'inaccuracy']]

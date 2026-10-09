@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { Chess } from 'chess.js'
 import { Brain, Play, RefreshCw } from 'lucide-react'
 import Header from './components/Header'
@@ -33,31 +33,51 @@ function App() {
 
   const activeFen = mode === 'editor' ? editor.fen : game.fen
 
-  useEffect(() => {
-      clear()
-      clearCoach()
-      setSelectedMoveIndex(0)
-  }, [activeFen])
+  // Ref que espelha game.history sempre atualizado. Usado dentro de
+  // useEffect para evitar dependencia de um array que muda toda hora
+  // (o que faria o efeito re-disparar sem necessidade).
+  const historyRef = useRef(game.history)
+  historyRef.current = game.history
 
-  // Explica automaticamente a primeira opção quando a análise chega
-  useEffect(() => {
-      if (analysis?.lines?.[0]?.move && activeFen && !coachExplanation && !coachLoading) {
-          explainMove(activeFen, analysis.lines[0].move, analysis.lines[0].evaluation || analysis.evaluation)
-      }
-  }, [analysis, activeFen])
+  // Ref que guarda qual FEN ja foi explicada pelo coach. Impede que o
+  // mesmo FEN seja re-explicado quando deps internas mudarem.
+  const lastExplainedFenRef = useRef(null)
 
+  // Reset de analise/coach ao trocar de posicao.
+  useEffect(() => {
+    clear()
+    clearCoach()
+    setSelectedMoveIndex(0)
+    lastExplainedFenRef.current = null
+  }, [activeFen, clear, clearCoach])
+
+  // Explica automaticamente a primeira opcao quando a analise chega.
+  // So explica cada FEN uma vez.
+  useEffect(() => {
+    if (!analysis?.lines?.[0]?.move || !activeFen) return
+    if (lastExplainedFenRef.current === activeFen) return
+    if (coachExplanation || coachLoading) return
+
+    lastExplainedFenRef.current = activeFen
+    explainMove(
+      activeFen,
+      analysis.lines[0].move,
+      analysis.lines[0].evaluation || analysis.evaluation,
+    )
+  }, [analysis, activeFen, coachExplanation, coachLoading, explainMove])
+
+  // Ao trocar de modo, reseta cor do jogador, estado do jogo contra o bot
+  // e limpa a revisao. Usa as funcoes desestruturadas (estaveis) nas deps.
+  const gameReset = game.reset
+  const gameSetPlayerColor = game.setPlayerColor
   useEffect(() => {
     if (mode === 'bot') {
-      game.reset()
-      game.setPlayerColor(null)
-      setBotGameStarted(false)
-      clearReview()
-    } else {
-      game.setPlayerColor(null)
-      setBotGameStarted(false)
-      clearReview()
+      gameReset()
     }
-  }, [mode])
+    gameSetPlayerColor(null)
+    setBotGameStarted(false)
+    clearReview()
+  }, [mode, gameReset, gameSetPlayerColor, clearReview])
 
   function handleStartBotGame() {
     if (!game.playerColor) return
@@ -81,45 +101,69 @@ function App() {
     }
   }
 
-  // Bot joga automaticamente + executa premove
+  // Bot joga automaticamente. Desestrutura funcoes estaveis do bot e do
+  // game pra nao colocar os objetos inteiros nas deps (o que causaria loop).
+  const botThinking = bot.thinking
+  const botRequestMove = bot.requestMove
+  const gameAttemptMove = game.attemptMove
+  const gameExecuteNextPremove = game.executeNextPremove
   useEffect(() => {
     if (mode !== 'bot') return
     if (!botGameStarted) return
     if (game.isGameOver) return
     if (!game.playerColor) return
-    
+
     const botColor = game.playerColor === 'w' ? 'b' : 'w'
-    
+
     if (game.turn !== botColor) return
-    if (bot.thinking) return
+    if (botThinking) return
 
     const timer = setTimeout(() => {
-      bot.requestMove(game.fen, game.history).then((result) => {
+      botRequestMove(game.fen, historyRef.current).then((result) => {
         if (result?.from_square && result?.to_square) {
-          game.attemptMove(result.from_square, result.to_square, {
+          gameAttemptMove(result.from_square, result.to_square, {
             skipColorCheck: true,
             promotion: result.promotion,
           })
           setTimeout(() => {
-            game.executeNextPremove()
+            gameExecuteNextPremove()
           }, 100)
         }
       })
     }, 400)
 
     return () => clearTimeout(timer)
-  }, [game.fen, game.turn, game.isGameOver, game.playerColor, mode, botGameStarted])
+  }, [
+    game.fen,
+    game.turn,
+    game.isGameOver,
+    game.playerColor,
+    mode,
+    botGameStarted,
+    botThinking,
+    botRequestMove,
+    gameAttemptMove,
+    gameExecuteNextPremove,
+  ])
 
-  // Revisão pós-partida
+  // Revisao pos-partida. Usa historyRef pra nao depender do array de historico.
   useEffect(() => {
     if (mode !== 'bot') return
     if (!botGameStarted) return
     if (!game.isGameOver) return
     if (review || reviewLoading) return
-    if (game.history.length === 0) return
-    
-    requestReview(game.history, game.playerColor)
-  }, [game.isGameOver, mode, botGameStarted])
+    if (historyRef.current.length === 0) return
+
+    requestReview(historyRef.current, game.playerColor)
+  }, [
+    game.isGameOver,
+    game.playerColor,
+    mode,
+    botGameStarted,
+    review,
+    reviewLoading,
+    requestReview,
+  ])
 
   const handleSelectMove = useCallback((index) => {
     setSelectedMoveIndex(index)
@@ -147,8 +191,8 @@ function App() {
     clearReview()
   }
 
-  const selectedBestMove = analysis?.lines?.[selectedMoveIndex]?.move 
-    || analysis?.top_moves?.[selectedMoveIndex] 
+  const selectedBestMove = analysis?.lines?.[selectedMoveIndex]?.move
+    || analysis?.top_moves?.[selectedMoveIndex]
     || analysis?.best_move
 
   const isBotMode = mode === 'bot'
@@ -174,10 +218,10 @@ function App() {
               {isEditorMode ? (
                 <EditorView editor={editor} boardWidth={520} bestMoveUci={selectedBestMove} />
               ) : (
-                <GameView 
-                  game={game} 
-                  boardWidth={520} 
-                  bestMoveUci={selectedBestMove} 
+                <GameView
+                  game={game}
+                  boardWidth={520}
+                  bestMoveUci={selectedBestMove}
                   isBotMode={isBotMode}
                   onBotReset={handleBotReset}
                 />
@@ -259,10 +303,10 @@ function App() {
                 {loading ? 'Analisando...' : 'Analisar posição'}
               </button>
 
-              <AnalysisPanel 
-                fen={activeFen} 
-                analysis={analysis} 
-                loading={loading} 
+              <AnalysisPanel
+                fen={activeFen}
+                analysis={analysis}
+                loading={loading}
                 error={error}
                 selected={selectedMoveIndex}
                 onSelect={handleSelectMove}
@@ -287,7 +331,7 @@ function App() {
         </div>
       </main>
 
-      <GameReviewModal 
+      <GameReviewModal
         review={review}
         loading={reviewLoading}
         onClose={clearReview}
@@ -298,7 +342,7 @@ function App() {
             return
           }
           setReplayIndex(index)
-          // Reconstrói FEN até o lance
+          // Reconstroi FEN ate o lance
           const temp = new Chess()
           for (let i = 0; i <= index; i++) {
             const m = review.all_moves[i]

@@ -5,15 +5,24 @@ import { computeEditorDests } from '../utils/pieceMovement'
 
 const MAX_HISTORY = 50
 
+
+function turnFromFen(fen) {
+  return fen.split(' ')[1] || 'w'
+}
+
+
 export function useChessEditor(initialFen) {
+  const fenInicial = initialFen || START_FEN
   const chessRef = useRef(null)
   if (chessRef.current === null) {
-    chessRef.current = createChess(initialFen || START_FEN)
+    chessRef.current = createChess(fenInicial)
   }
-  
+
   const historyRef = useRef([])
-  
-  const [fen, setFen] = useState(() => chessRef.current.fen())
+
+  // Derivados iniciais vem de um Chess temporario (nao do ref, para
+  // nao disparar warning react-hooks/refs).
+  const [fen, setFen] = useState(() => createChess(fenInicial).fen())
   const [canUndo, setCanUndo] = useState(false)
 
   const sync = useCallback(() => {
@@ -94,11 +103,13 @@ export function useChessEditor(initialFen) {
     return true
   }, [sync])
 
-  const chess = chessRef.current
+  const getDests = useCallback(() => {
+    return computeEditorDests(createChess(fen).board())
+  }, [fen])
 
   return {
     fen,
-    turn: chess.turn(),
+    turn: turnFromFen(fen),
     canUndo,
     movePiece,
     placePiece,
@@ -107,6 +118,6 @@ export function useChessEditor(initialFen) {
     reset,
     loadFen,
     undo,
-    getDests: () => computeEditorDests(chess.board()),
+    getDests,
   }
 }
