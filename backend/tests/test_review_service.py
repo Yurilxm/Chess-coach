@@ -84,7 +84,7 @@ def test_revisao_partida_curta(mock_engine, partida_pastor):
     assert resultado is not None
 
     # Chaves obrigatorias
-    chaves_obrigatorias = {"result", "result_reason", "opening", "stats", "mistakes", "summary", "all_moves"}
+    chaves_obrigatorias = {"result", "result_reason", "stats", "mistakes", "summary", "all_moves"}
     assert chaves_obrigatorias.issubset(resultado.keys())
 
     # Resultado esperado: vitoria das brancas (mate do pastor)

@@ -71,29 +71,3 @@ def get_opening_moves(fen: str, difficulty: int):
     current_opening_line = None
     current_opening_index = 0
     return None
-
-
-def detect_opening_from_history(history: list):
-    """Detecta abertura a partir do histórico de lances."""
-    opening_moves_uci = [m.get('from', '') + m.get('to', '') for m in history[:20] if m.get('from') and m.get('to')]
-    if not opening_moves_uci:
-        return "", ""
-    
-    best_match_len = 0
-    best_name = ""
-    best_code = ""
-    
-    for key, line in OPENING_LINES.items():
-        moves = line["moves"]
-        if len(moves) <= len(opening_moves_uci):
-            match = True
-            for i, m in enumerate(moves):
-                if i >= len(opening_moves_uci) or opening_moves_uci[i] != m:
-                    match = False
-                    break
-            if match and len(moves) > best_match_len:
-                best_name = line["name"]
-                best_code = key.upper()
-                best_match_len = len(moves)
-    
-    return best_name, best_code

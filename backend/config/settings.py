@@ -13,6 +13,8 @@ DEFAULT_DIFFICULTY = 1000
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
 
+# Nomes visiveis (name/desc) moram no frontend (useBotPlayer.js).
+# Aqui so os parametros tecnicos da engine.
 DIFFICULTY_LEVELS = {
     200:  {"skill": 0,  "depth": 1,  "cp_margin": 200, "error_rate": 0.50, "name": "Primeiros passos"},
     400:  {"skill": 0,  "depth": 2,  "cp_margin": 150, "error_rate": 0.40, "name": "Iniciante"},

@@ -165,7 +165,6 @@ def test_review_basico(client, monkeypatch, partida_pastor):
     fake = {
         "result": "Vitória",
         "result_reason": "Xeque-mate",
-        "opening": {"name": "Abertura Teste", "code": "X00"},
         "stats": {
             "total_moves": 7, "captures_by_player": 1, "captures_by_opponent": 0,
             "accuracy": 85.0, "brilliant": 0, "best_moves": 3, "excellent": 1,
@@ -183,7 +182,6 @@ def test_review_basico(client, monkeypatch, partida_pastor):
     assert r.status_code == 200
     body = r.json()
     assert body["result"] == "Vitória"
-    assert body["opening"]["name"] == "Abertura Teste"
     assert body["stats"]["accuracy"] == 85.0
 
 

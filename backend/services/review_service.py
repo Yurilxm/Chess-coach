@@ -1,6 +1,5 @@
 import chess
 from services.stockfish_service import _get_or_create_engine
-from chess_logic.openings import detect_opening_from_history
 from chess_logic.classifications import classify_move
 
 
@@ -49,8 +48,6 @@ def review_game(history: list, player_color: str = 'w'):
             except:
                 pass
         
-        # Abertura
-        opening_name, opening_code = detect_opening_from_history(history)
         
         all_moves_analysis = []
         engine = _get_or_create_engine(depth=6, multi_pv=1)
@@ -142,7 +139,6 @@ def review_game(history: list, player_color: str = 'w'):
         
         return {
             'result': result, 'result_reason': result_reason,
-            'opening': {'name': opening_name, 'code': opening_code},
             'stats': stats, 'mistakes': mistakes[:10], 'summary': summary,
             'all_moves': all_moves_analysis,  # NOVO: todos os lances para replay
         }

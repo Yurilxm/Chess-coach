@@ -11,12 +11,12 @@ async def review(request: ReviewRequest):
     result = review_game(request.history, request.player_color)
     if result is None:
         return {
-            "result": "Erro", "result_reason": "", "opening": {"name": "", "code": ""},
+            "result": "Erro", "result_reason": "",
             "stats": {}, "mistakes": [], "all_moves": [], "summary": "Não foi possível analisar.", "loading": False,
         }
     return {
         "result": result["result"], "result_reason": result.get("result_reason", ""),
-        "opening": result["opening"], "stats": result["stats"],
+        "stats": result["stats"],
         "mistakes": result["mistakes"], "all_moves": result.get("all_moves", []),
         "summary": result["summary"], "loading": False,
     }

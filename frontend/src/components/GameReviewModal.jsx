@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Chess } from 'chess.js'
 import ChessBoard from './ChessBoard'
+import { detectOpening } from '../utils/openings'
 import {
   Trophy, Skull, Handshake, Target, X, Loader2, Sparkles, Brain,
   Crosshair, Zap, ThumbsUp, AlertTriangle, Flame, Diamond,
@@ -64,6 +65,14 @@ function getErrorExplanation(category, cpLoss, moveDesc, bestDesc) {
 
 function GameReviewModal({ review, loading, onClose, onReplayMove, replayFen, replayIndex }) {
   const [selectedError, setSelectedError] = useState(null)
+
+  // Detecta abertura localmente. Backend nao envia mais 'opening'.
+  const opening = useMemo(() => {
+    const hist = (review?.all_moves || [])
+      .filter(m => m?.move_uci)
+      .map(m => ({ from: m.move_uci.slice(0, 2), to: m.move_uci.slice(2, 4) }))
+    return detectOpening(hist)
+  }, [review])
 
   if (!review && !loading) return null
 
@@ -139,9 +148,9 @@ function GameReviewModal({ review, loading, onClose, onReplayMove, replayFen, re
               {review.result_reason && (
                 <p className="text-xs text-slate-500 mt-1">{review.result_reason}</p>
               )}
-              {review.opening?.name && (
+              {opening?.name && (
                 <p className="text-xs text-cyan-400/80 mt-1">
-                  📖 {review.opening.name} {review.opening.code && `(${review.opening.code})`}
+                  📖 {opening.name} {opening.code && `(${opening.code})`}
                 </p>
               )}
               {accuracy > 0 && (

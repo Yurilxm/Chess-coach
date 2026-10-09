@@ -27,7 +27,6 @@ class CoachResponse(BaseModel):
 class ReviewResponse(BaseModel):
     result: str
     result_reason: str = ""
-    opening: dict
     stats: dict
     mistakes: list
     all_moves: list = []
