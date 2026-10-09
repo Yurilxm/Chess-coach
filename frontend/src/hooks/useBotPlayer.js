@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
-
-const API_URL = 'http://localhost:8000/play'
+import { ENDPOINTS } from '../utils/apiConfig'
 
 export const DIFFICULTY_LEVELS = {
   200:  { name: 'Primeiros passos',  desc: 'Lances aleatórios. Ideal para aprender.' },
@@ -30,7 +29,7 @@ export function useBotPlayer() {
     setThinking(true)
     
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(ENDPOINTS.play, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fen, difficulty }),

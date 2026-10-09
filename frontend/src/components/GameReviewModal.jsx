@@ -189,13 +189,6 @@ function GameReviewModal({ review, loading, onClose, onReplayMove, replayFen, re
             {/* Classificação dos lances */}
             {review.stats && (
               <div className="grid grid-cols-4 gap-1.5">
-                {review.stats.brilliant > 0 && (
-                  <div className="bg-cyan-500/10 rounded-xl p-2 text-center border border-cyan-500/20">
-                    <Diamond className="w-4 h-4 text-cyan-400 mx-auto mb-0.5" />
-                    <p className="text-lg font-bold text-cyan-400">{review.stats.brilliant}</p>
-                    <p className="text-[9px] text-slate-500">Brilhante</p>
-                  </div>
-                )}
                 {review.stats.best_moves > 0 && (
                   <div className="bg-emerald-500/10 rounded-xl p-2 text-center border border-emerald-500/20">
                     <Sparkles className="w-4 h-4 text-emerald-400 mx-auto mb-0.5" />

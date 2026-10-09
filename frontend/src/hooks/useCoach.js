@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
-
-const API_URL = 'http://localhost:8000/coach'
+import { ENDPOINTS } from '../utils/apiConfig'
 
 export function useCoach() {
   const [coachExplanation, setCoachExplanation] = useState(null)
@@ -13,7 +12,7 @@ export function useCoach() {
     setCoachExplanation(null)
     
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(ENDPOINTS.coach, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fen, move, evaluation }),

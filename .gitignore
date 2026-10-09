@@ -27,6 +27,7 @@ backend/.venv/
 # Variáveis de ambiente
 .env
 .env.*
+!.env.example
 
 # =========================
 # Node / React

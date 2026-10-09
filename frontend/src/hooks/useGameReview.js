@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
-
-const API_URL = 'http://localhost:8000/review'
+import { ENDPOINTS } from '../utils/apiConfig'
 
 export function useGameReview() {
   const [review, setReview] = useState(null)
@@ -13,7 +12,7 @@ export function useGameReview() {
     setReview(null)
     
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(ENDPOINTS.review, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ history, player_color: playerColor }),

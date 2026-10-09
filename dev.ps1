@@ -14,10 +14,16 @@ if (Test-Path $venvActivate) {
     & $venvActivate
 
     # Verifica se python-dotenv está instalado
-    $dotenvInstalled = pip show python-dotenv 2>$null
-    if (-not $dotenvInstalled) {
-        Write-Host "Instalando python-dotenv..." -ForegroundColor Yellow
-        pip install python-dotenv | Out-Null
+    # Instala dependencias se requirements.txt mudou (compara hash)
+    $reqFile = "$backendDir\requirements.txt"
+    $marker = "$backendDir\venv\.last_requirements_hash"
+    $currentHash = (Get-FileHash $reqFile -Algorithm MD5).Hash
+    $lastHash = if (Test-Path $marker) { (Get-Content $marker -Raw).Trim() } else { "" }
+
+    if ($currentHash -ne $lastHash) {
+        Write-Host "Instalando dependencias do backend..." -ForegroundColor Yellow
+        pip install -r $reqFile | Out-Null
+        $currentHash | Set-Content $marker
     }
 
     Write-Host "Backend: http://127.0.0.1:8000" -ForegroundColor Green

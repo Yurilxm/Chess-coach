@@ -107,17 +107,13 @@ def review_game(history: list, player_color: str = 'w'):
                                 'cp_loss': abs(cp_loss), 'category': category,
                                 'is_player_move': is_player_move, 'color': move_color,
                             })
-            except:
-                try:
-                    temp_board.push(chess_move)
-                except:
-                    pass
+            except Exception as e:
+                print(f"Erro ao analisar lance {i} ({uci}): {e}")
         
         # Estatísticas
         player_analysis = [m for m in all_moves_analysis if m.get('is_player_move')]
         mistakes = [m for m in player_analysis if m['category'] in ['mistake', 'blunder', 'inaccuracy']]
         
-        brilliant = len([m for m in player_analysis if m['category'] == 'brilliant'])
         best_moves = len([m for m in player_analysis if m['category'] == 'best'])
         excellent = len([m for m in player_analysis if m['category'] == 'excellent'])
         good = len([m for m in player_analysis if m['category'] == 'good'])
@@ -132,7 +128,7 @@ def review_game(history: list, player_color: str = 'w'):
         stats = {
             'total_moves': total_moves, 'captures_by_player': captures_by_player,
             'captures_by_opponent': captures_by_opponent, 'accuracy': accuracy,
-            'brilliant': brilliant, 'best_moves': best_moves, 'excellent': excellent,
+            'best_moves': best_moves, 'excellent': excellent,
             'good': good, 'inaccuracies': inaccuracies, 'mistakes': mistake_count,
             'blunders': blunders, 'grave_mistakes': blunders, 'moderate_mistakes': mistake_count,
         }
