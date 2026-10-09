@@ -1,6 +1,6 @@
 import chess
 from services.stockfish_service import engine_analysis
-from chess_logic.classifications import classify_move
+from chess_logic.classifications import classify_move, count_hanging_pieces
 
 
 def review_game(history: list, player_color: str = 'w'):
@@ -52,6 +52,8 @@ def review_game(history: list, player_color: str = 'w'):
         all_moves_analysis = []
         temp_board = chess.Board()
         
+        prev_best_cp = None  # cp do melhor lance na posicao apos o lance anterior
+
         for i, move in enumerate(history):
             if not move.get('from') or not move.get('to'):
                 continue
@@ -68,19 +70,30 @@ def review_game(history: list, player_color: str = 'w'):
                 chess_move = chess.Move.from_uci(uci)
             except (ValueError, TypeError) as e:
                 print(f"Lance com UCI invalido '{uci}': {e}")
+                prev_best_cp = None
                 continue
 
             if chess_move not in temp_board.legal_moves:
                 print(f"Lance '{uci}' nao e legal na posicao atual, ignorado")
+                prev_best_cp = None
                 continue
+
+            # Detecta sacrificio: quantas pecas proprias (valor >= 3)
+            # ficaram penduradas APOS o lance, vs antes.
+            mover_chess_color = chess.WHITE if move_color == 'w' else chess.BLACK
+            hanging_before = count_hanging_pieces(temp_board, mover_chess_color)
 
             fen_before = temp_board.fen()
             temp_board.push(chess_move)
             fen_after = temp_board.fen()
 
+            hanging_after = count_hanging_pieces(temp_board, mover_chess_color)
+            is_sacrifice = hanging_after > hanging_before
+
             try:
                 top = engine_analysis(fen_after, depth=6, multi_pv=3)
                 if not top:
+                    prev_best_cp = None
                     continue
 
                 best_move = top[0].get('Move', '')
@@ -92,15 +105,22 @@ def review_game(history: list, player_color: str = 'w'):
                         cp_after = t.get('Centipawn') or 0
                         break
 
-                top_before = engine_analysis(fen_before, depth=6, multi_pv=1)
-                cp_before = (top_before[0].get('Centipawn') or 0) if top_before else 0
+                # Reaproveita o best_cp da iteracao anterior. Como
+                # fen_before(i) == fen_after(i-1), a avaliacao best da
+                # iteracao anterior ja e o cp_before desta. So a primeira
+                # iteracao precisa de uma chamada extra a engine.
+                if prev_best_cp is not None:
+                    cp_before = prev_best_cp
+                else:
+                    top_before = engine_analysis(fen_before, depth=6, multi_pv=1)
+                    cp_before = (top_before[0].get('Centipawn') or 0) if top_before else 0
 
                 if move_color == 'w':
                     cp_loss = cp_before - cp_after
                 else:
                     cp_loss = -(cp_before - cp_after)
 
-                category = classify_move(uci, best_move, cp_loss, is_player_move)
+                category = classify_move(uci, best_move, cp_loss, is_player_move, is_sacrifice)
 
                 all_moves_analysis.append({
                     'move_number': i + 1, 'move_uci': uci,
@@ -108,13 +128,17 @@ def review_game(history: list, player_color: str = 'w'):
                     'cp_loss': abs(cp_loss), 'category': category,
                     'is_player_move': is_player_move, 'color': move_color,
                 })
+
+                prev_best_cp = best_cp
             except Exception as e:
                 print(f"Erro ao analisar lance {i} ({uci}): {e}")
+                prev_best_cp = None
 
         # Estatísticas
         player_analysis = [m for m in all_moves_analysis if m.get('is_player_move')]
         mistakes = [m for m in player_analysis if m['category'] in ['mistake', 'blunder', 'inaccuracy']]
         
+        brilliant = len([m for m in player_analysis if m['category'] == 'brilliant'])
         best_moves = len([m for m in player_analysis if m['category'] == 'best'])
         excellent = len([m for m in player_analysis if m['category'] == 'excellent'])
         good = len([m for m in player_analysis if m['category'] == 'good'])
@@ -129,7 +153,7 @@ def review_game(history: list, player_color: str = 'w'):
         stats = {
             'total_moves': total_moves, 'captures_by_player': captures_by_player,
             'captures_by_opponent': captures_by_opponent, 'accuracy': accuracy,
-            'best_moves': best_moves, 'excellent': excellent,
+            'brilliant': brilliant, 'best_moves': best_moves, 'excellent': excellent,
             'good': good, 'inaccuracies': inaccuracies, 'mistakes': mistake_count,
             'blunders': blunders, 'grave_mistakes': blunders, 'moderate_mistakes': mistake_count,
         }
@@ -143,7 +167,7 @@ def review_game(history: list, player_color: str = 'w'):
         
         return {
             'result': result, 'result_reason': result_reason,
-            'stats': stats, 'mistakes': mistakes[:10], 'summary': summary,
+            'stats': stats, 'mistakes': mistakes, 'summary': summary,
             'all_moves': all_moves_analysis,  # NOVO: todos os lances para replay
         }
     

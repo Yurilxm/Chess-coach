@@ -95,6 +95,7 @@ def test_revisao_partida_curta(mock_engine, partida_pastor):
     stats = resultado["stats"]
     assert "accuracy" in stats
     assert stats["total_moves"] == len(partida_pastor)
+    assert "brilliant" in stats
     assert "best_moves" in stats
     assert "blunders" in stats
 
@@ -124,7 +125,7 @@ def test_revisao_stats_soma_categorias(mock_engine, partida_pastor):
     # Jogador brancas jogou 4 lances no mate do pastor
     # (e4, Bc4, Qh5, Qxf7#)
     soma = (
-        stats["best_moves"] + stats["excellent"]
+        stats["brilliant"] + stats["best_moves"] + stats["excellent"]
         + stats["good"] + stats["inaccuracies"] + stats["mistakes"]
         + stats["blunders"]
     )

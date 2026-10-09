@@ -1,16 +1,31 @@
 # Chess Coach
 
-Treinador pessoal de xadrez com analise do Stockfish e explicacoes com IA (Gemini).
+Treinador pessoal de xadrez com análise do Stockfish e explicações com IA (Gemini).
 
 ## Funcionalidades
 
-- **Tabuleiro interativo** com drag and drop, destaque de lances validos e historico de jogadas
-- **Analise com Stockfish** — top 3 lances recomendados + avaliacao da posicao
-- **Explicacoes com IA (Gemini)** — cada lance ganha uma explicacao em linguagem natural
-- **Modo Editor** — monte posicoes via FEN ou arrastando pecas para estudo dirigido
-- **Modo Bot** — jogue contra o Stockfish com 14 niveis de dificuldade (rating 200 a 3000)
-- **Revisao pos-partida** — relatorio completo com precisao, erros, imprecisoes e estatisticas
-- **Pre-jogadas** — fila de lances planejados enquanto o bot pensa
+- **Tabuleiro interativo** com drag and drop, destaque de lances válidos e histórico de jogadas
+- **Análise com Stockfish** — top 3 lances recomendados + avaliação da posição
+- **Explicações com IA (Gemini)** — cada lance ganha uma explicação em linguagem natural
+- **Modo Editor** — monte posições via FEN ou arrastando peças para estudo dirigido
+- **Modo Bot** — jogue contra o Stockfish com 14 níveis de dificuldade (rating 200 a 3000)
+- **Revisão pós-partida** — relatório completo com precisão, classificação de cada lance e estatísticas
+- **Histórico de partidas** — as 50 partidas mais recentes ficam salvas no navegador
+- **Pré-jogadas** — fila de lances planejados enquanto o bot pensa
+
+### Classificação de lances
+
+A revisão classifica cada lance seu em uma das categorias:
+
+| Categoria | Significado |
+|-----------|-------------|
+| **Brilhante** | Sacrifício de material que mantém a vantagem |
+| **Melhor** | Igual ao melhor lance do motor |
+| **Excelente** | Perdeu menos de 20 centipawns |
+| **Bom** | Perdeu entre 20 e 49 centipawns |
+| **Imprecisão** | Perdeu entre 50 e 99 centipawns |
+| **Erro** | Perdeu entre 100 e 199 centipawns |
+| **Blunder** | Perdeu 200 centipawns ou mais |
 
 ## Stack
 
@@ -18,22 +33,23 @@ Treinador pessoal de xadrez com analise do Stockfish e explicacoes com IA (Gemin
 |--------|------------|
 | Frontend | React 19 + Vite + Chessground + Tailwind CSS 4 |
 | Backend | FastAPI + python-chess + Stockfish (UCI) |
-| IA | Google Gemini API (gemini-flash-latest) |
+| IA | Google Gemini API (`gemini-flash-latest`) |
+| Persistência | `localStorage` do navegador |
 | Testes | pytest (backend) + vitest (frontend) |
 | CI | GitHub Actions |
 
 ## Como rodar
 
-### 1. Clonar o repositorio
+### 1. Clonar o repositório
 
 ```bash
 git clone https://github.com/Yurilxm/Chess-coach.git
 cd Chess-coach
 ```
 
-### 2. Configurar variaveis de ambiente
+### 2. Configurar variáveis de ambiente
 
-Crie um arquivo .env na raiz do projeto:
+Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 GEMINI_API_KEY=sua-chave-da-gemini
@@ -44,13 +60,13 @@ Obtenha uma chave gratuita em https://aistudio.google.com/apikey.
 
 ### 3. Baixar o Stockfish
 
-O binario **nao esta no repositorio**. Baixe em https://stockfishchess.org/download/ e:
+O binário **não está no repositório**. Baixe em https://stockfishchess.org/download/ e:
 
 | SO | Procedimento |
 |----|--------------|
-| Windows | Extraia stockfish-windows-x86-64-avx2.exe para backend/engine/stockfish.exe |
-| macOS | brew install stockfish (ajuste STOCKFISH_PATH em backend/config/settings.py) |
-| Linux | sudo apt install stockfish (mesmo ajuste) |
+| Windows | Extraia `stockfish-windows-x86-64-avx2.exe` para `backend/engine/stockfish.exe` |
+| macOS | `brew install stockfish` (ajuste `STOCKFISH_PATH` em `backend/config/settings.py`) |
+| Linux | `sudo apt install stockfish` (mesmo ajuste) |
 
 ### 4. Iniciar com o script (recomendado — Windows)
 
@@ -60,9 +76,9 @@ O binario **nao esta no repositorio**. Baixe em https://stockfishchess.org/downl
 
 O script:
 
-1. Cria o venv do backend se nao existir
-2. Instala requirements.txt quando o hash do arquivo muda
-3. Instala node_modules se nao existir
+1. Cria o `venv` do backend se não existir
+2. Instala `requirements.txt` quando o hash do arquivo muda
+3. Instala `node_modules` se não existir
 4. Inicia backend (uvicorn --reload) e frontend (vite) em janelas separadas
 5. Abre o navegador em http://localhost:5173
 
@@ -90,7 +106,7 @@ cd ..
 uvicorn main:app --reload --app-dir backend
 ```
 
-API em http://localhost:8000 — documentacao em http://localhost:8000/docs.
+API em http://localhost:8000 — documentação em http://localhost:8000/docs.
 
 **Frontend** (em outro terminal):
 
@@ -100,17 +116,23 @@ npm install
 npm run dev
 ```
 
-Aplicacao em http://localhost:5173.
+Aplicação em http://localhost:5173.
 
 ## Como usar
 
 1. Abra http://localhost:5173.
 2. Escolha um modo:
-   - **Jogar** — mova as pecas livremente e explore variacoes.
+   - **Jogar** — mova as peças livremente e explore variações.
    - **vs Bot** — escolha sua cor e a dificuldade, jogue contra o Stockfish.
-   - **Editor** — monte posicoes via FEN ou arrastando pecas.
-3. Clique em **Analisar posicao** para ver a avaliacao, os top 3 lances e a explicacao da IA.
-4. Ao final de uma partida contra o Bot, o modal de **Revisao** aparece com estatisticas completas.
+   - **Editor** — monte posições via FEN ou arrastando peças.
+   - **Histórico** — veja suas partidas anteriores, com estatísticas completas.
+3. Clique em **Analisar posição** para ver a avaliação, os top 3 lances e a explicação da IA.
+4. Ao final de uma partida contra o Bot, o modal de **Revisão** aparece com:
+   - Resultado, precisão e abertura detectada
+   - Contadores clicáveis por categoria (clique para filtrar os lances)
+   - Replay lance a lance com o tabuleiro
+   - Lista de erros para revisar com explicação do coach (Gemini)
+5. As partidas ficam salvas automaticamente no **Histórico**.
 
 ## Desenvolvimento
 
@@ -124,12 +146,12 @@ Um comando, na raiz do projeto:
 
 Isso roda:
 
-- **Backend** — pytest no backend/venv (~75 testes)
-- **Frontend** — vitest em frontend/ (~122 testes)
+- **Backend** — `pytest` no `backend/venv` (100+ testes)
+- **Frontend** — `vitest` em `frontend/` (170+ testes)
 
 Se algum falhar, o script para e mostra o erro.
 
-### Rodar so backend ou so frontend
+### Rodar só backend ou só frontend
 
 ```bash
 # Backend
@@ -144,27 +166,32 @@ cd ..
 
 ### Estrutura dos testes
 
-**Backend** (backend/tests/):
+**Backend** (`backend/tests/`):
 
 | Arquivo | Cobre |
 |---------|-------|
-| conftest.py | Fixtures compartilhadas (FENs classicos, partida sintetica) |
-| test_classify_move.py | Classificacao de lances (best, excellent, mistake, blunder...) |
-| test_game_rules.py | Regras de xadrez (xeque-mate, afogamento, material insuficiente) |
-| test_repetition.py | Deteccao de repeticao tripla |
-| test_openings.py | Catalogo de aberturas do bot |
-| test_coach_service.py | Gemini (mock) |
-| test_stockfish_service.py | Analise (engine mockada) |
-| test_stockfish_integration.py | Analise real (pulado se o binario nao existir) |
-| test_review_service.py | Revisao pos-partida |
-| test_api_contract.py | Contrato dos endpoints via TestClient |
+| `conftest.py` | Fixtures compartilhadas (FENs clássicos, partida sintética) |
+| `test_classify_move.py` | Classificação de lances (incluindo brilliant/sacrifício) |
+| `test_game_rules.py` | Regras de xadrez (xeque-mate, afogamento, material insuficiente) |
+| `test_repetition.py` | Detecção de repetição tripla |
+| `test_openings.py` | Catálogo de aberturas do bot |
+| `test_coach_service.py` | Gemini (mock) |
+| `test_stockfish_service.py` | Análise (engine mockada) |
+| `test_stockfish_integration.py` | Análise real (pulado se o binário não existir) |
+| `test_review_service.py` | Revisão pós-partida |
+| `test_review_mate.py` | Casos de borda (mate, lance ilegal, UCI malformado) |
+| `test_review_sacrifice.py` | Detecção de sacrifícios |
+| `test_api_contract.py` | Contrato dos endpoints via TestClient |
 
-**Frontend** (frontend/src/):
+**Frontend** (`frontend/src/`):
 
 | Arquivo | Cobre |
 |---------|-------|
-| utils/*.test.js | Helpers de xadrez, avaliacao, traducao de lances, aberturas |
-| hooks/*.test.js | useChessGame, useChessEditor, useStockfishAnalysis |
+| `utils/*.test.js` | Helpers de xadrez, avaliação, tradução de lances, aberturas |
+| `hooks/useChessGame*.test.js` | Estado do jogo + premove |
+| `hooks/useChessEditor*.test.js` | Estado do editor |
+| `hooks/useStockfishAnalysis.test.js` | Chamadas à API |
+| `hooks/useMatchHistory.test.js` | Persistência no localStorage |
 
 ### Lint e build do frontend
 
@@ -177,36 +204,40 @@ cd ..
 
 ### CI
 
-A cada push em main ou PR, o GitHub Actions roda:
+A cada push em `main` ou PR, o GitHub Actions roda:
 
-- **Backend** — pytest (Ubuntu + Python 3.12)
-- **Frontend** — lint + test + build (Ubuntu + Node 20)
+- **Backend** — `pytest` (Ubuntu + Python 3.12)
+- **Frontend** — `lint` + `test` + `build` (Ubuntu + Node 20)
 
 Veja o status em https://github.com/Yurilxm/Chess-coach/actions.
 
 ## Arquitetura
 
-### Backend (backend/)
+### Backend (`backend/`)
 
-- **api/** — routers HTTP. Todos sincronos (def), rodando no threadpool do FastAPI.
-- **services/** — regras de negocio. stockfish_service expoe engine_analysis(), um wrapper atomico que serializa o acesso a engine com threading.Lock.
-- **chess_logic/** — logica pura de xadrez (classificacao de lances, regras, repeticao, catalogo de aberturas do bot). Sem dependencia de HTTP ou engine.
-- **models/** — schemas Pydantic de request/response.
-- **config/settings.py** — carrega .env, expoe caminho do Stockfish e os 14 niveis de dificuldade.
+- **`api/`** — routers HTTP. Todos síncronos (`def`), rodando no threadpool do FastAPI.
+- **`services/`** — regras de negócio. `stockfish_service` expõe `engine_analysis()`, wrapper atômico que serializa o acesso à engine com `threading.Lock`.
+- **`chess_logic/`** — lógica pura de xadrez (classificação de lances, detecção de sacrifício, regras, repetição, catálogo de aberturas do bot). Sem dependência de HTTP ou engine.
+- **`models/`** — schemas Pydantic de request/response.
+- **`config/settings.py`** — carrega `.env`, expõe caminho do Stockfish e os 14 níveis de dificuldade.
 
-### Frontend (frontend/src/)
+### Frontend (`frontend/src/`)
 
-- **hooks/** — estado da partida. useChessGame e useChessEditor encapsulam o chess.js atras de uma ref mutavel, expondo estado reativo so quando algo muda de fato. useStockfishAnalysis, useBotPlayer, useCoach e useGameReview chamam a API e gerenciam loading/erro.
-- **components/** — apresentacao. ChessBoard e totalmente burro: so espelha props no Chessground. Nada de regra de xadrez aqui.
-- **utils/** — funcoes puras (helpers, calculo de destinos, aberturas ECO, traducao de notacao).
-- **utils/apiConfig.js** — unica fonte das URLs da API, lida de VITE_API_URL.
+- **`hooks/`** — estado da partida. `useChessGame` e `useChessEditor` encapsulam o `chess.js` atrás de uma ref mutável, expondo estado reativo só quando algo muda de fato. `useStockfishAnalysis`, `useBotPlayer`, `useCoach`, `useGameReview` e `useMatchHistory` chamam a API / localStorage.
+- **`components/`** — apresentação. `ChessBoard` é totalmente "burro": só espelha props no Chessground. Nada de regra de xadrez aqui.
+- **`utils/`** — funções puras (helpers, cálculo de destinos, aberturas ECO, tradução de notação).
+- **`utils/apiConfig.js`** — única fonte das URLs da API, lida de `VITE_API_URL`.
 
-### Decisoes tecnicas
+### Decisões técnicas
 
-- **Engine persistente com lock.** O Stockfish e um processo caro de iniciar; criar um por request seria lento. Uma instancia fica viva, protegida por threading.Lock, e engine_analysis() garante que duas requests nunca se atropelem.
-- **Routers def (nao async).** Como a engine e bloqueante, async def travaria o event loop. Com def, o FastAPI usa threadpool e o servidor continua responsivo.
-- **Deteccao de abertura no frontend.** O backend mantem um catalogo proprio so para o bot escolher a linha, sem codigo ECO. O display (badge durante o jogo, modal de revisao) usa utils/openings.js no frontend, com codigos ECO reais (C50, B20...). Uma fonte unica para o usuario ver.
-- **Sem estado global entre requests.** get_opening_moves recebe o historico completo e decide o proximo lance so com base nele — idempotente, seguro para multiplos jogadores simultaneos.
+- **Engine persistente com lock.** O Stockfish é um processo caro de iniciar; criar um por request seria lento. Uma instância fica viva, protegida por `threading.Lock`, e `engine_analysis()` garante que duas requests nunca se atropelem.
+- **Routers `def` (não `async`).** Como a engine é bloqueante, `async def` travaria o event loop. Com `def`, o FastAPI usa threadpool e o servidor continua responsivo.
+- **Detecção de abertura no frontend.** O backend mantém um catálogo próprio só para o bot escolher a linha, sem código ECO. O display (badge durante o jogo, modal de revisão) usa `utils/openings.js` no frontend, com códigos ECO reais (C50, B20...). Uma fonte única para o usuário ver.
+- **Sem estado global entre requests.** `get_opening_moves` recebe o histórico completo e decide o próximo lance só com base nele — idempotente, seguro para múltiplos jogadores simultâneos.
+- **Histórico em `localStorage`.** Escolha consciente para não exigir backend/migrations. O hook `useMatchHistory` isola o acesso ao storage; trocar por API/SQLite no futuro é só mudar a implementação interna.
+- **"Brilhante" por heurística.** Categoria detectada quando o lance deixa uma peça sua pendurada (valor ≥ 3) que não estava pendurada antes, e o `cp_loss` fica abaixo de 30. Não é perfeito como o Chess.com, mas é honesto.
+- **Gemini com fallback.** Ao expandir um erro no modal, o coach tenta explicar via Gemini. Se falhar (quota, rede), a explicação heurística local é exibida — sem erro na tela.
+- **Análise do review reaproveita `best_cp`.** O `cp_before` de uma iteração é o `best_cp` da anterior (mesma posição). Isso corta ~50% das chamadas à engine no review.
 
 ## Estrutura do projeto
 
@@ -214,10 +245,10 @@ Veja o status em https://github.com/Yurilxm/Chess-coach/actions.
 chess-coach/
 ├── backend/
 │   ├── api/                # Routers (analyze, coach, play, review)
-│   ├── chess_logic/        # Regras puras (classificacoes, repeticao, aberturas)
+│   ├── chess_logic/        # Regras puras (classificações, sacrifício, aberturas)
 │   ├── config/
-│   │   └── settings.py     # Caminho do Stockfish, niveis de dificuldade
-│   ├── engine/             # Stockfish.exe (nao versionado)
+│   │   └── settings.py     # Caminho do Stockfish, níveis de dificuldade
+│   ├── engine/             # Stockfish.exe (não versionado)
 │   ├── models/             # Pydantic schemas
 │   ├── services/           # Bot, coach, review, stockfish
 │   ├── tests/              # pytest
@@ -226,8 +257,8 @@ chess-coach/
 │   └── requirements-dev.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── components/     # Componentes React
-│   │   ├── hooks/          # Hooks (estado da partida, chamadas a API)
+│   │   ├── components/     # Componentes React (incluindo MatchHistoryView)
+│   │   ├── hooks/          # Estado da partida, chamadas à API, histórico
 │   │   ├── utils/          # Helpers puros
 │   │   ├── App.jsx
 │   │   └── main.jsx
@@ -238,7 +269,7 @@ chess-coach/
 │   └── vite.config.js
 ├── .github/workflows/
 │   └── test.yml            # CI
-├── .env                    # Chaves (nao versionado)
+├── .env                    # Chaves (não versionado)
 ├── .gitignore
 ├── dev.ps1                 # Inicia backend + frontend
 ├── test.ps1                # Roda pytest + vitest
@@ -246,6 +277,6 @@ chess-coach/
 └── README.md
 ```
 
-## Licenca
+## Licença
 
 Projeto pessoal de estudo. Sinta-se livre para usar e modificar.

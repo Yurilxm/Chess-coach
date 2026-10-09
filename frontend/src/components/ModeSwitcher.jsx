@@ -1,4 +1,4 @@
-import { BookOpen, PenLine, Bot } from 'lucide-react'
+import { BookOpen, PenLine, Bot, History } from 'lucide-react'
 
 function ModeSwitcher({ mode, onChange }) {
   return (
@@ -35,6 +35,17 @@ function ModeSwitcher({ mode, onChange }) {
       >
         <PenLine className="w-4 h-4" />
         Editor
+      </button>
+      <button
+        onClick={() => onChange('history')}
+        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+          mode === 'history'
+            ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-amber-500/20'
+            : 'text-slate-400 hover:text-white hover:bg-white/5'
+        }`}
+      >
+        <History className="w-4 h-4" />
+        Histórico
       </button>
     </div>
   )
