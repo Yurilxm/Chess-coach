@@ -102,15 +102,26 @@ def test_gemini_falha_retorna_none(fen_start, mock_gemini):
 
 def test_fen_invalido_retorna_none(fen_invalid, mock_gemini):
     """
-    BUG CONHECIDO: 'chess.Board(fen)' levanta ValueError antes do
-    '.is_valid()' poder ser avaliado. Cai no except externo e retorna None.
-
-    Este teste DOCUMENTA o comportamento atual. Quando o bug for
-    corrigido, o teste deve ser atualizado.
+    FEN invalido e rejeitado explicitamente antes de tentar criar o
+    board. A funcao retorna None sem chamar o Gemini.
     """
     mock_gemini()
     resultado = get_coach_explanation(fen_invalid, "e2e4")
     assert resultado is None
+
+
+def test_fen_invalido_nao_chama_gemini(fen_invalid, mock_gemini):
+    """Verifica que o Gemini nao e chamado quando o FEN e invalido."""
+    fake = mock_gemini()
+    get_coach_explanation(fen_invalid, "e2e4")
+    assert fake.models.last_contents is None
+
+
+def test_fen_valido_chama_gemini(fen_start, mock_gemini):
+    """Verifica que o Gemini e chamado para FEN valido."""
+    fake = mock_gemini(response_text="Explicacao qualquer.")
+    get_coach_explanation(fen_start, "e2e4")
+    assert fake.models.last_contents is not None
 
 
 # ------------------------------------------------------------

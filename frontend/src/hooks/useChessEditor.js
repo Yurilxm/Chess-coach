@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
+import { validateFen } from 'chess.js'
 import { createChess, START_FEN } from '../utils/chessHelpers'
 import { computeEditorDests } from '../utils/pieceMovement'
 
@@ -71,6 +72,11 @@ export function useChessEditor(initialFen) {
 
   const loadFen = useCallback((newFen) => {
     if (!newFen || newFen === chessRef.current.fen()) return
+    // Valida formato do FEN antes de tentar carregar. Sem isso, o
+    // load({skipValidation: true}) aceita QUALQUER string e corrompe o
+    // board silenciosamente (ex: 'isso nao e FEN' vira '8/8/.../8 nao - - 0 1').
+    const check = validateFen(newFen)
+    if (!check.ok) return
     pushHistory()
     try {
       chessRef.current.load(newFen, { skipValidation: true })

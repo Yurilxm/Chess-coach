@@ -54,8 +54,12 @@ function computePieceDests(square, piece, grid) {
       let r = rank + dr
       while (f >= 0 && f <= 7 && r >= 0 && r <= 7) {
         const dest = toSquare(f, r)
+        const target = grid[dest]
+        // Peca propria bloqueia e NAO vira destino
+        if (target && target.color === piece.color) break
         targets.push(dest)
-        if (grid[dest]) break // bloqueado: pode "capturar" a peça, mas não passar dela
+        // Peca adversaria: captura, mas nao passa por cima
+        if (target) break
         f += df
         r += dr
       }
@@ -65,7 +69,11 @@ function computePieceDests(square, piece, grid) {
   const step = (offsets) => {
     for (const [df, dr] of offsets) {
       const dest = toSquare(file + df, rank + dr)
-      if (dest) targets.push(dest)
+      if (!dest) continue
+      const target = grid[dest]
+      // Nunca captura peca propria
+      if (target && target.color === piece.color) continue
+      targets.push(dest)
     }
   }
 
@@ -96,7 +104,10 @@ function computePieceDests(square, piece, grid) {
       }
       for (const df of [-1, 1]) {
         const diag = toSquare(file + df, rank + dir)
-        if (diag && grid[diag]) targets.push(diag)
+        if (!diag) continue
+        const target = grid[diag]
+        // Diagonal so inclui peca ADVERSARIA (captura)
+        if (target && target.color !== piece.color) targets.push(diag)
       }
       break
     }

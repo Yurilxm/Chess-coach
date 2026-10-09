@@ -80,11 +80,13 @@ describe('needsPromotion', () => {
 })
 
 describe('computeEditorDests (via chess instance)', () => {
-  it('retorna destinos para as 32 pecas na posicao inicial', () => {
+  it('retorna destinos para as 20 pecas com movimento na posicao inicial', () => {
     const chess = createChess()
     const dests = computeEditorDests(chess)
-    // 16 pecas brancas + 16 pecas pretas = 32 entradas
-    expect(dests.size).toBe(32)
+    // Na posicao inicial, so peoes (16) e cavalos (4) tem destino.
+    // Torres, bispos, damas e reis estao bloqueados por pecas proprias
+    // e nao entram no Map (apos o fix de "nao capturar peca propria").
+    expect(dests.size).toBe(20)
   })
   it('ignora turno — peca preta tambem tem destinos', () => {
     const chess = createChess()
@@ -95,6 +97,12 @@ describe('computeEditorDests (via chess instance)', () => {
     const chess = createChess()
     const dests = computeEditorDests(chess)
     expect(dests.get('e2').sort()).toEqual(['e3', 'e4'])
+  })
+
+  it('cavalo em g1 nao inclui e2 (peca propria)', () => {
+    const chess = createChess()
+    const dests = computeEditorDests(chess)
+    expect(dests.get('g1').sort()).toEqual(['f3', 'h3'])
   })
 })
 

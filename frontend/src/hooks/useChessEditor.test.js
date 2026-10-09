@@ -158,22 +158,14 @@ describe('useChessEditor - loadFen', () => {
     expect(result.current.fen).toBe(novaFen)
   })
 
-  it('BUG CONHECIDO: loadFen aceita FEN invalido e corrompe o board', () => {
-    // Comportamento atual do useChessEditor.loadFen:
-    //
-    // O codigo chama chess.load(newFen, { skipValidation: true }), que
-    // aceita QUALQUER string. O try/catch nunca dispara. Se o usuario
-    // colar lixo no AdvancedTools, o tabuleiro fica num estado
-    // corrompido em vez de manter a posicao anterior.
-    //
-    // Quando o bug for corrigido (validar antes do load), este teste
-    // deve voltar a esperar result.current.fen === START_FEN.
+  it('loadFen rejeita FEN invalido sem alterar o board', () => {
+    // Apos fix: validateFen() rejeita strings malformadas antes do load.
     const { result } = renderHook(() => useChessEditor())
 
     act(() => {
       result.current.loadFen('isso nao e FEN')
     })
 
-    expect(result.current.fen).not.toBe(START_FEN)
+    expect(result.current.fen).toBe(START_FEN)
   })
 })

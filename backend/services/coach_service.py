@@ -7,15 +7,29 @@ gemini_client = genai.Client(api_key=GEMINI_API_KEY)
 
 def get_coach_explanation(fen: str, move: str, evaluation: dict = None):
     try:
-        board = chess.Board(fen) if chess.Board(fen).is_valid() else None
-        move_san = move
-        if board:
+        # Validacao segura do FEN. chess.Board(fen) levanta ValueError
+        # para strings malformadas. .is_valid() cobre posicoes
+        # semanticamente invalidas (sem reis, pecas a mais, etc).
+        # Antes, FEN malformado explodia e caia no except externo com
+        # a mensagem enganosa 'Erro no Gemini'.
+        board = None
+        if fen and isinstance(fen, str):
             try:
-                chess_move = chess.Move.from_uci(move)
-                if chess_move in board.legal_moves:
-                    move_san = board.san(chess_move)
-            except:
+                _b = chess.Board(fen)
+                if _b.is_valid():
+                    board = _b
+            except (ValueError, TypeError):
                 pass
+        if board is None:
+            return None
+
+        move_san = move
+        try:
+            chess_move = chess.Move.from_uci(move)
+            if chess_move in board.legal_moves:
+                move_san = board.san(chess_move)
+        except (ValueError, TypeError):
+            pass
         
         eval_text = ""
         if evaluation:
@@ -53,5 +67,5 @@ Regras:
         )
         return response.text.strip()
     except Exception as e:
-        print(f"Erro no Gemini: {e}")
+        print(f"Erro ao gerar explicacao: {e}")
         return None

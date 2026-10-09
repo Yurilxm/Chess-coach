@@ -73,12 +73,19 @@ export function computeEditorDests(chess) {
       if (piece.type === 'n') {
         for (const [df, dr] of KNIGHT_OFFSETS) {
           const dest = coordsToSquare(file + df, rank + dr)
-          if (dest) targets.push(dest)
+          if (!dest) continue
+          const target = chess.get(dest)
+          // Nunca captura peca propria, nem no editor
+          if (target && target.color === piece.color) continue
+          targets.push(dest)
         }
       } else if (piece.type === 'k') {
         for (const [df, dr] of KING_OFFSETS) {
           const dest = coordsToSquare(file + df, rank + dr)
-          if (dest) targets.push(dest)
+          if (!dest) continue
+          const target = chess.get(dest)
+          if (target && target.color === piece.color) continue
+          targets.push(dest)
         }
       } else if (piece.type === 'p') {
         const dir = piece.color === 'w' ? 1 : -1
@@ -94,7 +101,10 @@ export function computeEditorDests(chess) {
         }
         for (const df of [-1, 1]) {
           const diag = coordsToSquare(file + df, rank + dir)
-          if (diag && chess.get(diag)) targets.push(diag)
+          if (!diag) continue
+          const target = chess.get(diag)
+          // Diagonal so inclui peca ADVERSARIA (captura)
+          if (target && target.color !== piece.color) targets.push(diag)
         }
       } else {
         const directions = SLIDING_DIRECTIONS[piece.type]
@@ -105,8 +115,12 @@ export function computeEditorDests(chess) {
             while (true) {
               const dest = coordsToSquare(f, r)
               if (!dest) break
+              const target = chess.get(dest)
+              // Peca propria bloqueia e NAO vira destino
+              if (target && target.color === piece.color) break
               targets.push(dest)
-              if (chess.get(dest)) break // bloqueado: peça pode capturar, mas não passa por cima
+              // Peca adversaria: captura, mas nao passa por cima
+              if (target) break
               f += df
               r += dr
             }
