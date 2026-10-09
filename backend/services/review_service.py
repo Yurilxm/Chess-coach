@@ -72,20 +72,20 @@ def review_game(history: list, player_color: str = 'w'):
                     temp_board.push(chess_move)
                     fen_after = temp_board.fen()
                     
-                    top = engine_analysis(fen_after, multi_pv=3)
+                    top = engine_analysis(fen_after, depth=6, multi_pv=3)
 
                 if top:
                             best_move = top[0].get('Move', '')
-                            best_cp = top[0].get('Centipawn', 0) or 0
+                            best_cp = top[0].get('Centipawn') or 0
                             
                             cp_after = best_cp
                             for t in top:
                                 if t.get('Move') == uci:
-                                    cp_after = t.get('Centipawn', 0) or 0
+                                    cp_after = t.get('Centipawn') or 0
                                     break
                             
-                            top_before = engine_analysis(fen_before, multi_pv=1)
-                            cp_before = top_before[0].get('Centipawn', 0) if top_before else 0
+                            top_before = engine_analysis(fen_before, depth=6, multi_pv=1)
+                            cp_before = (top_before[0].get('Centipawn') or 0) if top_before else 0
 
                             if move_color == 'w':
                                 cp_loss = cp_before - cp_after
