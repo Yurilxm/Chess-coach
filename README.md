@@ -1,119 +1,251 @@
 # Chess Coach
 
-## Visão Geral
-O Chess Coach é um treinador pessoal e interativo de xadrez projetado para jogadores que desejam aprimorar suas habilidades com feedback claro e inteligente. A plataforma permite jogar partidas contra o computador em diferentes níveis de dificuldade, praticar posições personalizadas e receber análises detalhadas a cada jogada. Mais do que apenas apontar os melhores lances matemáticos, o sistema conta com um assistente de inteligência artificial que traduz os cálculos em conselhos práticos e fáceis de compreender.
-
-## Tecnologias
-- **Frontend:** React, Vite, Chessground, Tailwind CSS
-- **Backend:** FastAPI, Python, Motor UCI de Xadrez (Stockfish)
-- **Inteligência Artificial:** Google Gemini API (`gemini-flash-latest`)
+Treinador pessoal de xadrez com analise do Stockfish e explicacoes com IA (Gemini).
 
 ## Funcionalidades
-- **Tabuleiro Interativo:** Interface fluida com suporte a arrastar e soltar peças (*drag and drop*), destaque de casas e movimentos válidos, histórico de jogadas, reversão de lances (*undo*) e opção de inverter o tabuleiro.
-- **Promoção Visual de Peças:** Interface dedicada para escolha da peça ao promover peões.
-- **Análise com Stockfish:** Avaliação posicional precisa em tempo real exibindo os top 3 melhores lances recomendados pela engine.
-- **Explicações com IA (Gemini):** Explicação contextualizada em linguagem natural sobre o motivo de cada lance sugerido ser bom ou ruim.
-- **Modo Editor de Posição:** Possibilidade de configurar cenários específicos no tabuleiro ou importar posições via notação FEN para estudo direcionado.
-- **Partida contra o Bot:** Jogo direto contra o computador com seleção de lado (brancas/negras) e diferentes níveis de dificuldade.
-- **Revisão Pós-Partida:** Relatório completo ao término do jogo com identificação de erros, gafes, acertos e estatísticas de desempenho.
 
-## Configuração
+- **Tabuleiro interativo** com drag and drop, destaque de lances validos e historico de jogadas
+- **Analise com Stockfish** — top 3 lances recomendados + avaliacao da posicao
+- **Explicacoes com IA (Gemini)** — cada lance ganha uma explicacao em linguagem natural
+- **Modo Editor** — monte posicoes via FEN ou arrastando pecas para estudo dirigido
+- **Modo Bot** — jogue contra o Stockfish com 14 niveis de dificuldade (rating 200 a 3000)
+- **Revisao pos-partida** — relatorio completo com precisao, erros, imprecisoes e estatisticas
+- **Pre-jogadas** — fila de lances planejados enquanto o bot pensa
 
-### Variáveis de Ambiente
-Crie um arquivo `.env` na raiz do projeto contendo as seguintes definições:
+## Stack
+
+| Camada | Tecnologia |
+|--------|------------|
+| Frontend | React 19 + Vite + Chessground + Tailwind CSS 4 |
+| Backend | FastAPI + python-chess + Stockfish (UCI) |
+| IA | Google Gemini API (gemini-flash-latest) |
+| Testes | pytest (backend) + vitest (frontend) |
+| CI | GitHub Actions |
+
+## Como rodar
+
+### 1. Clonar o repositorio
+
+```bash
+git clone https://github.com/Yurilxm/Chess-coach.git
+cd Chess-coach
+```
+
+### 2. Configurar variaveis de ambiente
+
+Crie um arquivo .env na raiz do projeto:
 
 ```env
 GEMINI_API_KEY=sua-chave-da-gemini
 GEMINI_MODEL=gemini-flash-latest
 ```
 
-> Obtenha uma chave gratuita da API do Gemini em: [Google AI Studio](https://aistudio.google.com/apikey).
+Obtenha uma chave gratuita em https://aistudio.google.com/apikey.
 
-### Motor Stockfish
-O executável do Stockfish não vem incluso no repositório e deve ser obtido separadamente:
+### 3. Baixar o Stockfish
 
-1. Baixe a versão compatível com seu sistema em [Stockfish Chess Download](https://stockfishchess.org/download/).
-2. No Windows, extraia o executável para `backend/engine/stockfish.exe`.
-3. Em outros sistemas operacionais, instale via gerenciador de pacotes:
-   - **macOS:** `brew install stockfish`
-   - **Linux:** `sudo apt install stockfish`
+O binario **nao esta no repositorio**. Baixe em https://stockfishchess.org/download/ e:
 
-## Instalação
+| SO | Procedimento |
+|----|--------------|
+| Windows | Extraia stockfish-windows-x86-64-avx2.exe para backend/engine/stockfish.exe |
+| macOS | brew install stockfish (ajuste STOCKFISH_PATH em backend/config/settings.py) |
+| Linux | sudo apt install stockfish (mesmo ajuste) |
 
-### 1. Clonar o Repositório
-```bash
-git clone https://github.com/Yurilxm/Chess-coach.git
-cd Chess-coach
-```
-
-### 2. Inicialização Automática (Recomendado - Windows)
-Execute o script auxiliar via PowerShell para criar/ativar o ambiente virtual, instalar dependências e iniciar o backend e o frontend simultaneamente:
+### 4. Iniciar com o script (recomendado — Windows)
 
 ```powershell
 .\dev.ps1
 ```
 
-### 3. Inicialização Manual
+O script:
 
-#### Backend
+1. Cria o venv do backend se nao existir
+2. Instala requirements.txt quando o hash do arquivo muda
+3. Instala node_modules se nao existir
+4. Inicia backend (uvicorn --reload) e frontend (vite) em janelas separadas
+5. Abre o navegador em http://localhost:5173
+
+Para iniciar sem abrir o navegador:
+
+```powershell
+.\dev.ps1 -NoBrowser
+```
+
+### 5. Iniciar manualmente
+
+**Backend:**
+
 ```bash
 cd backend
 python -m venv venv
 
-# Ativação do ambiente virtual:
-# Windows (PowerShell/CMD):
+# Windows
 venv\Scripts\activate
-# Linux/macOS:
+# macOS/Linux
 source venv/bin/activate
 
 pip install -r requirements.txt
 cd ..
 uvicorn main:app --reload --app-dir backend
 ```
-A API estará acessível em `http://localhost:8000` (documentação interativa em `http://localhost:8000/docs`).
 
-#### Frontend
-Em outro terminal:
+API em http://localhost:8000 — documentacao em http://localhost:8000/docs.
+
+**Frontend** (em outro terminal):
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-A aplicação web estará acessível em `http://localhost:5173`.
 
-## Como Usar
-1. Acesse o frontend no navegador (`http://localhost:5173`).
-2. Selecione o modo desejado:
-   - **Modo Jogo:** Mova as peças livremente e explore variações.
-   - **Modo Editor:** Monte posições via FEN ou posicionamento manual para criar problemas táticos.
-   - **Modo Bot:** Escolha a cor das peças e o nível de dificuldade para desafiar o computador.
-3. Clique em **Analisar Posição** para ver a pontuação da posição, os 3 melhores lances calculados pelo Stockfish e a explicação didática gerada pela IA.
-4. Ao final de uma partida contra o Bot, acesse a **Revisão Completa** para verificar a precisão dos seus movimentos e entender onde errou.
+Aplicacao em http://localhost:5173.
 
-## Estrutura do Projeto
+## Como usar
+
+1. Abra http://localhost:5173.
+2. Escolha um modo:
+   - **Jogar** — mova as pecas livremente e explore variacoes.
+   - **vs Bot** — escolha sua cor e a dificuldade, jogue contra o Stockfish.
+   - **Editor** — monte posicoes via FEN ou arrastando pecas.
+3. Clique em **Analisar posicao** para ver a avaliacao, os top 3 lances e a explicacao da IA.
+4. Ao final de uma partida contra o Bot, o modal de **Revisao** aparece com estatisticas completas.
+
+## Desenvolvimento
+
+### Rodar todos os testes
+
+Um comando, na raiz do projeto:
+
+```powershell
+.\test.ps1
+```
+
+Isso roda:
+
+- **Backend** — pytest no backend/venv (~75 testes)
+- **Frontend** — vitest em frontend/ (~122 testes)
+
+Se algum falhar, o script para e mostra o erro.
+
+### Rodar so backend ou so frontend
+
+```bash
+# Backend
+python -m pytest
+
+# Frontend
+cd frontend
+npm test
+npm run test:watch    # modo watch
+cd ..
+```
+
+### Estrutura dos testes
+
+**Backend** (backend/tests/):
+
+| Arquivo | Cobre |
+|---------|-------|
+| conftest.py | Fixtures compartilhadas (FENs classicos, partida sintetica) |
+| test_classify_move.py | Classificacao de lances (best, excellent, mistake, blunder...) |
+| test_game_rules.py | Regras de xadrez (xeque-mate, afogamento, material insuficiente) |
+| test_repetition.py | Deteccao de repeticao tripla |
+| test_openings.py | Catalogo de aberturas do bot |
+| test_coach_service.py | Gemini (mock) |
+| test_stockfish_service.py | Analise (engine mockada) |
+| test_stockfish_integration.py | Analise real (pulado se o binario nao existir) |
+| test_review_service.py | Revisao pos-partida |
+| test_api_contract.py | Contrato dos endpoints via TestClient |
+
+**Frontend** (frontend/src/):
+
+| Arquivo | Cobre |
+|---------|-------|
+| utils/*.test.js | Helpers de xadrez, avaliacao, traducao de lances, aberturas |
+| hooks/*.test.js | useChessGame, useChessEditor, useStockfishAnalysis |
+
+### Lint e build do frontend
+
+```bash
+cd frontend
+npm run lint
+npm run build
+cd ..
+```
+
+### CI
+
+A cada push em main ou PR, o GitHub Actions roda:
+
+- **Backend** — pytest (Ubuntu + Python 3.12)
+- **Frontend** — lint + test + build (Ubuntu + Node 20)
+
+Veja o status em https://github.com/Yurilxm/Chess-coach/actions.
+
+## Arquitetura
+
+### Backend (backend/)
+
+- **api/** — routers HTTP. Todos sincronos (def), rodando no threadpool do FastAPI.
+- **services/** — regras de negocio. stockfish_service expoe engine_analysis(), um wrapper atomico que serializa o acesso a engine com threading.Lock.
+- **chess_logic/** — logica pura de xadrez (classificacao de lances, regras, repeticao, catalogo de aberturas do bot). Sem dependencia de HTTP ou engine.
+- **models/** — schemas Pydantic de request/response.
+- **config/settings.py** — carrega .env, expoe caminho do Stockfish e os 14 niveis de dificuldade.
+
+### Frontend (frontend/src/)
+
+- **hooks/** — estado da partida. useChessGame e useChessEditor encapsulam o chess.js atras de uma ref mutavel, expondo estado reativo so quando algo muda de fato. useStockfishAnalysis, useBotPlayer, useCoach e useGameReview chamam a API e gerenciam loading/erro.
+- **components/** — apresentacao. ChessBoard e totalmente burro: so espelha props no Chessground. Nada de regra de xadrez aqui.
+- **utils/** — funcoes puras (helpers, calculo de destinos, aberturas ECO, traducao de notacao).
+- **utils/apiConfig.js** — unica fonte das URLs da API, lida de VITE_API_URL.
+
+### Decisoes tecnicas
+
+- **Engine persistente com lock.** O Stockfish e um processo caro de iniciar; criar um por request seria lento. Uma instancia fica viva, protegida por threading.Lock, e engine_analysis() garante que duas requests nunca se atropelem.
+- **Routers def (nao async).** Como a engine e bloqueante, async def travaria o event loop. Com def, o FastAPI usa threadpool e o servidor continua responsivo.
+- **Deteccao de abertura no frontend.** O backend mantem um catalogo proprio so para o bot escolher a linha, sem codigo ECO. O display (badge durante o jogo, modal de revisao) usa utils/openings.js no frontend, com codigos ECO reais (C50, B20...). Uma fonte unica para o usuario ver.
+- **Sem estado global entre requests.** get_opening_moves recebe o historico completo e decide o proximo lance so com base nele — idempotente, seguro para multiplos jogadores simultaneos.
+
+## Estrutura do projeto
 
 ```text
 chess-coach/
 ├── backend/
-│   ├── api/             # Rotas HTTP e endpoints (analyze, coach, play, review)
-│   ├── chess_logic/     # Lógica do jogo, classificação de jogadas e aberturas
-│   ├── config/          # Definições centrais e carregamento do .env
-│   ├── engine/          # Diretório reservado para o executável do Stockfish
-│   ├── services/        # Regras de negócio e integrações (Bot, Coach, Review, Stockfish)
-│   ├── main.py          # Ponto de entrada da aplicação FastAPI
-│   └── requirements.txt # Dependências Python
+│   ├── api/                # Routers (analyze, coach, play, review)
+│   ├── chess_logic/        # Regras puras (classificacoes, repeticao, aberturas)
+│   ├── config/
+│   │   └── settings.py     # Caminho do Stockfish, niveis de dificuldade
+│   ├── engine/             # Stockfish.exe (nao versionado)
+│   ├── models/             # Pydantic schemas
+│   ├── services/           # Bot, coach, review, stockfish
+│   ├── tests/              # pytest
+│   ├── main.py             # Entry point FastAPI
+│   ├── requirements.txt
+│   └── requirements-dev.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── components/  # Componentes de interface (tabuleiro, painéis, modais)
-│   │   ├── hooks/       # Hooks customizados para gerenciar o estado da partida
-│   │   ├── App.jsx      # Componente raiz da interface
-│   │   └── main.jsx     # Ponto de entrada do React
-│   ├── package.json     # Dependências e scripts Node.js
-│   └── vite.config.js   # Configurações do Vite
-├── .env                 # Variáveis de ambiente (não versionado)
-├── dev.ps1              # Script de automação de desenvolvimento (PowerShell)
-└── README.md            # Documentação do projeto
+│   │   ├── components/     # Componentes React
+│   │   ├── hooks/          # Hooks (estado da partida, chamadas a API)
+│   │   ├── utils/          # Helpers puros
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── .env.example        # Template de VITE_API_URL
+│   ├── eslint.config.js
+│   ├── vitest.config.js
+│   ├── package.json
+│   └── vite.config.js
+├── .github/workflows/
+│   └── test.yml            # CI
+├── .env                    # Chaves (nao versionado)
+├── .gitignore
+├── dev.ps1                 # Inicia backend + frontend
+├── test.ps1                # Roda pytest + vitest
+├── pytest.ini
+└── README.md
 ```
 
-## Licença
-Projeto desenvolvido para fins de estudo e prática. Sinta-se livre para utilizar, bifurcar e modificar conforme necessário.
+## Licenca
+
+Projeto pessoal de estudo. Sinta-se livre para usar e modificar.
