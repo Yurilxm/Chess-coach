@@ -52,7 +52,7 @@ export function describeUciMove(fen, uci) {
       captured: move.captured || null,
       san: move.san,
     }
-  } catch (err) {
+  } catch {
     return null
   }
 }

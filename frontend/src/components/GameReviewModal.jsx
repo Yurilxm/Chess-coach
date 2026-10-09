@@ -84,9 +84,6 @@ function GameReviewModal({ review, loading, onClose, onReplayMove, replayFen, re
   const allMoves = review?.all_moves || []
   const mistakes = review?.mistakes || []
 
-  // Encontra a análise do lance selecionado
-  const selectedAnalysis = selectedError !== null ? mistakes[selectedError] : null
-  const selectedMoveData = selectedAnalysis ? allMoves.find(m => m.move_number === selectedAnalysis.move_number) : null
 
   function handleErrorClick(index) {
     setSelectedError(selectedError === index ? null : index)
@@ -113,8 +110,6 @@ function GameReviewModal({ review, loading, onClose, onReplayMove, replayFen, re
       return temp.fen()
     } catch { return null }
   }
-
-  const currentFen = replayFen || (review?.all_moves?.length > 0 ? getFenForMove(review.all_moves.length - 1) : null)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">

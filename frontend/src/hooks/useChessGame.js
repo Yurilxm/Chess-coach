@@ -152,7 +152,7 @@ export function useChessGame(initialFen) {
     if (!pendingPromotion) return null
     const chess = chessRef.current
     const { from, to } = pendingPromotion
-    let move = null
+    let move
     try {
       move = chess.move({ from, to, promotion: promotionCode })
     } catch {

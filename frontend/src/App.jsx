@@ -307,7 +307,7 @@ function App() {
               const from = uci.substring(0, 2)
               const to = uci.substring(2, 4)
               const promo = uci.length > 4 ? uci.substring(4, 5) : undefined
-              try { promo ? temp.move({ from, to, promotion: promo }) : temp.move({ from, to }) } catch {}
+              try { promo ? temp.move({ from, to, promotion: promo }) : temp.move({ from, to }) } catch { /* lance invalido, ignora */ }
             }
           }
           setReplayFen(temp.fen())

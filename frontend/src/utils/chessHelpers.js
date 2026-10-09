@@ -29,10 +29,6 @@ export function needsPromotion(chess, from, to) {
   return (piece.color === 'w' && to[1] === '8') || (piece.color === 'b' && to[1] === '1')
 }
 
-function squareToCoords(square) {
-  return { file: FILES.indexOf(square[0]), rank: parseInt(square[1], 10) - 1 }
-}
-
 function coordsToSquare(file, rank) {
   if (file < 0 || file > 7 || rank < 0 || rank > 7) return null
   return FILES[file] + (rank + 1)

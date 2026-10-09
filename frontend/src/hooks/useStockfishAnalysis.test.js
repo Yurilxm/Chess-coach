@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { renderHook, act, waitFor } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react'
 import { useStockfishAnalysis } from './useStockfishAnalysis'
 
 
@@ -7,11 +7,11 @@ describe('useStockfishAnalysis', () => {
   let originalFetch
 
   beforeEach(() => {
-    originalFetch = global.fetch
+    originalFetch = globalThis.fetch
   })
 
   afterEach(() => {
-    global.fetch = originalFetch
+    globalThis.fetch = originalFetch
     vi.restoreAllMocks()
   })
 
@@ -32,7 +32,7 @@ describe('useStockfishAnalysis', () => {
       warnings: [],
     }
 
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => fakeData,
     })
@@ -43,8 +43,8 @@ describe('useStockfishAnalysis', () => {
       await result.current.analyze('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
     })
 
-    expect(global.fetch).toHaveBeenCalledOnce()
-    const [url, options] = global.fetch.mock.calls[0]
+    expect(globalThis.fetch).toHaveBeenCalledOnce()
+    const [url, options] = globalThis.fetch.mock.calls[0]
     expect(url).toContain('/analyze')
     expect(options.method).toBe('POST')
     expect(options.headers['Content-Type']).toBe('application/json')
@@ -59,7 +59,7 @@ describe('useStockfishAnalysis', () => {
   })
 
   it('analyze inclui history no body quando fornecido', async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ fen: '', best_move: '', evaluation: {}, top_moves: [], lines: [], warnings: [] }),
     })
@@ -70,12 +70,12 @@ describe('useStockfishAnalysis', () => {
       await result.current.analyze('algumfen', ['fen1', 'fen2'])
     })
 
-    const body = JSON.parse(global.fetch.mock.calls[0][1].body)
+    const body = JSON.parse(globalThis.fetch.mock.calls[0][1].body)
     expect(body.history).toEqual(['fen1', 'fen2'])
   })
 
   it('analyze com response nao-ok seta error', async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: false,
       json: async () => ({}),
     })
@@ -92,7 +92,7 @@ describe('useStockfishAnalysis', () => {
   })
 
   it('analyze com fetch que lanca excecao seta error', async () => {
-    global.fetch = vi.fn().mockRejectedValue(new Error('Network down'))
+    globalThis.fetch = vi.fn().mockRejectedValue(new Error('Network down'))
 
     const { result } = renderHook(() => useStockfishAnalysis())
 
@@ -105,7 +105,7 @@ describe('useStockfishAnalysis', () => {
   })
 
   it('analyze com fen vazio nao faz fetch', async () => {
-    global.fetch = vi.fn()
+    globalThis.fetch = vi.fn()
 
     const { result } = renderHook(() => useStockfishAnalysis())
 
@@ -113,11 +113,11 @@ describe('useStockfishAnalysis', () => {
       await result.current.analyze('')
     })
 
-    expect(global.fetch).not.toHaveBeenCalled()
+    expect(globalThis.fetch).not.toHaveBeenCalled()
   })
 
   it('clear reseta analysis e error', async () => {
-    global.fetch = vi.fn().mockResolvedValue({
+    globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ fen: '', best_move: 'e2e4', evaluation: {}, top_moves: [], lines: [], warnings: [] }),
     })

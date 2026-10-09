@@ -8,9 +8,8 @@ const VALUE_ORDER = { q: 0, r: 1, b: 2, n: 3, p: 4 }
 
 /**
  * @param pieces - lista de tipos de peça capturadas (ex: ['p','p','n'])
- * @param color - cor das peças capturadas ('w' ou 'b'), usada só pra cor do texto
  */
-function CapturedPieces({ pieces, color }) {
+function CapturedPieces({ pieces }) {
   if (!pieces || pieces.length === 0) return null
 
   const sorted = [...pieces].sort((a, b) => VALUE_ORDER[a] - VALUE_ORDER[b])
