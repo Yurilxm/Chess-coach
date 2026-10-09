@@ -7,7 +7,7 @@ router = APIRouter()
 
 
 @router.post("/analyze", response_model=AnalysisResponse)
-async def analyze(request: PositionRequest):
+def analyze(request: PositionRequest):
     if not request.fen or "/" not in request.fen:
         return {"fen": request.fen, "best_move": "", "evaluation": {"type": "cp", "value": 0}, "top_moves": [], "lines": [], "warnings": ["FEN inválido."]}
     result = analyze_position(request.fen, history_fens=request.history)

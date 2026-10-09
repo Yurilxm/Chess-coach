@@ -48,7 +48,7 @@ class FakeStockfishEngine:
 def mock_engine(monkeypatch):
     def _install(engine):
         monkeypatch.setattr(
-            "services.review_service._get_or_create_engine",
+            "services.stockfish_service._get_or_create_engine",
             lambda **kwargs: engine,
         )
         return engine

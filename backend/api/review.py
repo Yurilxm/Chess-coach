@@ -7,7 +7,7 @@ router = APIRouter()
 
 
 @router.post("/review", response_model=ReviewResponse)
-async def review(request: ReviewRequest):
+def review(request: ReviewRequest):
     result = review_game(request.history, request.player_color)
     if result is None:
         return {

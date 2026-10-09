@@ -7,7 +7,7 @@ router = APIRouter()
 
 
 @router.post("/coach", response_model=CoachResponse)
-async def coach(request: CoachRequest):
+def coach(request: CoachRequest):
     if not request.fen or not request.move:
         return {"explanation": "Posição ou lance inválido.", "loading": False}
     explanation = get_coach_explanation(request.fen, request.move, request.evaluation)

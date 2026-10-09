@@ -1,5 +1,5 @@
 import chess
-from services.stockfish_service import _get_or_create_engine
+from services.stockfish_service import engine_analysis
 from chess_logic.classifications import classify_move
 
 
@@ -50,7 +50,6 @@ def review_game(history: list, player_color: str = 'w'):
         
         
         all_moves_analysis = []
-        engine = _get_or_create_engine(depth=6, multi_pv=1)
         temp_board = chess.Board()
         
         for i, move in enumerate(history):
@@ -73,11 +72,9 @@ def review_game(history: list, player_color: str = 'w'):
                     temp_board.push(chess_move)
                     fen_after = temp_board.fen()
                     
-                    if engine.is_fen_valid(fen_after):
-                        engine.set_fen_position(fen_after)
-                        top = engine.get_top_moves(3)
-                        
-                        if top:
+                    top = engine_analysis(fen_after, multi_pv=3)
+
+                if top:
                             best_move = top[0].get('Move', '')
                             best_cp = top[0].get('Centipawn', 0) or 0
                             
@@ -87,10 +84,9 @@ def review_game(history: list, player_color: str = 'w'):
                                     cp_after = t.get('Centipawn', 0) or 0
                                     break
                             
-                            engine.set_fen_position(fen_before)
-                            top_before = engine.get_top_moves(1)
+                            top_before = engine_analysis(fen_before, multi_pv=1)
                             cp_before = top_before[0].get('Centipawn', 0) if top_before else 0
-                            
+
                             if move_color == 'w':
                                 cp_loss = cp_before - cp_after
                             else:

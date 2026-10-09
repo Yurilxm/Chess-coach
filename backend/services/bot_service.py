@@ -1,6 +1,6 @@
 import random
 from config.settings import DIFFICULTY_LEVELS, DEFAULT_DIFFICULTY
-from services.stockfish_service import _get_or_create_engine
+from services.stockfish_service import engine_analysis
 from chess_logic.openings import get_opening_moves
 import warnings
 warnings.filterwarnings("ignore", message=".*get_top_moves will still return.*")
@@ -33,17 +33,11 @@ def play_bot_move(fen: str, difficulty: int = DEFAULT_DIFFICULTY):
         else:
             multi_pv = 5
         
-        engine = _get_or_create_engine(depth=depth, multi_pv=multi_pv, skill=skill if skill > 0 else None)
-        
-        if not engine.is_fen_valid(fen):
-            return None
-        
-        engine.set_fen_position(fen)
-        top_moves = engine.get_top_moves(multi_pv)
-        
+        top_moves = engine_analysis(fen, depth=depth, multi_pv=multi_pv, skill=skill if skill > 0 else None)
+
         if not top_moves:
             return None
-        
+
         valid_moves = []
         for m in top_moves:
             move = m.get("Move")
