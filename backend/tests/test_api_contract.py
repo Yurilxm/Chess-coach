@@ -135,7 +135,7 @@ def test_play_basico(client, monkeypatch, fen_start):
         "to_square": "e5",
         "promotion": None,
     }
-    monkeypatch.setattr("api.play.play_bot_move", lambda fen, diff: fake)
+    monkeypatch.setattr("api.play.play_bot_move", lambda fen, diff, history=None: fake)
 
     r = client.post("/play", json={"fen": fen_start, "difficulty": 1000})
 
@@ -147,7 +147,7 @@ def test_play_basico(client, monkeypatch, fen_start):
 
 
 def test_play_bot_falha_retorna_vazio(client, monkeypatch, fen_start):
-    monkeypatch.setattr("api.play.play_bot_move", lambda fen, diff: None)
+    monkeypatch.setattr("api.play.play_bot_move", lambda fen, diff, history=None: None)
 
     r = client.post("/play", json={"fen": fen_start, "difficulty": 1000})
     assert r.status_code == 200
@@ -193,3 +193,33 @@ def test_review_service_retorna_none(client, monkeypatch):
     body = r.json()
     assert body["result"] == "Erro"
     assert "Não foi possível" in body["summary"]
+
+
+def test_play_com_history(client, monkeypatch, fen_start):
+    """Play aceita history no body (opcional)."""
+    fake = {
+        "move": "e7e5",
+        "from_square": "e7",
+        "to_square": "e5",
+        "promotion": None,
+    }
+
+    chamadas = []
+
+    def fake_play(fen, difficulty, history=None):
+        chamadas.append(history)
+        return fake
+
+    monkeypatch.setattr("api.play.play_bot_move", fake_play)
+
+    body = {
+        "fen": fen_start,
+        "difficulty": 1000,
+        "history": [
+            {"from": "e2", "to": "e4", "promotion": ""},
+        ],
+    }
+    r = client.post("/play", json=body)
+
+    assert r.status_code == 200
+    assert chamadas[0] == [{"from": "e2", "to": "e4", "promotion": ""}]

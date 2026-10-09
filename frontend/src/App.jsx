@@ -65,7 +65,7 @@ function App() {
     clearReview()
     if (game.playerColor === 'b') {
       const timer = setTimeout(() => {
-        bot.requestMove(game.fen).then((result) => {
+        bot.requestMove(game.fen, game.history).then((result) => {
           if (result?.from_square && result?.to_square) {
             game.attemptMove(result.from_square, result.to_square, {
               skipColorCheck: true,
@@ -94,7 +94,7 @@ function App() {
     if (bot.thinking) return
 
     const timer = setTimeout(() => {
-      bot.requestMove(game.fen).then((result) => {
+      bot.requestMove(game.fen, game.history).then((result) => {
         if (result?.from_square && result?.to_square) {
           game.attemptMove(result.from_square, result.to_square, {
             skipColorCheck: true,

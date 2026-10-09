@@ -6,7 +6,7 @@ import warnings
 warnings.filterwarnings("ignore", message=".*get_top_moves will still return.*")
 
 
-def play_bot_move(fen: str, difficulty: int = DEFAULT_DIFFICULTY):
+def play_bot_move(fen: str, difficulty: int = DEFAULT_DIFFICULTY, history: list = None):
     config = DIFFICULTY_LEVELS.get(difficulty, DIFFICULTY_LEVELS[DEFAULT_DIFFICULTY])
     
     try:
@@ -15,7 +15,7 @@ def play_bot_move(fen: str, difficulty: int = DEFAULT_DIFFICULTY):
         cp_margin = config.get("cp_margin", 0)
         error_rate = config.get("error_rate", 0)
         
-        opening_move = get_opening_moves(fen, difficulty)
+        opening_move = get_opening_moves(fen, difficulty, history)
         if opening_move and random.random() > error_rate:
             return {
                 "move": opening_move,

@@ -11,6 +11,7 @@ class PositionRequest(BaseModel):
 class PlayRequest(BaseModel):
     fen: str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     difficulty: int = DEFAULT_DIFFICULTY
+    history: Optional[List[dict]] = None
 
 
 class CoachRequest(BaseModel):

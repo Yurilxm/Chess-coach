@@ -29,10 +29,6 @@ OPENING_LEVELS = {
     1400: ["italiana", "ruy_lopez", "siciliana", "francesa", "caro_kann", "pirc", "gambito_dama", "eslava", "india_rei", "nimzo_india", "inglesa", "londres"],
 }
 
-current_opening_line = None
-current_opening_index = 0
-
-
 def get_opening_line(difficulty: int):
     allowed = OPENING_LEVELS.get(difficulty, OPENING_LEVELS[1000])
     if difficulty >= 1400:
@@ -50,24 +46,50 @@ def get_opening_line(difficulty: int):
     return available[chosen_key]
 
 
-def get_opening_moves(fen: str, difficulty: int):
-    global current_opening_line, current_opening_index
-    
-    fen_short = " ".join(fen.split(" ")[:3])
-    start_short = " ".join(START_POSITION.split(" ")[:3])
-    
-    if fen_short == start_short:
+def _history_to_uci(history: list) -> list:
+    """Converte historico (lista de dicts com from/to/promotion) em lista UCI."""
+    if not history:
+        return []
+    out = []
+    for m in history:
+        frm = m.get('from')
+        to = m.get('to')
+        if not frm or not to:
+            continue
+        promo = m.get('promotion') or ''
+        out.append(frm + to + promo)
+    return out
+
+
+def get_opening_moves(fen: str, difficulty: int, history: list = None):
+    """Retorna o proximo lance da abertura, se houver linha compativel.
+
+    Sem estado global: reconstroi a decisao a partir do historico.
+    Se history vazio, escolhe linha nova e devolve o 1o lance. Senao,
+    casa o historico com as linhas conhecidas e devolve o proximo lance
+    da linha mais longa compativel.
+
+    Retorna None quando nao ha linha compativel (bot cai no Stockfish).
+    """
+    played = _history_to_uci(history or [])
+
+    if not played:
         line = get_opening_line(difficulty)
         if line:
-            current_opening_line = line
-            current_opening_index = 0
             return line["moves"][0]
         return None
-    
-    if current_opening_line and current_opening_index < len(current_opening_line["moves"]) - 1:
-        current_opening_index += 1
-        return current_opening_line["moves"][current_opening_index]
-    
-    current_opening_line = None
-    current_opening_index = 0
-    return None
+
+    best_line = None
+    best_len = 0
+    for line in OPENING_LINES.values():
+        moves = line["moves"]
+        if len(moves) <= len(played):
+            continue
+        if moves[:len(played)] == played and len(moves) > best_len:
+            best_line = line
+            best_len = len(moves)
+
+    if best_line is None:
+        return None
+
+    return best_line["moves"][len(played)]

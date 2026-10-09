@@ -23,16 +23,26 @@ export function useBotPlayer() {
   const [thinking, setThinking] = useState(false)
   const thinkingRef = useRef(false)
 
-  const requestMove = useCallback(async (fen) => {
+  const requestMove = useCallback(async (fen, history = null) => {
     if (thinkingRef.current) return null
     thinkingRef.current = true
     setThinking(true)
-    
+
     try {
+      const payload = { fen, difficulty }
+      if (history && history.length > 0) {
+        // Envia so o que o backend precisa (from/to/promotion por lance)
+        payload.history = history.map(m => ({
+          from: m.from,
+          to: m.to,
+          promotion: m.promotion || '',
+        }))
+      }
+
       const response = await fetch(ENDPOINTS.play, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fen, difficulty }),
+        body: JSON.stringify(payload),
       })
       if (!response.ok) throw new Error('Falha ao obter lance do bot')
       const data = await response.json()

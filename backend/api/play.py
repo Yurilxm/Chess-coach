@@ -8,7 +8,7 @@ router = APIRouter()
 
 @router.post("/play", response_model=PlayResponse)
 def play(request: PlayRequest):
-    result = play_bot_move(request.fen, request.difficulty)
+    result = play_bot_move(request.fen, request.difficulty, request.history)
     if result is None:
         return {"fen": request.fen, "move": "", "from_square": "", "to_square": "", "promotion": None}
     return {"fen": request.fen, "move": result["move"], "from_square": result["from_square"], "to_square": result["to_square"], "promotion": result["promotion"]}

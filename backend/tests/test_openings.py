@@ -8,6 +8,7 @@ escolher a linha que o BOT vai jogar.
 
 from chess_logic.openings import (
     get_opening_line,
+    get_opening_moves,
     OPENING_LINES,
     OPENING_LEVELS,
 )
@@ -54,3 +55,48 @@ def test_opening_levels_apontam_para_linhas_existentes():
     for nivel, chaves in OPENING_LEVELS.items():
         for chave in chaves:
             assert chave in OPENING_LINES, f"Nivel {nivel} aponta para {chave} inexistente"
+
+
+# ------------------------------------------------------------
+# get_opening_moves (sem estado global)
+# ------------------------------------------------------------
+
+def test_get_opening_moves_historico_vazio_retorna_primeiro_lance():
+    move = get_opening_moves(
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        1000,
+        history=[],
+    )
+    assert move is not None
+    assert len(move) >= 4
+
+
+def test_get_opening_moves_historico_none_retorna_primeiro_lance():
+    move = get_opening_moves(
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        1000,
+        history=None,
+    )
+    assert move is not None
+
+
+def test_get_opening_moves_historico_incompativel_retorna_none():
+    hist = [
+        {"from": "a2", "to": "a3", "promotion": ""},
+        {"from": "a7", "to": "a6", "promotion": ""},
+    ]
+    move = get_opening_moves("qualquerfen", 1000, history=hist)
+    assert move is None
+
+
+def test_get_opening_moves_sem_estado_global_entre_chamadas():
+    """Duas chamadas com historicos diferentes nao devem interferir."""
+    hist1 = []
+    hist2 = [
+        {"from": "e2", "to": "e4", "promotion": ""},
+    ]
+    r1 = get_opening_moves("fen1", 1000, history=hist1)
+    r2 = get_opening_moves("fen2", 1000, history=hist2)
+    # Chamar r1 nao deve mudar o resultado de r2
+    r2_repetido = get_opening_moves("fen2", 1000, history=hist2)
+    assert r2 == r2_repetido
