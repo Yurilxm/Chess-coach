@@ -2,19 +2,35 @@
   "id": "estrutura-peoes",
   "level": "advanced",
   "category": "estrategia",
-  "title": "Estruturas de Peões",
-  "objective": "Entender como os peões ditam o plano de jogo.",
-  "estimatedMinutes": 15,
-  "explanation": "Os peões são a 'alma do xadrez' (Philidor). A estrutura deles define onde você deve atacar.\n\n**Peões dobrados:** Dois peões na mesma coluna. Geralmente é uma fraqueza, pois eles não podem se defender.\n**Peão isolado:** Um peão sem peões aliados nas colunas vizinhas. É fraco no final de jogo, mas dá espaço e linhas abertas no meio jogo.",
+  "order": 1,
+  "title": "Estruturas de Peões: Peão Isolado",
+  "objective": "Entender o que é um peão isolado e como jogar contra ele.",
+  "estimatedMinutes": 12,
+  "explanation": "Um peão isolado é aquele que não tem peões aliados nas colunas adjacentes.\n\nExemplo: um peão branco em d4 é isolado se os peões de c e e já não estão no tabuleiro.\n\n**Vantagens:** O peão isolado controla casas importantes e dá espaço.\n**Desvantagens:** Ele não pode ser defendido por outros peões e se torna um alvo no final de jogo.\n\nO plano correto contra um peão isolado é bloqueá-lo e trocar as peças, deixando o peão exposto.",
   "demo": {
-    "fen": "8/8/8/8/8/8/8/8 w - - 0 1",
-    "moves": [],
-    "description": "Estudo teórico."
+    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
+    "moves": [
+      "d2d4"
+    ],
+    "description": "O peão de d4 pode se tornar isolado se as brancas trocarem os peões centrais."
   },
-  "exercises": [],
-  "summary": "Peões definem sua estratégia.",
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
+      "prompt": "Avance o peão de d2 para d4, criando uma estrutura central de peões.",
+      "expected": [
+        "d2d4"
+      ],
+      "hint": "Abra espaço no centro com o peão da dama.",
+      "success": "Correto! Peões centrais dão controle do tabuleiro.",
+      "failure": "Mova o peão de d2 para d4."
+    }
+  ],
+  "summary": "Peões isolados são fortes no meio-jogo, mas fracos no final. Ataque-os com torres nas colunas abertas.",
   "source": {
-    "type": "original"
-  },
-  "order": 1
+    "type": "original",
+    "inspiration": "Capablanca - Chess Fundamentals"
+  }
 }

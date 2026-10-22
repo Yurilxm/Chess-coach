@@ -4,7 +4,6 @@ import 'chessground/assets/chessground.base.css'
 import 'chessground/assets/chessground.brown.css'
 import 'chessground/assets/chessground.cburnett.css'
 import './ChessBoard.css'
-import { useSettings } from '../contexts/useSettings'
 
 /**
  * Componente "burro": apenas espelha visualmente o estado que recebe via
@@ -36,8 +35,6 @@ function ChessBoard({
   // Usado para evitar reenviar `fen` no .set() quando ele não mudou (ver
   // comentário no efeito de sincronização abaixo).
   const lastSyncedFenRef = useRef(fen)
-  const { boardTheme, pieceTheme, pieceThemes } = useSettings()
-  const pieceStyle = pieceThemes.find(p => p.id === pieceTheme)?.style || {}
 
   const autoCastle = !freeMove
 
@@ -126,8 +123,8 @@ function ChessBoard({
     >
       <div
         ref={boardRef}
-        style={{ width: boardWidth, height: boardWidth, ...pieceStyle }}
-        className={`rounded-[16px] overflow-hidden cg-theme-${boardTheme} piece-theme-${pieceTheme}`}
+        style={{ width: boardWidth, height: boardWidth }}
+        className={`rounded-[16px] overflow-hidden `}
       />
     </div>
   )

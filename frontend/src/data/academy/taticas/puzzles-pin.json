@@ -1,0 +1,1274 @@
+{
+  "id": "puzzles-pin",
+  "level": "intermediate",
+  "category": "taticas",
+  "order": 99,
+  "title": "Puzzles: Cravada (Pin)",
+  "objective": "Resolva 40 puzzles interativos sobre puzzles: cravada (pin).",
+  "estimatedMinutes": 40,
+  "explanation": "Esta é uma coletânea de puzzles reais do Lichess. O tabuleiro já vem com o lance do adversário jogado (setup). Sua missão é encontrar a sequência vencedora.",
+  "demo": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "moves": [],
+    "description": "Puzzles práticos."
+  },
+  "exercises": [
+    {
+      "id": "puzzles-pin-1",
+      "type": "move",
+      "fen": "r4k1r/pNqnppb1/6pn/2p3Np/7P/2P2Q2/PP3PP1/R1B1K2R b KQ - 2 15",
+      "setup": [
+        "a8b8"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g5e6",
+        "f8g8",
+        "e6c7"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1336,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "003S3",
+        "license": "CC0",
+        "url": "https://lichess.org/training/003S3"
+      }
+    },
+    {
+      "id": "puzzles-pin-2",
+      "type": "move",
+      "fen": "6rk/pp6/2n5/3ppn1p/3p4/2P2P1q/PP3QNB/R4R1K w - - 2 29",
+      "setup": [
+        "f1g1"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f5g3",
+        "f2g3",
+        "g8g3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1286,
+      "themes": [
+        "crushing",
+        "kingsideAttack",
+        "master",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "003nQ",
+        "license": "CC0",
+        "url": "https://lichess.org/training/003nQ"
+      }
+    },
+    {
+      "id": "puzzles-pin-3",
+      "type": "move",
+      "fen": "4rk2/p1q5/1p3Q1b/8/1p5N/2P1p3/P3P3/2K5 b - - 0 43",
+      "setup": [
+        "c7f7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "h4g6",
+        "f8g8",
+        "f6h8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1434,
+      "themes": [
+        "endgame",
+        "mate",
+        "mateIn2",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "005Bm",
+        "license": "CC0",
+        "url": "https://lichess.org/training/005Bm"
+      }
+    },
+    {
+      "id": "puzzles-pin-4",
+      "type": "move",
+      "fen": "5rk1/p4p1p/4p1p1/5nq1/8/5QPP/5PK1/2RR4 w - - 6 35",
+      "setup": [
+        "c1b1"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f5h4",
+        "g2f1",
+        "h4f3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1204,
+      "themes": [
+        "crushing",
+        "endgame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Dt6",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Dt6"
+      }
+    },
+    {
+      "id": "puzzles-pin-5",
+      "type": "move",
+      "fen": "5rk1/5ppp/1R6/3Qp3/2B1P3/2q3P1/3R1PKP/1r6 b - - 0 27",
+      "setup": [
+        "b1b6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d5f7",
+        "f8f7",
+        "d2d8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1331,
+      "themes": [
+        "clearance",
+        "endgame",
+        "mate",
+        "mateIn2",
+        "pin",
+        "sacrifice",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00KhM",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00KhM"
+      }
+    },
+    {
+      "id": "puzzles-pin-6",
+      "type": "move",
+      "fen": "2r3k1/2r1q1p1/p3p1Q1/1p1p4/nP1P4/2P4R/P4PPP/2R3K1 b - - 0 30",
+      "setup": [
+        "e7f6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g6h7",
+        "g8f7",
+        "h3f3",
+        "f6f3",
+        "g2f3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1434,
+      "themes": [
+        "advantage",
+        "long",
+        "middlegame",
+        "pin"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00M1q",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00M1q"
+      }
+    },
+    {
+      "id": "puzzles-pin-7",
+      "type": "move",
+      "fen": "r6r/4kppp/2pNpnq1/p1P1n3/8/B3P3/PP2QPPP/3R1RK1 w - - 7 20",
+      "setup": [
+        "e2d2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e5f3",
+        "g1h1",
+        "f3d2"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1041,
+      "themes": [
+        "crushing",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Tdk",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Tdk"
+      }
+    },
+    {
+      "id": "puzzles-pin-8",
+      "type": "move",
+      "fen": "1r4k1/p5pp/5p2/2Rb4/1P4P1/P2r4/3P3P/3B1RK1 b - - 3 34",
+      "setup": [
+        "d3d2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c5d5",
+        "d2d5",
+        "d1b3",
+        "g8f8",
+        "b3d5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1402,
+      "themes": [
+        "advantage",
+        "attraction",
+        "endgame",
+        "long",
+        "pin",
+        "sacrifice"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00W5B",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00W5B"
+      }
+    },
+    {
+      "id": "puzzles-pin-9",
+      "type": "move",
+      "fen": "8/pk1r1Rp1/1p2p2p/4P1bP/3rN3/8/PP6/1K3R2 b - - 4 33",
+      "setup": [
+        "d4d1"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f1d1",
+        "d7f7",
+        "e4d6",
+        "b7c7",
+        "d6f7"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1044,
+      "themes": [
+        "crushing",
+        "endgame",
+        "fork",
+        "long",
+        "pin"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00WG3",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00WG3"
+      }
+    },
+    {
+      "id": "puzzles-pin-10",
+      "type": "move",
+      "fen": "2kr3r/ppp3pp/6q1/3Pnp2/1PP1p3/7P/P2QNPP1/R4RK1 w - - 1 17",
+      "setup": [
+        "d2d4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e5f3",
+        "g1h1",
+        "f3d4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 998,
+      "themes": [
+        "crushing",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00XL2",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00XL2"
+      }
+    },
+    {
+      "id": "puzzles-pin-11",
+      "type": "move",
+      "fen": "b6k/8/6p1/4q2p/1Q3r1P/P1N3R1/1PP3PK/8 w - - 3 35",
+      "setup": [
+        "b4b6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f4h4",
+        "h2g1",
+        "e5e1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1344,
+      "themes": [
+        "endgame",
+        "mate",
+        "mateIn2",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00YbZ",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00YbZ"
+      }
+    },
+    {
+      "id": "puzzles-pin-12",
+      "type": "move",
+      "fen": "2R5/5pk1/pb4p1/1p1q4/3P1P1p/P3r2P/1PQ3P1/3R2K1 w - - 6 45",
+      "setup": [
+        "g1h1"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e3h3",
+        "h1g1",
+        "b6d4",
+        "d1d4",
+        "d5d4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1290,
+      "themes": [
+        "crushing",
+        "endgame",
+        "long",
+        "pin"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00ZSd",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00ZSd"
+      }
+    },
+    {
+      "id": "puzzles-pin-13",
+      "type": "move",
+      "fen": "1Q1k4/4r3/2q4p/2p1pp1P/2Bb4/1P6/P6K/4R3 b - - 4 43",
+      "setup": [
+        "d8d7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c4b5",
+        "c6b5",
+        "b8b5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1385,
+      "themes": [
+        "crushing",
+        "endgame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00ZeT",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00ZeT"
+      }
+    },
+    {
+      "id": "puzzles-pin-14",
+      "type": "move",
+      "fen": "5r2/1Pk5/8/K7/8/1P3B2/8/8 w - - 1 47",
+      "setup": [
+        "f3d5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f8f5",
+        "b7b8b",
+        "c7b8",
+        "a5b5",
+        "f5d5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1027,
+      "themes": [
+        "crushing",
+        "endgame",
+        "long",
+        "pin"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00blC",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00blC"
+      }
+    },
+    {
+      "id": "puzzles-pin-15",
+      "type": "move",
+      "fen": "5nk1/1pp2ppp/p5q1/4PN2/2P2Q2/1P1rBP1P/r4P1K/4R3 b - - 5 30",
+      "setup": [
+        "f8e6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f5e7",
+        "g8f8",
+        "e7g6"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 959,
+      "themes": [
+        "crushing",
+        "fork",
+        "master",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00bns",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00bns"
+      }
+    },
+    {
+      "id": "puzzles-pin-16",
+      "type": "move",
+      "fen": "2r3k1/2r1bppp/3ppn2/qp6/3BP3/1Q4P1/PP3PBP/1RR3K1 w - - 5 21",
+      "setup": [
+        "d4e3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c7c1",
+        "b1c1",
+        "c8c1",
+        "e3c1",
+        "a5e1",
+        "g2f1",
+        "e1c1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1141,
+      "themes": [
+        "advantage",
+        "fork",
+        "middlegame",
+        "pin",
+        "veryLong"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00byq",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00byq"
+      }
+    },
+    {
+      "id": "puzzles-pin-17",
+      "type": "move",
+      "fen": "2rknb2/3q1pp1/p1pP3r/1pQ1P2p/5P2/1P4P1/PB4K1/3R4 b - - 0 27",
+      "setup": [
+        "h5h4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c5b6",
+        "e8c7",
+        "d6c7"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1229,
+      "themes": [
+        "advancedPawn",
+        "advantage",
+        "master",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00cy1",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00cy1"
+      }
+    },
+    {
+      "id": "puzzles-pin-18",
+      "type": "move",
+      "fen": "r3r1k1/ppp2p2/1b5Q/3PP2n/2B3bq/2N5/PP4PP/R4R1K w - - 1 18",
+      "setup": [
+        "f1f7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "h5g3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1159,
+      "themes": [
+        "mate",
+        "mateIn1",
+        "middlegame",
+        "oneMove",
+        "pin"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00jPw",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00jPw"
+      }
+    },
+    {
+      "id": "puzzles-pin-19",
+      "type": "move",
+      "fen": "1k4r1/7p/1p4r1/pPp1qp2/P1Pp1R2/3Q2NP/2P4K/5R2 w - - 4 32",
+      "setup": [
+        "f1f3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g6g3",
+        "f3g3",
+        "e5f4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1120,
+      "themes": [
+        "advantage",
+        "deflection",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00n3G",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00n3G"
+      }
+    },
+    {
+      "id": "puzzles-pin-20",
+      "type": "move",
+      "fen": "4r3/2R3pk/1n2p2p/p6N/6PP/8/P7/6K1 b - - 0 40",
+      "setup": [
+        "e8g8"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "h5f6",
+        "h7h8",
+        "f6g8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1252,
+      "themes": [
+        "advantage",
+        "endgame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00o5f",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00o5f"
+      }
+    },
+    {
+      "id": "puzzles-pin-21",
+      "type": "move",
+      "fen": "r1b2r2/pp2bpkp/1qn1p2p/3pP3/3P4/5N2/PP1QBPPP/R3KN1R w KQ - 6 12",
+      "setup": [
+        "f1g3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e7b4",
+        "e1c1",
+        "b4d2"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1137,
+      "themes": [
+        "crushing",
+        "master",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00o9U",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00o9U"
+      }
+    },
+    {
+      "id": "puzzles-pin-22",
+      "type": "move",
+      "fen": "5rk1/5Rpp/1q1p4/2pB4/6Q1/2b4P/Pr4P1/6K1 b - - 0 29",
+      "setup": [
+        "f8f7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g4c8",
+        "b6d8",
+        "c8d8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 926,
+      "themes": [
+        "endgame",
+        "mate",
+        "mateIn2",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00s7Y",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00s7Y"
+      }
+    },
+    {
+      "id": "puzzles-pin-23",
+      "type": "move",
+      "fen": "1k1r3r/1bq1b1p1/p2p4/2nBp1P1/4P3/4BP2/1PPQN3/2KR3R w - - 3 24",
+      "setup": [
+        "d5b7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c5b3",
+        "c1b1",
+        "b3d2"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1142,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "pin",
+        "queensideAttack",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00tB9",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00tB9"
+      }
+    },
+    {
+      "id": "puzzles-pin-24",
+      "type": "move",
+      "fen": "8/p6p/3b2pk/5p1n/2B4q/1P3P2/P5QP/5R1K w - - 10 35",
+      "setup": [
+        "f1d1"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "h5g3",
+        "g2g3",
+        "d6g3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1265,
+      "themes": [
+        "crushing",
+        "endgame",
+        "master",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00tTz",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00tTz"
+      }
+    },
+    {
+      "id": "puzzles-pin-25",
+      "type": "move",
+      "fen": "r6r/ppk3pp/2pN4/4P3/1b6/6PQ/PP3PKP/R1Bq4 b - - 2 24",
+      "setup": [
+        "b4d6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e5d6",
+        "d1d6",
+        "c1f4",
+        "d6f4",
+        "g3f4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 999,
+      "themes": [
+        "advantage",
+        "long",
+        "middlegame",
+        "pin"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00xmm",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00xmm"
+      }
+    },
+    {
+      "id": "puzzles-pin-26",
+      "type": "move",
+      "fen": "2r1r1k1/7p/1q2pp1Q/p2p3R/3P4/2P4P/P4PP1/6K1 b - - 0 27",
+      "setup": [
+        "b6c7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "h6f6",
+        "c7g7",
+        "h5g5",
+        "g7g5",
+        "f6g5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1412,
+      "themes": [
+        "advantage",
+        "endgame",
+        "long",
+        "pin"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00yP0",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00yP0"
+      }
+    },
+    {
+      "id": "puzzles-pin-27",
+      "type": "move",
+      "fen": "r5k1/1pn2p1p/p2p2p1/2pP3P/P1Pb2q1/3B2B1/1P1QrP2/R4RK1 w - - 0 21",
+      "setup": [
+        "d2e2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g4g3",
+        "g1h1",
+        "g3h3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1384,
+      "themes": [
+        "crushing",
+        "kingsideAttack",
+        "master",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "012Fq",
+        "license": "CC0",
+        "url": "https://lichess.org/training/012Fq"
+      }
+    },
+    {
+      "id": "puzzles-pin-28",
+      "type": "move",
+      "fen": "6k1/5pb1/p6p/1p4p1/7P/5BQ1/PP1q1PP1/6K1 w - - 1 36",
+      "setup": [
+        "h4g5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d2e1",
+        "g1h2",
+        "g7e5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1171,
+      "themes": [
+        "advantage",
+        "endgame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "015hW",
+        "license": "CC0",
+        "url": "https://lichess.org/training/015hW"
+      }
+    },
+    {
+      "id": "puzzles-pin-29",
+      "type": "move",
+      "fen": "2r1kb1r/1p3ppp/p7/3ppP2/8/1P1PBP2/P4RPP/R5K1 w k - 1 21",
+      "setup": [
+        "a1c1"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c8c1",
+        "e3c1",
+        "f8c5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 781,
+      "themes": [
+        "crushing",
+        "endgame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "0162G",
+        "license": "CC0",
+        "url": "https://lichess.org/training/0162G"
+      }
+    },
+    {
+      "id": "puzzles-pin-30",
+      "type": "move",
+      "fen": "4r1k1/1b1r1pPp/4p3/p5B1/5Q2/1P6/PbR3qP/6RK w - - 0 36",
+      "setup": [
+        "g1g2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d7d1",
+        "f4f1",
+        "d1f1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1159,
+      "themes": [
+        "mate",
+        "mateIn2",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "018KA",
+        "license": "CC0",
+        "url": "https://lichess.org/training/018KA"
+      }
+    },
+    {
+      "id": "puzzles-pin-31",
+      "type": "move",
+      "fen": "2r1k2r/1p2bppp/1q1p4/p2Pp1P1/5n1P/1N3P2/PPPQ4/2KR1B1R w k - 0 17",
+      "setup": [
+        "a2a4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "b6b3",
+        "f1b5",
+        "e8f8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1482,
+      "themes": [
+        "advantage",
+        "defensiveMove",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01Btz",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01Btz"
+      }
+    },
+    {
+      "id": "puzzles-pin-32",
+      "type": "move",
+      "fen": "r3q1r1/1ppn3k/p2p3b/3Pp1Bp/1PP1N2P/5P1Q/P7/2K2RR1 w - - 9 27",
+      "setup": [
+        "e4f6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d7f6",
+        "g5h6",
+        "h7h6"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1495,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01Cqi",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01Cqi"
+      }
+    },
+    {
+      "id": "puzzles-pin-33",
+      "type": "move",
+      "fen": "2b5/8/6p1/1R6/3kP3/5PPn/8/3K4 w - - 1 54",
+      "setup": [
+        "d1e2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c8a6",
+        "e2d2",
+        "a6b5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1232,
+      "themes": [
+        "crushing",
+        "endgame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01CvZ",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01CvZ"
+      }
+    },
+    {
+      "id": "puzzles-pin-34",
+      "type": "move",
+      "fen": "4Q3/6bk/6pp/pp6/8/3qBP1P/PP6/K1R5 w - - 0 37",
+      "setup": [
+        "a2a3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d3a3",
+        "a1b1",
+        "a3b2"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1382,
+      "themes": [
+        "endgame",
+        "mate",
+        "mateIn2",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01Gqt",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01Gqt"
+      }
+    },
+    {
+      "id": "puzzles-pin-35",
+      "type": "move",
+      "fen": "2r3q1/1p6/p2p3R/3PpkP1/4np2/3B4/PP6/1K4R1 b - - 5 31",
+      "setup": [
+        "g8d5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "h6f6"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1252,
+      "themes": [
+        "endgame",
+        "epauletteMate",
+        "mate",
+        "mateIn1",
+        "oneMove",
+        "pin"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01KVi",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01KVi"
+      }
+    },
+    {
+      "id": "puzzles-pin-36",
+      "type": "move",
+      "fen": "8/2p5/1p2B3/p7/5r2/P4pN1/1PP4k/1K4R1 w - - 1 59",
+      "setup": [
+        "g3e2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f3e2",
+        "g1e1",
+        "f4f1",
+        "b1c1",
+        "f1e1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1158,
+      "themes": [
+        "advancedPawn",
+        "crushing",
+        "endgame",
+        "hangingPiece",
+        "long",
+        "pin"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01M89",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01M89"
+      }
+    },
+    {
+      "id": "puzzles-pin-37",
+      "type": "move",
+      "fen": "8/8/pkr5/4KB2/1P4P1/8/2P5/8 b - - 5 57",
+      "setup": [
+        "b6b5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f5d7",
+        "b5b6",
+        "d7c6"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1277,
+      "themes": [
+        "crushing",
+        "endgame",
+        "master",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01NYs",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01NYs"
+      }
+    },
+    {
+      "id": "puzzles-pin-38",
+      "type": "move",
+      "fen": "5r2/2p2pbk/4p1p1/5n1p/1q3P1P/pP3Q2/P5P1/1BBR3K b - - 1 28",
+      "setup": [
+        "f5h4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f3h5",
+        "h7g8",
+        "h5h4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1399,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01PBg",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01PBg"
+      }
+    },
+    {
+      "id": "puzzles-pin-39",
+      "type": "move",
+      "fen": "5rk1/b4ppp/4P3/pp1N4/8/P2rP3/B5PP/2B2RK1 b - - 0 26",
+      "setup": [
+        "f7e6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d5e7",
+        "g8h8",
+        "f1f8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1196,
+      "themes": [
+        "backRankMate",
+        "deflection",
+        "mate",
+        "mateIn2",
+        "middlegame",
+        "pin",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01Pko",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01Pko"
+      }
+    },
+    {
+      "id": "puzzles-pin-40",
+      "type": "move",
+      "fen": "b4rk1/p4p2/2q4p/2p5/2Pb2p1/PR3PP1/1PQ3KP/2B1R3 w - - 0 31",
+      "setup": [
+        "c2e4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g4f3",
+        "b3f3",
+        "c6e4",
+        "e1e4",
+        "a8e4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1405,
+      "themes": [
+        "crushing",
+        "long",
+        "middlegame",
+        "pin"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01aXE",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01aXE"
+      }
+    }
+  ],
+  "summary": "Você praticou 40 puzzles de Puzzles: Cravada (Pin).",
+  "source": {
+    "type": "lichess",
+    "license": "CC0"
+  }
+}

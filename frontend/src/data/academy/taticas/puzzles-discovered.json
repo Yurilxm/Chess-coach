@@ -1,0 +1,1270 @@
+{
+  "id": "puzzles-discovered",
+  "level": "advanced",
+  "category": "taticas",
+  "order": 99,
+  "title": "Puzzles: Ataque Descoberto",
+  "objective": "Resolva 40 puzzles interativos sobre puzzles: ataque descoberto.",
+  "estimatedMinutes": 40,
+  "explanation": "Esta é uma coletânea de puzzles reais do Lichess. O tabuleiro já vem com o lance do adversário jogado (setup). Sua missão é encontrar a sequência vencedora.",
+  "demo": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "moves": [],
+    "description": "Puzzles práticos."
+  },
+  "exercises": [
+    {
+      "id": "puzzles-discovered-1",
+      "type": "move",
+      "fen": "r5k1/1p1rqpp1/p3pnp1/2PN4/8/1Q5P/PP3PP1/3RR1K1 b - - 0 24",
+      "setup": [
+        "e7c5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d5f6",
+        "g7f6",
+        "d1d7"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1054,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "kingsideAttack",
+        "master",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "008Y3",
+        "license": "CC0",
+        "url": "https://lichess.org/training/008Y3"
+      }
+    },
+    {
+      "id": "puzzles-discovered-2",
+      "type": "move",
+      "fen": "r3r1k1/1p3p1p/p1p3p1/8/6bP/Q3b3/PP2B1P1/R3K2R w KQ - 2 20",
+      "setup": [
+        "g2g3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g4e2",
+        "e1e2",
+        "e3c5",
+        "e2f3",
+        "c5a3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1434,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "discoveredCheck",
+        "exposedKing",
+        "long",
+        "middlegame"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "009zS",
+        "license": "CC0",
+        "url": "https://lichess.org/training/009zS"
+      }
+    },
+    {
+      "id": "puzzles-discovered-3",
+      "type": "move",
+      "fen": "r4rk1/2q2ppp/p3bp2/2P2N1Q/Ppp5/8/1PP2PPP/R2R2K1 b - - 6 21",
+      "setup": [
+        "c7c5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f5h6",
+        "g7h6",
+        "h5c5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1486,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00AFG",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00AFG"
+      }
+    },
+    {
+      "id": "puzzles-discovered-4",
+      "type": "move",
+      "fen": "3r4/4kp1p/1PQ1p1p1/p3b3/1p2P2P/1P6/6PK/8 w - - 1 36",
+      "setup": [
+        "h2h3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d8d3",
+        "g2g3",
+        "d3g3",
+        "h3h2",
+        "g3c3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1263,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "discoveredCheck",
+        "endgame",
+        "long",
+        "master"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00AdI",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00AdI"
+      }
+    },
+    {
+      "id": "puzzles-discovered-5",
+      "type": "move",
+      "fen": "rnbqk2r/pp3ppp/5n2/3pN3/2B5/2P5/P1PPQPPP/R1B1K2R b KQkq - 1 8",
+      "setup": [
+        "d5c4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e5c6",
+        "c8e6",
+        "c6d8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1295,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "discoveredCheck",
+        "opening",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Bul",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Bul"
+      }
+    },
+    {
+      "id": "puzzles-discovered-6",
+      "type": "move",
+      "fen": "8/p5pk/1p3b1p/3r3P/6P1/3nBN2/P4PK1/4R3 w - - 3 30",
+      "setup": [
+        "e1d1"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d3f4",
+        "e3f4",
+        "d5d1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1091,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00DEc",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00DEc"
+      }
+    },
+    {
+      "id": "puzzles-discovered-7",
+      "type": "move",
+      "fen": "5bk1/2Q2p1p/5qp1/p7/P1Bp4/1Pr4P/5PP1/3R2K1 b - - 5 27",
+      "setup": [
+        "c3c2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c4f7",
+        "g8g7",
+        "c7c2"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1498,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "master",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Dke",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Dke"
+      }
+    },
+    {
+      "id": "puzzles-discovered-8",
+      "type": "move",
+      "fen": "r1bq1rk1/4bppp/p1n5/3P4/Pp6/3B1N2/1B3PPP/R2Q1RK1 b - - 0 17",
+      "setup": [
+        "d8d5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d3h7",
+        "g8h7",
+        "d1d5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 969,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "kingsideAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00E29",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00E29"
+      }
+    },
+    {
+      "id": "puzzles-discovered-9",
+      "type": "move",
+      "fen": "r6k/pp2n1pp/2nN4/4p1Br/1PB5/2P4b/P3Nb1P/R2R3K b - - 1 22",
+      "setup": [
+        "h5g5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d6f7",
+        "h8g8",
+        "f7g5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 864,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "discoveredCheck",
+        "fork",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00GBX",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00GBX"
+      }
+    },
+    {
+      "id": "puzzles-discovered-10",
+      "type": "move",
+      "fen": "R7/4k3/5p2/3p2p1/4b2p/2K1P2P/5PP1/8 w - - 2 47",
+      "setup": [
+        "f2f3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d5d4",
+        "c3d4",
+        "e4a8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1052,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "master",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Gt0",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Gt0"
+      }
+    },
+    {
+      "id": "puzzles-discovered-11",
+      "type": "move",
+      "fen": "4r3/7P/1p4Q1/1b4B1/1k4n1/8/1P2n1PK/4R3 w - - 2 41",
+      "setup": [
+        "h2h1"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e2g3",
+        "h1g1",
+        "e8e1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1316,
+      "themes": [
+        "discoveredAttack",
+        "mate",
+        "mateIn2",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Lh9",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Lh9"
+      }
+    },
+    {
+      "id": "puzzles-discovered-12",
+      "type": "move",
+      "fen": "r1q1r1k1/1p3pp1/n1p4p/p1bpp2P/P3P3/2P2P2/1P1QBP2/R1BK3R b - - 3 23",
+      "setup": [
+        "c5f2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e2a6",
+        "b7a6",
+        "d2f2"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1300,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00O37",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00O37"
+      }
+    },
+    {
+      "id": "puzzles-discovered-13",
+      "type": "move",
+      "fen": "2kr1b1R/p5p1/8/3P1p2/8/4B3/PPPK1P2/8 w - - 1 25",
+      "setup": [
+        "c2c4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f8b4",
+        "d2d3",
+        "d8h8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 856,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00R2A",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00R2A"
+      }
+    },
+    {
+      "id": "puzzles-discovered-14",
+      "type": "move",
+      "fen": "3n2k1/6p1/pp3p1p/8/2r1NR1P/6P1/1PP5/1K6 b - - 1 32",
+      "setup": [
+        "d8e6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e4f6",
+        "g7f6",
+        "f4c4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1071,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "endgame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00UHZ",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00UHZ"
+      }
+    },
+    {
+      "id": "puzzles-discovered-15",
+      "type": "move",
+      "fen": "4Q3/5ppk/2p2b1p/1pq1pP2/2r1B3/5P1P/6P1/5R1K b - - 3 33",
+      "setup": [
+        "c5e7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e8e7",
+        "f6e7",
+        "f5f6",
+        "c4e4",
+        "f6e7"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1198,
+      "themes": [
+        "advancedPawn",
+        "crushing",
+        "discoveredAttack",
+        "discoveredCheck",
+        "endgame",
+        "long"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Uo9",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Uo9"
+      }
+    },
+    {
+      "id": "puzzles-discovered-16",
+      "type": "move",
+      "fen": "2k3rr/ppp2p1p/2np1B2/8/4P3/2NB1b2/PPP2PPP/R4RK1 w - - 1 13",
+      "setup": [
+        "f6h8"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g8g2",
+        "g1h1",
+        "g2g4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1453,
+      "themes": [
+        "discoveredAttack",
+        "discoveredCheck",
+        "kingsideAttack",
+        "mate",
+        "mateIn2",
+        "middlegame",
+        "morphysMate",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Vdx",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Vdx"
+      }
+    },
+    {
+      "id": "puzzles-discovered-17",
+      "type": "move",
+      "fen": "5k2/5pp1/8/1p2N3/1P6/7P/3nR1P1/2r3K1 w - - 1 48",
+      "setup": [
+        "g1h2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d2f1",
+        "h2g1",
+        "f1g3",
+        "g1f2",
+        "g3e2"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1193,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "discoveredCheck",
+        "endgame",
+        "long"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Y6y",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Y6y"
+      }
+    },
+    {
+      "id": "puzzles-discovered-18",
+      "type": "move",
+      "fen": "1r6/p2n1pkp/4p1p1/2Np4/1r6/1P1K1P1P/P3R1P1/2R5 b - - 5 36",
+      "setup": [
+        "b8c8"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c5e6",
+        "f7e6",
+        "c1c8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1164,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "endgame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00f1Y",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00f1Y"
+      }
+    },
+    {
+      "id": "puzzles-discovered-19",
+      "type": "move",
+      "fen": "r4r1k/ppp1b1pp/3qQn2/6B1/8/2N5/PPP2PPP/R4RK1 w - - 3 14",
+      "setup": [
+        "e6b3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f6g4",
+        "g2g3",
+        "e7g5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1377,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00jCD",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00jCD"
+      }
+    },
+    {
+      "id": "puzzles-discovered-20",
+      "type": "move",
+      "fen": "r3r3/1p1n2pk/2p1pq1p/2P5/1p2R3/P2Q1N1P/5PP1/R5K1 b - - 1 24",
+      "setup": [
+        "f6a1"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e4e1",
+        "h7h8",
+        "e1a1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1307,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "discoveredCheck",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00kZF",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00kZF"
+      }
+    },
+    {
+      "id": "puzzles-discovered-21",
+      "type": "move",
+      "fen": "r1b2k1r/pppp2pp/5q2/4n3/2Bp4/8/PPP2PPP/RN1QR1K1 w - - 2 13",
+      "setup": [
+        "d1d4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e5f3",
+        "g2f3",
+        "f6d4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1156,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00mvP",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00mvP"
+      }
+    },
+    {
+      "id": "puzzles-discovered-22",
+      "type": "move",
+      "fen": "7r/ppp1Nk1p/2n5/8/8/2P2pP1/P6P/R1Br1BK1 b - - 0 20",
+      "setup": [
+        "f7e7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c1g5",
+        "e7e6",
+        "a1d1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 789,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "master",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00mvr",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00mvr"
+      }
+    },
+    {
+      "id": "puzzles-discovered-23",
+      "type": "move",
+      "fen": "r2q1rk1/p4pbp/1pp1p1p1/4n3/2PpN3/1P4P1/PB2PP1P/1R1Q1RK1 w - - 0 16",
+      "setup": [
+        "d1d4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e5f3",
+        "e2f3",
+        "g7d4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1283,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00nHy",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00nHy"
+      }
+    },
+    {
+      "id": "puzzles-discovered-24",
+      "type": "move",
+      "fen": "3k2q1/pp3pN1/2b5/2pp2Q1/6n1/3P1N2/PbP2PPP/5K2 b - - 3 26",
+      "setup": [
+        "b2f6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g7e6",
+        "d8e7",
+        "g5g8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1394,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00rx9",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00rx9"
+      }
+    },
+    {
+      "id": "puzzles-discovered-25",
+      "type": "move",
+      "fen": "1k1r4/pp3pp1/2p1p3/4b3/P3n1P1/8/KPP2PN1/3rBR1R b - - 2 31",
+      "setup": [
+        "b8c7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e1a5",
+        "b7b6",
+        "f1d1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 901,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "master",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00sO1",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00sO1"
+      }
+    },
+    {
+      "id": "puzzles-discovered-26",
+      "type": "move",
+      "fen": "3q2k1/r1p3p1/P1Pp3p/3Pp1b1/R3Qr2/5N1P/5PP1/R5K1 w - - 1 27",
+      "setup": [
+        "e4e3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f4a4",
+        "a1a4",
+        "g5e3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1158,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00wYl",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00wYl"
+      }
+    },
+    {
+      "id": "puzzles-discovered-27",
+      "type": "move",
+      "fen": "3rqrk1/1p1bp1bp/1N1p4/pP2n1p1/2PBPp2/P4P2/4B1PP/2RQ1RK1 w - - 5 21",
+      "setup": [
+        "d1a4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e5f3",
+        "e2f3",
+        "g7d4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1175,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "kingsideAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00wn7",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00wn7"
+      }
+    },
+    {
+      "id": "puzzles-discovered-28",
+      "type": "move",
+      "fen": "r2q1rk1/ppp1nppp/3b4/1B6/3QP3/2N2b2/PPP2PPP/R1B2RK1 w - - 0 10",
+      "setup": [
+        "g2f3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d6h2",
+        "g1h2",
+        "d8d4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 967,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "kingsideAttack",
+        "opening",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00xGN",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00xGN"
+      }
+    },
+    {
+      "id": "puzzles-discovered-29",
+      "type": "move",
+      "fen": "rn1q1b1Q/pp1k3p/2p2n2/3p4/6pP/2N5/PPP1P1B1/2KR2NR w - - 2 14",
+      "setup": [
+        "e2e4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f8h6",
+        "c1b1",
+        "d8h8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1184,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00xvM",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00xvM"
+      }
+    },
+    {
+      "id": "puzzles-discovered-30",
+      "type": "move",
+      "fen": "3r3k/p5p1/5q1p/8/P1b5/4Q1RP/6BK/8 b - - 6 42",
+      "setup": [
+        "d8d3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e3e8",
+        "c4g8",
+        "g3d3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1055,
+      "themes": [
+        "advantage",
+        "deflection",
+        "discoveredAttack",
+        "endgame",
+        "master",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00yIS",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00yIS"
+      }
+    },
+    {
+      "id": "puzzles-discovered-31",
+      "type": "move",
+      "fen": "5k2/p3pp2/7p/2Qp1P2/6B1/6q1/2K5/8 b - - 2 43",
+      "setup": [
+        "g3g4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c5c8",
+        "f8g7",
+        "f5f6",
+        "g7f6",
+        "c8g4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1069,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "long",
+        "queenEndgame"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00yPS",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00yPS"
+      }
+    },
+    {
+      "id": "puzzles-discovered-32",
+      "type": "move",
+      "fen": "4R3/5ppk/7p/2p2q2/1n6/2Br2P1/5P1P/1Q4K1 w - - 0 35",
+      "setup": [
+        "c3b4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d3g3",
+        "f2g3",
+        "f5b1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1387,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "endgame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "011J1",
+        "license": "CC0",
+        "url": "https://lichess.org/training/011J1"
+      }
+    },
+    {
+      "id": "puzzles-discovered-33",
+      "type": "move",
+      "fen": "2rq1rk1/pb2bppp/1p2p3/8/3N4/P1P1P3/4BPPP/1Q1R1RK1 b - - 0 18",
+      "setup": [
+        "a7a6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d4e6",
+        "f7e6",
+        "d1d8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1223,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "012QY",
+        "license": "CC0",
+        "url": "https://lichess.org/training/012QY"
+      }
+    },
+    {
+      "id": "puzzles-discovered-34",
+      "type": "move",
+      "fen": "2k5/bpp2B2/p1np4/4pR2/PP2P1q1/1NPP2P1/5RK1/8 b - - 6 30",
+      "setup": [
+        "a7f2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f7e6",
+        "c8d8",
+        "f5f8",
+        "d8e7",
+        "e6g4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1133,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "fork",
+        "long"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "013hi",
+        "license": "CC0",
+        "url": "https://lichess.org/training/013hi"
+      }
+    },
+    {
+      "id": "puzzles-discovered-35",
+      "type": "move",
+      "fen": "3r3r/pp3pp1/5k2/2pbq3/3N4/Q4PP1/PPP1N2p/R3R2K w - - 1 22",
+      "setup": [
+        "a3c5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d5f3",
+        "d4f3",
+        "e5c5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 962,
+      "themes": [
+        "advantage",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "017Ut",
+        "license": "CC0",
+        "url": "https://lichess.org/training/017Ut"
+      }
+    },
+    {
+      "id": "puzzles-discovered-36",
+      "type": "move",
+      "fen": "8/8/8/1p6/4k3/2p4P/rP2RK2/8 b - - 1 49",
+      "setup": [
+        "e4d4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "b2c3",
+        "d4c3",
+        "e2a2"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1129,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "rookEndgame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "017c1",
+        "license": "CC0",
+        "url": "https://lichess.org/training/017c1"
+      }
+    },
+    {
+      "id": "puzzles-discovered-37",
+      "type": "move",
+      "fen": "5rqk/1p4p1/B1n3Qp/3p4/8/2P2P2/P6P/6RK b - - 0 29",
+      "setup": [
+        "f8f6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g6f6",
+        "g7f6",
+        "g1g8",
+        "h8g8",
+        "a6b7"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1370,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "long",
+        "master"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "017zX",
+        "license": "CC0",
+        "url": "https://lichess.org/training/017zX"
+      }
+    },
+    {
+      "id": "puzzles-discovered-38",
+      "type": "move",
+      "fen": "2k2r1r/p2n1Q1p/1pqbp3/8/3P4/2P2N2/P2B1PPP/R4RK1 w - - 1 19",
+      "setup": [
+        "f7e6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d6h2",
+        "f3h2",
+        "c6e6"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 971,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "master",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01Ag5",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01Ag5"
+      }
+    },
+    {
+      "id": "puzzles-discovered-39",
+      "type": "move",
+      "fen": "6k1/1B2ppbp/p2p2p1/3P4/1P2P3/P3B3/4qPPP/1Q1b2K1 w - - 1 28",
+      "setup": [
+        "g2g3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e2e1",
+        "g1g2",
+        "d1f3",
+        "g2f3",
+        "e1b1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1143,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "endgame",
+        "long"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01B6x",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01B6x"
+      }
+    },
+    {
+      "id": "puzzles-discovered-40",
+      "type": "move",
+      "fen": "2rq1rk1/1b3ppp/p2pp3/bp1n4/3PQ1N1/PP1B4/1BP2PPP/R4RK1 b - - 3 17",
+      "setup": [
+        "d8h4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g4f6",
+        "d5f6",
+        "e4h4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1339,
+      "themes": [
+        "crushing",
+        "discoveredAttack",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01CKc",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01CKc"
+      }
+    }
+  ],
+  "summary": "Você praticou 40 puzzles de Puzzles: Ataque Descoberto.",
+  "source": {
+    "type": "lichess",
+    "license": "CC0"
+  }
+}

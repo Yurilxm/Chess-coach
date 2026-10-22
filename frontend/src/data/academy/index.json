@@ -122,16 +122,6 @@
       "file": "fundamentos/afogamento.json"
     },
     {
-      "id": "mate-corredor",
-      "level": "beginner",
-      "category": "fundamentos",
-      "title": "Mate do Corredor (Back Rank)",
-      "objective": "Aprender a dar mate na última fileira.",
-      "estimatedMinutes": 5,
-      "order": 10,
-      "file": "fundamentos/mate-corredor.json"
-    },
-    {
       "id": "empate-repeticao",
       "level": "beginner",
       "category": "fundamentos",
@@ -202,23 +192,13 @@
       "file": "aberturas/ruy-lopez.json"
     },
     {
-      "id": "oposicao-reis",
-      "level": "intermediate",
-      "category": "finais",
-      "title": "Oposição de Reis",
-      "objective": "Aprender o conceito fundamental dos finais de peões.",
-      "estimatedMinutes": 10,
-      "order": 2,
-      "file": "finais/oposicao-reis.json"
-    },
-    {
       "id": "quadrado-peao",
       "level": "intermediate",
       "category": "finais",
-      "title": "Regra do Quadrado",
-      "objective": "Saber se o Rei alcança o peão a tempo.",
+      "title": "A Regra do Quadrado",
+      "objective": "Saber se o Rei alcança o peão a tempo, visualizando um quadrado imaginário.",
       "estimatedMinutes": 6,
-      "order": 3,
+      "order": 2,
       "file": "finais/quadrado-peao.json"
     },
     {
@@ -230,6 +210,16 @@
       "estimatedMinutes": 5,
       "order": 11,
       "file": "fundamentos/en-passant.json"
+    },
+    {
+      "id": "mate-corredor",
+      "level": "intermediate",
+      "category": "fundamentos",
+      "title": "Mate do Corredor (Back Rank Mate)",
+      "objective": "Aprender a dar mate na última fileira, explorando o rei preso atrás dos próprios peões.",
+      "estimatedMinutes": 5,
+      "order": 11,
+      "file": "fundamentos/mate-corredor.json"
     },
     {
       "id": "garfo",
@@ -272,6 +262,26 @@
       "file": "taticas/ataque-descoberto.json"
     },
     {
+      "id": "puzzles-pin",
+      "level": "intermediate",
+      "category": "taticas",
+      "title": "Puzzles: Cravada (Pin)",
+      "objective": "Resolva 40 puzzles interativos sobre puzzles: cravada (pin).",
+      "estimatedMinutes": 40,
+      "order": 99,
+      "file": "taticas/puzzles-pin.json"
+    },
+    {
+      "id": "puzzles-skewer",
+      "level": "intermediate",
+      "category": "taticas",
+      "title": "Puzzles: Espeto (Skewer)",
+      "objective": "Resolva 40 puzzles interativos sobre puzzles: espeto (skewer).",
+      "estimatedMinutes": 40,
+      "order": 99,
+      "file": "taticas/puzzles-skewer.json"
+    },
+    {
       "id": "puzzles-garfo",
       "level": "intermediate",
       "category": "taticas",
@@ -292,12 +302,32 @@
       "file": "taticas/puzzles-mate2.json"
     },
     {
+      "id": "puzzles-backrank",
+      "level": "intermediate",
+      "category": "taticas",
+      "title": "Puzzles: Mate do Corredor",
+      "objective": "Resolva 40 puzzles interativos sobre puzzles: mate do corredor.",
+      "estimatedMinutes": 40,
+      "order": 100,
+      "file": "taticas/puzzles-backrank.json"
+    },
+    {
+      "id": "puzzles-trapped",
+      "level": "intermediate",
+      "category": "taticas",
+      "title": "Puzzles: Peças Presas",
+      "objective": "Resolva 40 puzzles interativos sobre puzzles: peças presas.",
+      "estimatedMinutes": 40,
+      "order": 100,
+      "file": "taticas/puzzles-trapped.json"
+    },
+    {
       "id": "estrutura-peoes",
       "level": "advanced",
       "category": "estrategia",
-      "title": "Estruturas de Peões",
-      "objective": "Entender como os peões ditam o plano de jogo.",
-      "estimatedMinutes": 15,
+      "title": "Estruturas de Peões: Peão Isolado",
+      "objective": "Entender o que é um peão isolado e como jogar contra ele.",
+      "estimatedMinutes": 12,
       "order": 1,
       "file": "estrategia/estrutura-peoes.json"
     },
@@ -307,9 +337,19 @@
       "category": "estrategia",
       "title": "Bispo Bom e Bispo Ruim",
       "objective": "Identificar quando um bispo é uma peça forte ou fraca.",
-      "estimatedMinutes": 10,
+      "estimatedMinutes": 8,
       "order": 2,
       "file": "estrategia/bispo-bom-ruim.json"
+    },
+    {
+      "id": "oposicao-reis",
+      "level": "advanced",
+      "category": "finais",
+      "title": "Oposição de Reis (Capablanca)",
+      "objective": "Dominar a técnica de oposição no final de peões, conforme ensinado por Capablanca.",
+      "estimatedMinutes": 10,
+      "order": 1,
+      "file": "finais/oposicao-reis.json"
     },
     {
       "id": "desvio",
@@ -330,6 +370,46 @@
       "estimatedMinutes": 8,
       "order": 5,
       "file": "taticas/atracao.json"
+    },
+    {
+      "id": "puzzles-discovered",
+      "level": "advanced",
+      "category": "taticas",
+      "title": "Puzzles: Ataque Descoberto",
+      "objective": "Resolva 40 puzzles interativos sobre puzzles: ataque descoberto.",
+      "estimatedMinutes": 40,
+      "order": 99,
+      "file": "taticas/puzzles-discovered.json"
+    },
+    {
+      "id": "puzzles-bishop-endgame",
+      "level": "advanced",
+      "category": "taticas",
+      "title": "Puzzles: Finais de Bispo",
+      "objective": "Resolva 40 puzzles interativos sobre puzzles: finais de bispo.",
+      "estimatedMinutes": 40,
+      "order": 100,
+      "file": "taticas/puzzles-bishop-endgame.json"
+    },
+    {
+      "id": "puzzles-rook-endgame",
+      "level": "advanced",
+      "category": "taticas",
+      "title": "Puzzles: Finais de Torre",
+      "objective": "Resolva 40 puzzles interativos sobre puzzles: finais de torre.",
+      "estimatedMinutes": 40,
+      "order": 100,
+      "file": "taticas/puzzles-rook-endgame.json"
+    },
+    {
+      "id": "puzzles-mate3",
+      "level": "advanced",
+      "category": "taticas",
+      "title": "Puzzles: Mate em 3",
+      "objective": "Resolva 40 puzzles interativos sobre puzzles: mate em 3.",
+      "estimatedMinutes": 40,
+      "order": 100,
+      "file": "taticas/puzzles-mate3.json"
     }
   ]
 }

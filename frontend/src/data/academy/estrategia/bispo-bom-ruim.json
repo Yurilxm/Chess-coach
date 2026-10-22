@@ -2,19 +2,35 @@
   "id": "bispo-bom-ruim",
   "level": "advanced",
   "category": "estrategia",
+  "order": 2,
   "title": "Bispo Bom e Bispo Ruim",
   "objective": "Identificar quando um bispo é uma peça forte ou fraca.",
-  "estimatedMinutes": 10,
-  "explanation": "**Bispo Bom:** Suas próprias peças (especialmente peões) NÃO estão nas casas da sua cor. Ele tem liberdade para atacar.\n\n**Bispo Ruim:** Suas próprias peças estão presas nas casas da sua cor. O bispo fica 'trancado' e não tem alvos para atacar. Trocar o bispo ruim é uma das melhores estratégias.",
+  "estimatedMinutes": 8,
+  "explanation": "**Bispo Bom:** Suas próprias peças (especialmente peões) NÃO estão nas casas da sua cor. Ele tem liberdade para atacar.\n\n**Bispo Ruim:** Suas próprias peças estão presas nas casas da sua cor. O bispo fica 'trancado' e não tem alvos para atacar.\n\nA estratégia contra um bispo ruim é simplesmente trocá-lo. A estratégia com um bispo bom é manter as diagonais abertas.",
   "demo": {
-    "fen": "8/8/8/8/8/8/8/8 w - - 0 1",
-    "moves": [],
-    "description": "Teoria."
+    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+    "moves": [
+      "f1c4"
+    ],
+    "description": "O bispo de f1 sai da passividade e ocupa a diagonal c4-f7."
   },
-  "exercises": [],
-  "summary": "Bispos precisam de diagonais abertas.",
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "prompt": "Desenvolva o bispo de f1 para c4, saindo da passividade.",
+      "expected": [
+        "f1c4"
+      ],
+      "hint": "Mova o bispo para a diagonal ativa.",
+      "success": "Correto! Bispos ativos controlam o centro.",
+      "failure": "Mova o bispo de f1 para c4."
+    }
+  ],
+  "summary": "Um bispo bom vale mais que uma torre em posições abertas. Troque o bispo ruim.",
   "source": {
-    "type": "original"
-  },
-  "order": 2
+    "type": "original",
+    "inspiration": "Capablanca - Chess Fundamentals"
+  }
 }

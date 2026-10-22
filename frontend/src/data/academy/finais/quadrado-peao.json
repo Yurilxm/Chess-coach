@@ -2,11 +2,11 @@
   "id": "quadrado-peao",
   "level": "intermediate",
   "category": "finais",
-  "order": 3,
-  "title": "Regra do Quadrado",
-  "objective": "Saber se o Rei alcança o peão a tempo.",
+  "order": 2,
+  "title": "A Regra do Quadrado",
+  "objective": "Saber se o Rei alcança o peão a tempo, visualizando um quadrado imaginário.",
   "estimatedMinutes": 6,
-  "explanation": "Desenhe um quadrado imaginário do peão até a casa de promoção. Se o Rei adversário estiver dentro desse quadrado (ou puder entrar nele na sua vez), ele captura o peão.",
+  "explanation": "Desenhe um quadrado imaginário do peão até a casa de promoção. Se o Rei adversário estiver dentro desse quadrado (ou puder entrar nele na sua vez), ele captura o peão.\n\nEsta regra evita cálculos desnecessários e é essencial para decidir se vale a pena correr com o peão.",
   "demo": {
     "fen": "4k3/8/8/8/4P3/8/8/4K3 w - - 0 1",
     "moves": [
@@ -14,7 +14,7 @@
       "e8e7",
       "e5e6"
     ],
-    "description": "O Rei está dentro do quadrado do peão."
+    "description": "O Rei preto está dentro do quadrado e alcança o peão."
   },
   "exercises": [
     {
@@ -30,8 +30,9 @@
       "failure": "Mova o peão para e5."
     }
   ],
-  "summary": "O quadrado mostra quem é mais rápido.",
+  "summary": "O quadrado mostra quem é mais rápido. Peão na 2ª fileira = quadrado de 5 casas. Peão na 4ª = 4 casas.",
   "source": {
-    "type": "original"
+    "type": "original",
+    "inspiration": "Capablanca - Chess Fundamentals"
   }
 }

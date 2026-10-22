@@ -1,0 +1,1254 @@
+{
+  "id": "puzzles-trapped",
+  "level": "intermediate",
+  "category": "taticas",
+  "order": 100,
+  "title": "Puzzles: Peças Presas",
+  "objective": "Resolva 40 puzzles interativos sobre puzzles: peças presas.",
+  "estimatedMinutes": 40,
+  "explanation": "Esta é uma coletânea de puzzles reais do Lichess. O tabuleiro já vem com o lance do adversário jogado (setup). Sua missão é encontrar a sequência vencedora.",
+  "demo": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "moves": [],
+    "description": "Puzzles práticos."
+  },
+  "exercises": [
+    {
+      "id": "puzzles-trapped-1",
+      "type": "move",
+      "fen": "r1b1k1nr/ppp2pbp/3ppqp1/8/2BnP3/N2P2QP/PPP2PP1/R1B1K2R b KQkq - 4 9",
+      "setup": [
+        "e6e5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c1g5",
+        "f6g5",
+        "g3g5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1339,
+      "themes": [
+        "advantage",
+        "opening",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "009FP",
+        "license": "CC0",
+        "url": "https://lichess.org/training/009FP"
+      }
+    },
+    {
+      "id": "puzzles-trapped-2",
+      "type": "move",
+      "fen": "r1b2rk1/2q2p1p/1p2pbp1/pP6/2P1Q3/P2B1N2/5PPP/3R1RK1 w - - 0 20",
+      "setup": [
+        "e4a8"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c8b7",
+        "a8a7",
+        "f8a8",
+        "a7a8",
+        "b7a8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1229,
+      "themes": [
+        "advantage",
+        "clearance",
+        "long",
+        "master",
+        "middlegame",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00AhO",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00AhO"
+      }
+    },
+    {
+      "id": "puzzles-trapped-3",
+      "type": "move",
+      "fen": "r2qr1k1/ppp2ppp/2nbp3/5b2/3P4/2P1BN2/P1PQBPPP/3R1RK1 b - - 7 11",
+      "setup": [
+        "d8f6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e3g5",
+        "f6g6",
+        "f3h4",
+        "h7h6",
+        "h4g6"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1394,
+      "themes": [
+        "crushing",
+        "long",
+        "middlegame",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00YeV",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00YeV"
+      }
+    },
+    {
+      "id": "puzzles-trapped-4",
+      "type": "move",
+      "fen": "r1b2bnr/ppQp3p/2n2q1k/6pP/2B1P3/3P4/PPP2PP1/RNB1K2R w KQ - 1 11",
+      "setup": [
+        "c2c3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f8d6",
+        "c7d6",
+        "f6d6"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1398,
+      "themes": [
+        "crushing",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00ZWf",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00ZWf"
+      }
+    },
+    {
+      "id": "puzzles-trapped-5",
+      "type": "move",
+      "fen": "rn1qk2r/ppp2ppp/5b2/3P4/4P3/5b1P/PPP1QPP1/RN2KB1R w KQkq - 0 10",
+      "setup": [
+        "e2f3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f6b2",
+        "f3b3",
+        "b2a1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1052,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01Bmi",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01Bmi"
+      }
+    },
+    {
+      "id": "puzzles-trapped-6",
+      "type": "move",
+      "fen": "r3k2r/pppqbppp/2n1b3/3p2PQ/1P1Pp2P/2P1P3/P4PB1/RNB1K1NR w KQkq - 1 11",
+      "setup": [
+        "a2a4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e6g4",
+        "g2h3",
+        "g4h5",
+        "h3d7",
+        "e8d7"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1504,
+      "themes": [
+        "advantage",
+        "long",
+        "middlegame",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01HgH",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01HgH"
+      }
+    },
+    {
+      "id": "puzzles-trapped-7",
+      "type": "move",
+      "fen": "r2qb2r/6k1/p2p1p2/1ppN1Pp1/4P1Q1/2PP3P/P5P1/3R1RK1 w - - 6 29",
+      "setup": [
+        "g2g3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e8h5",
+        "g4h5",
+        "h8h5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1183,
+      "themes": [
+        "crushing",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01Lo7",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01Lo7"
+      }
+    },
+    {
+      "id": "puzzles-trapped-8",
+      "type": "move",
+      "fen": "3r1rk1/p2nppbp/2p2np1/qpPp4/N2P1B2/PP1BP2P/5PP1/R2Q1RK1 b - - 0 15",
+      "setup": [
+        "b5a4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "b3b4",
+        "a5b5",
+        "d3b5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1170,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01V4g",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01V4g"
+      }
+    },
+    {
+      "id": "puzzles-trapped-9",
+      "type": "move",
+      "fen": "r3kb1r/1p3pp1/p1p1b3/4p1Bp/4P3/2NQ1PP1/PPP2qBP/R6K b kq - 1 16",
+      "setup": [
+        "f7f6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g5e3",
+        "e6c4",
+        "e3f2",
+        "c4d3",
+        "c2d3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1533,
+      "themes": [
+        "advantage",
+        "long",
+        "middlegame",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01iqw",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01iqw"
+      }
+    },
+    {
+      "id": "puzzles-trapped-10",
+      "type": "move",
+      "fen": "4rr1k/pp4pp/2p1Bn2/2b1pP1q/8/2NP1R2/PPPB2QP/4K3 b - - 6 20",
+      "setup": [
+        "f6d5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f3h3",
+        "c5f2",
+        "e1f2",
+        "h5h3",
+        "g2h3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1590,
+      "themes": [
+        "crushing",
+        "long",
+        "master",
+        "middlegame",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01sqg",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01sqg"
+      }
+    },
+    {
+      "id": "puzzles-trapped-11",
+      "type": "move",
+      "fen": "r3k2r/pp1n1pp1/4p3/3pPnPp/2pP1Q1P/2B2N2/qPPK1P2/3R3R b kq - 5 19",
+      "setup": [
+        "g7g6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d1a1",
+        "a2a1",
+        "h1a1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1040,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01xk5",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01xk5"
+      }
+    },
+    {
+      "id": "puzzles-trapped-12",
+      "type": "move",
+      "fen": "6k1/3bnppp/p4n2/1pp5/8/1BNP1N2/PPP2PPP/6K1 w - - 0 19",
+      "setup": [
+        "c3e4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f6e4",
+        "d3e4",
+        "c5c4",
+        "b3c4",
+        "b5c4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1275,
+      "themes": [
+        "advantage",
+        "endgame",
+        "long",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "01zU8",
+        "license": "CC0",
+        "url": "https://lichess.org/training/01zU8"
+      }
+    },
+    {
+      "id": "puzzles-trapped-13",
+      "type": "move",
+      "fen": "r2qk2r/1pp3p1/p1nbbn1p/3p1p2/3P4/PQN1PN1P/1PPB1P2/R3KB1R w KQkq - 0 13",
+      "setup": [
+        "b3b7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c6a5",
+        "b7a8",
+        "d8a8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1411,
+      "themes": [
+        "crushing",
+        "master",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "02FSn",
+        "license": "CC0",
+        "url": "https://lichess.org/training/02FSn"
+      }
+    },
+    {
+      "id": "puzzles-trapped-14",
+      "type": "move",
+      "fen": "5r1k/2r3p1/pp1N3p/2p4n/5p2/1B3P1P/PPP4B/R5K1 w - - 2 28",
+      "setup": [
+        "d6e4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c5c4",
+        "b3a4",
+        "b6b5",
+        "a4b5",
+        "a6b5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1509,
+      "themes": [
+        "advantage",
+        "long",
+        "middlegame",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "02Wga",
+        "license": "CC0",
+        "url": "https://lichess.org/training/02Wga"
+      }
+    },
+    {
+      "id": "puzzles-trapped-15",
+      "type": "move",
+      "fen": "r2qk1nr/p2b1ppp/2pbp3/2ppN3/5P2/1P2P2P/PBPP2P1/RN1QK2R b KQkq - 2 9",
+      "setup": [
+        "f7f6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d1h5",
+        "g7g6",
+        "e5g6",
+        "h7g6",
+        "h5h8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1217,
+      "themes": [
+        "crushing",
+        "long",
+        "opening",
+        "pin",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "02cdm",
+        "license": "CC0",
+        "url": "https://lichess.org/training/02cdm"
+      }
+    },
+    {
+      "id": "puzzles-trapped-16",
+      "type": "move",
+      "fen": "rn3rk1/pp3ppp/2p1p1b1/8/2Pq4/P4N1P/2P1BPP1/R1Q2RK1 b - - 3 18",
+      "setup": [
+        "d4e4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e2d3",
+        "e4f3",
+        "g2f3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1381,
+      "themes": [
+        "crushing",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "02itv",
+        "license": "CC0",
+        "url": "https://lichess.org/training/02itv"
+      }
+    },
+    {
+      "id": "puzzles-trapped-17",
+      "type": "move",
+      "fen": "r2qk2r/1p2bp1p/p1n1b3/3pPpp1/3P4/PQN2N2/1P3PPP/R1B2RK1 w kq - 0 13",
+      "setup": [
+        "b3b7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c6a5",
+        "b7a8",
+        "d8a8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1581,
+      "themes": [
+        "crushing",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "02nYL",
+        "license": "CC0",
+        "url": "https://lichess.org/training/02nYL"
+      }
+    },
+    {
+      "id": "puzzles-trapped-18",
+      "type": "move",
+      "fen": "rnbq1rk1/pppp1ppp/4p3/8/3P4/3B1N2/P1PB1PPP/Q4RK1 b - - 2 9",
+      "setup": [
+        "d8f6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d2g5",
+        "f6g6",
+        "d3g6"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1500,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "02r6y",
+        "license": "CC0",
+        "url": "https://lichess.org/training/02r6y"
+      }
+    },
+    {
+      "id": "puzzles-trapped-19",
+      "type": "move",
+      "fen": "8/3b2r1/k6p/p4p2/4pr2/P5R1/1R3P1N/7K b - - 3 39",
+      "setup": [
+        "g7g3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f2g3",
+        "f4f3",
+        "h2f3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1063,
+      "themes": [
+        "advantage",
+        "endgame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "02utb",
+        "license": "CC0",
+        "url": "https://lichess.org/training/02utb"
+      }
+    },
+    {
+      "id": "puzzles-trapped-20",
+      "type": "move",
+      "fen": "r4rk1/pp1b1p1p/3p1n2/2p1pp2/4P2q/3P1B1P/PPP1Q2K/R1B3R1 b - - 1 17",
+      "setup": [
+        "g8h8"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c1g5",
+        "h4g5",
+        "g1g5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1371,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "035Y0",
+        "license": "CC0",
+        "url": "https://lichess.org/training/035Y0"
+      }
+    },
+    {
+      "id": "puzzles-trapped-21",
+      "type": "move",
+      "fen": "8/8/3k4/p1b1p2p/P1R3pP/2P5/6K1/8 w - - 4 45",
+      "setup": [
+        "g2g3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d6d5",
+        "c4g4",
+        "h5g4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1386,
+      "themes": [
+        "crushing",
+        "endgame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "038q1",
+        "license": "CC0",
+        "url": "https://lichess.org/training/038q1"
+      }
+    },
+    {
+      "id": "puzzles-trapped-22",
+      "type": "move",
+      "fen": "r1b2rk1/pp3pp1/1qn1pn1p/1N1p4/3P1B2/8/PPP1BPPP/R2Q1RK1 b - - 3 12",
+      "setup": [
+        "a7a6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f4c7",
+        "b6b5",
+        "e2b5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1516,
+      "themes": [
+        "advantage",
+        "opening",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "04779",
+        "license": "CC0",
+        "url": "https://lichess.org/training/04779"
+      }
+    },
+    {
+      "id": "puzzles-trapped-23",
+      "type": "move",
+      "fen": "5r2/p5k1/3p4/2pP2pQ/2Pb1q2/4N3/P4PPP/5R1K w - - 1 35",
+      "setup": [
+        "e3g4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f8h8",
+        "h5h8",
+        "g7h8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1545,
+      "themes": [
+        "advantage",
+        "endgame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "047JD",
+        "license": "CC0",
+        "url": "https://lichess.org/training/047JD"
+      }
+    },
+    {
+      "id": "puzzles-trapped-24",
+      "type": "move",
+      "fen": "rbb2rk1/1p3ppp/pqn2n2/3p4/3Pp3/P1N1B2P/1PP1BPPN/R2QK2R b KQ - 3 13",
+      "setup": [
+        "b6b2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c3a4",
+        "b2a1",
+        "d1a1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1374,
+      "themes": [
+        "advantage",
+        "opening",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "048VU",
+        "license": "CC0",
+        "url": "https://lichess.org/training/048VU"
+      }
+    },
+    {
+      "id": "puzzles-trapped-25",
+      "type": "move",
+      "fen": "5rk1/1bq1bppp/2p1pn2/4N3/3P4/3B3P/1BP2PP1/QR4K1 w - - 4 21",
+      "setup": [
+        "a1a7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f8a8",
+        "a7a8",
+        "b7a8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1318,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "04DEQ",
+        "license": "CC0",
+        "url": "https://lichess.org/training/04DEQ"
+      }
+    },
+    {
+      "id": "puzzles-trapped-26",
+      "type": "move",
+      "fen": "r2q1rk1/pppbb1p1/3p3n/3Ppp1Q/8/3PPNPP/PP3PB1/R1B2RK1 w - - 0 15",
+      "setup": [
+        "e3e4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d7e8",
+        "h5h6",
+        "g7h6"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1510,
+      "themes": [
+        "crushing",
+        "opening",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "04FGP",
+        "license": "CC0",
+        "url": "https://lichess.org/training/04FGP"
+      }
+    },
+    {
+      "id": "puzzles-trapped-27",
+      "type": "move",
+      "fen": "r2qk1nr/1p1bbppp/p3p3/3pN3/3P4/2N2Q2/PPP2PPP/R1B1K2R b KQkq - 1 9",
+      "setup": [
+        "f7f6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f3h5",
+        "g7g6",
+        "e5g6",
+        "h7g6",
+        "h5h8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1227,
+      "themes": [
+        "crushing",
+        "long",
+        "opening",
+        "pin",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "04QKP",
+        "license": "CC0",
+        "url": "https://lichess.org/training/04QKP"
+      }
+    },
+    {
+      "id": "puzzles-trapped-28",
+      "type": "move",
+      "fen": "5rk1/7p/p1p5/3pB1q1/3P2p1/2PB1rQb/PP2RPpP/4R1K1 w - - 4 32",
+      "setup": [
+        "d3h7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g8h7",
+        "e5d6",
+        "f3g3"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1200,
+      "themes": [
+        "crushing",
+        "hangingPiece",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "04YaR",
+        "license": "CC0",
+        "url": "https://lichess.org/training/04YaR"
+      }
+    },
+    {
+      "id": "puzzles-trapped-29",
+      "type": "move",
+      "fen": "rBb1qrk1/pp2bppp/4p3/8/2B5/1QP5/PP3PPP/3RK1NR b K - 0 11",
+      "setup": [
+        "a8b8"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c4b5",
+        "e8d8",
+        "d1d8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1259,
+      "themes": [
+        "advantage",
+        "master",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "04aK0",
+        "license": "CC0",
+        "url": "https://lichess.org/training/04aK0"
+      }
+    },
+    {
+      "id": "puzzles-trapped-30",
+      "type": "move",
+      "fen": "r1r3k1/1q1n1ppp/p2bpnb1/8/P1pN3P/2N1P3/3PBPP1/B1RQK2R b K - 2 16",
+      "setup": [
+        "b7g2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e2f3",
+        "g2h1",
+        "f3h1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1260,
+      "themes": [
+        "advantage",
+        "fork",
+        "master",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "0598v",
+        "license": "CC0",
+        "url": "https://lichess.org/training/0598v"
+      }
+    },
+    {
+      "id": "puzzles-trapped-31",
+      "type": "move",
+      "fen": "r1b1kbr1/pppp3p/5qp1/7Q/2P1Pp2/8/PPP2PPP/RNB1K2R w KQq - 0 10",
+      "setup": [
+        "h5h7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g8h8",
+        "h7h8",
+        "f6h8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1357,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "05BVq",
+        "license": "CC0",
+        "url": "https://lichess.org/training/05BVq"
+      }
+    },
+    {
+      "id": "puzzles-trapped-32",
+      "type": "move",
+      "fen": "r2qkb1r/pp3ppp/4bn2/2p1Q3/3pPP2/3P4/PPP1N1PP/RNB2RK1 w kq - 1 12",
+      "setup": [
+        "f4f5"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f8d6",
+        "e5d6",
+        "d8d6"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1336,
+      "themes": [
+        "advantage",
+        "opening",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "05HRv",
+        "license": "CC0",
+        "url": "https://lichess.org/training/05HRv"
+      }
+    },
+    {
+      "id": "puzzles-trapped-33",
+      "type": "move",
+      "fen": "r3kb1r/ppp2pp1/3pp2p/8/2PPN2q/7P/PP2QPP1/R3K2R b KQkq - 0 13",
+      "setup": [
+        "f8e7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "g2g3",
+        "h4e4",
+        "e2e4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1482,
+      "themes": [
+        "crushing",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "05Jem",
+        "license": "CC0",
+        "url": "https://lichess.org/training/05Jem"
+      }
+    },
+    {
+      "id": "puzzles-trapped-34",
+      "type": "move",
+      "fen": "r3r2k/6pp/p1n2p2/1pp2b2/2B2P2/2P2N1P/PP3PP1/3R1K1R w - - 0 18",
+      "setup": [
+        "c4b3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "c5c4",
+        "b3c4",
+        "b5c4"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1426,
+      "themes": [
+        "crushing",
+        "master",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "05nKb",
+        "license": "CC0",
+        "url": "https://lichess.org/training/05nKb"
+      }
+    },
+    {
+      "id": "puzzles-trapped-35",
+      "type": "move",
+      "fen": "rnb1k2r/p3ppbp/2pq1np1/3p4/8/1QNBPN2/PP1B1PPP/2R1K2R b Kkq - 3 11",
+      "setup": [
+        "c8e6"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "b3b7",
+        "e8g8",
+        "b7a8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1486,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "069QP",
+        "license": "CC0",
+        "url": "https://lichess.org/training/069QP"
+      }
+    },
+    {
+      "id": "puzzles-trapped-36",
+      "type": "move",
+      "fen": "2r2rk1/4pp1p/p2p2p1/1ppP2Pn/4P1QP/1PB5/qPK2P2/3R3R b - - 1 19",
+      "setup": [
+        "b5b4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d1a1",
+        "a2a1",
+        "h1a1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1338,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "06AFP",
+        "license": "CC0",
+        "url": "https://lichess.org/training/06AFP"
+      }
+    },
+    {
+      "id": "puzzles-trapped-37",
+      "type": "move",
+      "fen": "6k1/1p4r1/p1p2P1p/3pr1qP/1P3RP1/P3p2Q/8/5R1K b - - 0 37",
+      "setup": [
+        "g7f7"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "f4f5",
+        "e3e2",
+        "f5g5"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 964,
+      "themes": [
+        "advantage",
+        "endgame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "06Eew",
+        "license": "CC0",
+        "url": "https://lichess.org/training/06Eew"
+      }
+    },
+    {
+      "id": "puzzles-trapped-38",
+      "type": "move",
+      "fen": "rn1q1rk1/pb3ppp/1N2p3/8/3P4/3B1N2/PP1b1PPP/R2Q1RK1 b - - 0 12",
+      "setup": [
+        "b7f3"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "d1f3",
+        "d8b6",
+        "f3a8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1214,
+      "themes": [
+        "advantage",
+        "master",
+        "opening",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "06cqX",
+        "license": "CC0",
+        "url": "https://lichess.org/training/06cqX"
+      }
+    },
+    {
+      "id": "puzzles-trapped-39",
+      "type": "move",
+      "fen": "r1b2rk1/4bppp/p2ppq2/1p6/4PP2/P2BB2P/1PPQN1P1/R6K b - - 5 19",
+      "setup": [
+        "f6b2"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e3d4",
+        "b2a1",
+        "d4a1"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1311,
+      "themes": [
+        "advantage",
+        "middlegame",
+        "short",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "06loL",
+        "license": "CC0",
+        "url": "https://lichess.org/training/06loL"
+      }
+    },
+    {
+      "id": "puzzles-trapped-40",
+      "type": "move",
+      "fen": "3r4/5ppp/Qpk1n3/3p4/2pPb3/2P5/PP4PP/4R1K1 w - - 1 28",
+      "setup": [
+        "a2a4"
+      ],
+      "prompt": "Encontre a solução para este puzzle.",
+      "expected": [
+        "e6c7",
+        "a6a7",
+        "d8a8",
+        "a7a8",
+        "c7a8"
+      ],
+      "hint": "Pense nas táticas vistas nas lições anteriores.",
+      "success": "Correto! Excelente visão tática.",
+      "failure": "Não é a melhor jogada. Tente novamente.",
+      "rating": 1437,
+      "themes": [
+        "advantage",
+        "endgame",
+        "long",
+        "trappedPiece"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "06mgf",
+        "license": "CC0",
+        "url": "https://lichess.org/training/06mgf"
+      }
+    }
+  ],
+  "summary": "Você praticou 40 puzzles de Puzzles: Peças Presas.",
+  "source": {
+    "type": "lichess",
+    "license": "CC0"
+  }
+}

@@ -12,7 +12,6 @@ import GameReviewModal from './components/GameReviewModal'
 import MatchHistoryView from './components/MatchHistoryView'
 import AcademyView from './components/AcademyView'
 import LessonView from './components/LessonView'
-import { SettingsView } from './components/SettingsView'
 
 import { useChessGame } from './hooks/useChessGame'
 import { useChessEditor } from './hooks/useChessEditor'
@@ -173,7 +172,6 @@ function App() {
   const isEditorMode = mode === 'editor'
   const isHistoryMode = mode === 'history'
   const isAcademyMode = mode === 'academy'
-  const isSettingsMode = mode === 'settings'
   const matchesList = isHistoryMode ? matchHistory.listMatches() : []
 
   return (
@@ -188,14 +186,25 @@ function App() {
       <Header mode={mode} onModeChange={setMode} />
 
       <main className="relative z-10 flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
-        {isSettingsMode || isAcademyMode || isHistoryMode ? (
+        {isAcademyMode || isHistoryMode ? (
           <div className="w-full">
-            {isSettingsMode ? <SettingsView /> :
-             isAcademyMode ? (
-               activeLesson ? <LessonView lesson={activeLesson} onBack={() => setActiveLesson(null)} /> : <AcademyView onOpenLesson={setActiveLesson} />
-             ) : (
-               <MatchHistoryView matches={matchesList} onOpenMatch={handleOpenMatch} onDeleteMatch={matchHistory.deleteMatch} onClearAll={matchHistory.clearAll} />
-             )}
+            {isAcademyMode ? (
+              activeLesson ? (
+                <LessonView
+                  lesson={activeLesson}
+                  onBack={() => setActiveLesson(null)}
+                />
+              ) : (
+                <AcademyView onOpenLesson={setActiveLesson} />
+              )
+            ) : (
+              <MatchHistoryView
+                matches={matchesList}
+                onOpenMatch={handleOpenMatch}
+                onDeleteMatch={matchHistory.deleteMatch}
+                onClearAll={matchHistory.clearAll}
+              />
+            )}
           </div>
         ) : (
           <div className="relative w-full rounded-[32px] bg-white/[0.035] backdrop-blur-2xl ring-1 ring-white/10 shadow-2xl shadow-black/30 p-5 md:p-8">

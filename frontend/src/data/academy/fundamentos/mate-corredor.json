@@ -1,12 +1,12 @@
 {
   "id": "mate-corredor",
-  "level": "beginner",
+  "level": "intermediate",
   "category": "fundamentos",
-  "order": 10,
-  "title": "Mate do Corredor (Back Rank)",
-  "objective": "Aprender a dar mate na última fileira.",
+  "order": 11,
+  "title": "Mate do Corredor (Back Rank Mate)",
+  "objective": "Aprender a dar mate na última fileira, explorando o rei preso atrás dos próprios peões.",
   "estimatedMinutes": 5,
-  "explanation": "O Mate do Corredor acontece quando o Rei está preso atrás dos próprios peões e uma Torre ou Dama invade a última fileira.",
+  "explanation": "O Mate do Corredor acontece quando o Rei está preso atrás dos próprios peões e uma Torre ou Dama invade a última fileira.\n\nEste padrão é extremamente comum em partidas de nível intermediário. Muitas vezes, a ameaça de mate força uma fraqueza fatal.",
   "demo": {
     "fen": "6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1",
     "moves": [
@@ -28,7 +28,7 @@
       "failure": "Mova a torre para a8."
     }
   ],
-  "summary": "Cuidado com o rei preso na última fileira.",
+  "summary": "Cuidado com o rei preso na última fileira. Sempre dê uma 'janela' (luft) para o rei.",
   "source": {
     "type": "original"
   }

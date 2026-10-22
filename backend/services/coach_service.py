@@ -1,11 +1,20 @@
 import chess
+import os
 from google import genai
 from config.settings import GEMINI_API_KEY, GEMINI_MODEL
 
-gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+# Inicializa o client apenas quando necessario para evitar crash se a chave estiver vazia
+gemini_client = None
 
 
 def get_coach_explanation(fen: str, move: str, evaluation: dict = None):
+    global gemini_client
+    if not GEMINI_API_KEY:
+        return "A chave da API do Gemini não foi configurada no arquivo .env."
+    
+    if gemini_client is None:
+        gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+
     try:
         # Validacao segura do FEN. chess.Board(fen) levanta ValueError
         # para strings malformadas. .is_valid() cobre posicoes

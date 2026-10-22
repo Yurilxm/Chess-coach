@@ -1,35 +1,48 @@
 {
   "id": "oposicao-reis",
-  "level": "intermediate",
+  "level": "advanced",
   "category": "finais",
-  "order": 2,
-  "title": "Oposição de Reis",
-  "objective": "Aprender o conceito fundamental dos finais de peões.",
+  "order": 1,
+  "title": "Oposição de Reis (Capablanca)",
+  "objective": "Dominar a técnica de oposição no final de peões, conforme ensinado por Capablanca.",
   "estimatedMinutes": 10,
-  "explanation": "A oposição ocorre quando os reis ficam frente a frente com uma casa de distância. Quem não tem a vez (quem for forçado a se mover) perde a oposição e dá vantagem ao outro.",
+  "explanation": "A oposição ocorre quando os reis ficam frente a frente com uma casa de distância. Quem não tem a vez (quem for forçado a se mover) perde a oposição e dá vantagem ao outro.\n\nEste conceito é a base de todos os finais de peões. Capablanca considerava este o primeiro passo para dominar os finais.",
   "demo": {
-    "fen": "8/8/8/3k4/8/8/4K3/8 w - - 0 1",
+    "fen": "8/4k3/8/8/4K3/8/8/8 w - - 0 1",
     "moves": [
-      "e2e3"
+      "e4e5"
     ],
-    "description": "O rei branco toma a oposição."
+    "description": "O rei branco toma a oposição avançando para e5."
   },
   "exercises": [
     {
       "id": "ex1",
       "type": "move",
-      "fen": "8/8/8/3k4/8/8/4K3/8 w - - 0 1",
-      "prompt": "Avance o Rei para e3.",
+      "fen": "8/4k3/8/8/4K3/8/8/8 w - - 0 1",
+      "prompt": "Avance o Rei para e5 e tome a oposição.",
       "expected": [
-        "e2e3"
+        "e4e5"
       ],
       "hint": "Vá para frente.",
-      "success": "Correto! O rei branco tomou espaço.",
-      "failure": "Mova o rei para e3."
+      "success": "Correto! Você tomou a oposição.",
+      "failure": "Mova para e5."
+    },
+    {
+      "id": "ex2",
+      "type": "move",
+      "fen": "8/4k3/4K3/8/8/8/8/8 b - - 0 1",
+      "prompt": "As pretas estão sem espaço. Mova o Rei preto para e8.",
+      "expected": [
+        "e7e8"
+      ],
+      "hint": "Recue para a oitava fileira.",
+      "success": "Correto! O rei preto foi forçado a recuar.",
+      "failure": "Mova o rei preto para e8."
     }
   ],
-  "summary": "No final de peões, o posicionamento dos reis decide o jogo.",
+  "summary": "No final de peões, o posicionamento dos reis decide o jogo. A oposição é o conceito fundamental.",
   "source": {
-    "type": "original"
+    "type": "original",
+    "inspiration": "Capablanca - Chess Fundamentals"
   }
 }

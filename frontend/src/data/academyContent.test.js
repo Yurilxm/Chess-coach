@@ -21,9 +21,17 @@ describe('Validacao Automatica de Conteudo da Academia', () => {
         expect(lesson.explanation).toBeTruthy()
       })
 
+      if (lesson.demo && lesson.demo.fen) {
+        it('FEN da demonstracao e valido e tem reis', () => {
+          // O construtor do chess.js lança erro se o FEN for invalido (ex: faltando reis)
+          expect(() => new Chess(lesson.demo.fen)).not.toThrow()
+        })
+      }
+
       if (lesson.exercises && lesson.exercises.length > 0) {
         for (const ex of lesson.exercises) {
           it(`Exercicio ${ex.id} tem FEN valido`, () => {
+            // O construtor do chess.js lança erro se o FEN for invalido (evita tela branca)
             expect(() => new Chess(ex.fen)).not.toThrow()
           })
 
@@ -37,7 +45,11 @@ describe('Validacao Automatica de Conteudo da Academia', () => {
               for (const uci of ex.setup) {
                 const from = uci.slice(0, 2)
                 const to = uci.slice(2, 4)
-                chess.move({ from, to, promotion: uci.length > 4 ? uci[4] : 'q' })
+                try {
+                  chess.move({ from, to, promotion: uci.length > 4 ? uci[4] : 'q' })
+                } catch (e) {
+                  throw new Error(`Setup falhou no lance ${uci}: ${e.message}`, { cause: e })
+                }
               }
             }
 

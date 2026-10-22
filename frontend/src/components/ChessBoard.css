@@ -68,3 +68,20 @@
 
 .cg-theme-dark square.light { background-color: #5c5c5c !important; }
 .cg-theme-dark square.dark { background-color: #2c2c2c !important; }
+
+.cg-theme-blue square.light { background-color: #dee3e6 !important; }
+.cg-theme-blue square.dark { background-color: #8ca2ad !important; }
+
+.cg-theme-green square.light { background-color: #ffffdd !important; }
+.cg-theme-green square.dark { background-color: #86a666 !important; }
+
+.cg-theme-purple square.light { background-color: #9f90b0 !important; }
+.cg-theme-purple square.dark { background-color: #7d6a80 !important; }
+
+.cg-theme-dark square.light { background-color: #5c5c5c !important; }
+.cg-theme-dark square.dark { background-color: #2c2c2c !important; }
+
+/* Piece Themes (Aplicado nas peças, nao no tabuleiro) */
+.piece-theme-wood piece { filter: sepia(0.6) contrast(1.2); }
+.piece-theme-glass piece { filter: opacity(0.8) drop-shadow(0 0 2px rgba(255,255,255,0.6)); }
+.piece-theme-vintage piece { filter: sepia(1) hue-rotate(15deg) contrast(1.1); }
