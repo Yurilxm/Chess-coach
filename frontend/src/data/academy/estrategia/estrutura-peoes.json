@@ -1,0 +1,20 @@
+{
+  "id": "estrutura-peoes",
+  "level": "advanced",
+  "category": "estrategia",
+  "title": "Estruturas de Peões",
+  "objective": "Entender como os peões ditam o plano de jogo.",
+  "estimatedMinutes": 15,
+  "explanation": "Os peões são a 'alma do xadrez' (Philidor). A estrutura deles define onde você deve atacar.\n\n**Peões dobrados:** Dois peões na mesma coluna. Geralmente é uma fraqueza, pois eles não podem se defender.\n**Peão isolado:** Um peão sem peões aliados nas colunas vizinhas. É fraco no final de jogo, mas dá espaço e linhas abertas no meio jogo.",
+  "demo": {
+    "fen": "8/8/8/8/8/8/8/8 w - - 0 1",
+    "moves": [],
+    "description": "Estudo teórico."
+  },
+  "exercises": [],
+  "summary": "Peões definem sua estratégia.",
+  "source": {
+    "type": "original"
+  },
+  "order": 1
+}

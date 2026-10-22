@@ -1,0 +1,36 @@
+{
+  "id": "movimento-rei",
+  "level": "beginner",
+  "category": "fundamentos",
+  "title": "Como o rei se move",
+  "objective": "Aprender o movimento do rei e a regra de não poder ficar em xeque.",
+  "estimatedMinutes": 5,
+  "explanation": "O rei é a peça mais importante. Se ele for capturado, o jogo termina.\n\n**Movimento:** ele anda **apenas uma casa** por vez, em qualquer direção (horizontal, vertical ou diagonal).\n\n**Restrição:** o rei nunca pode se mover para uma casa onde ficaria sob ataque do adversário (em xeque).\n\n**Objetivo:** colocar o rei adversário em xeque-mate, ou seja, atacá-lo sem que ele tenha escapatória.",
+  "demo": {
+    "fen": "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+    "moves": [
+      "e1e2",
+      "e8e7"
+    ],
+    "description": "Os reis se aproximam lentamente."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+      "prompt": "Mova o rei branco de e1 para e2.",
+      "expected": [
+        "e1e2"
+      ],
+      "hint": "Apenas uma casa para cima.",
+      "success": "Correto! O rei dá passos curtos.",
+      "failure": "O rei só anda 1 casa."
+    }
+  ],
+  "summary": "O rei anda 1 casa em qualquer direção. Ele nunca pode estar em xeque.",
+  "source": {
+    "type": "original"
+  },
+  "order": 6
+}

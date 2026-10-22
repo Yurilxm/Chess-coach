@@ -1,0 +1,38 @@
+{
+  "id": "empate-repeticao",
+  "level": "beginner",
+  "category": "fundamentos",
+  "order": 12,
+  "title": "Empate por Repetição",
+  "objective": "Entender a regra da repetição tripla.",
+  "estimatedMinutes": 5,
+  "explanation": "Se a mesma posição ocorrer 3 vezes no tabuleiro (com a mesma vez de jogar, mesmos direitos de roque e en passant), o jogo termina em empate por repetição tripla. Isso é muito usado quando se está perdendo.",
+  "demo": {
+    "fen": "4k3/8/8/8/8/8/8/4K2R w - - 0 1",
+    "moves": [
+      "h1h2",
+      "e8e7",
+      "h2h1",
+      "e7e8"
+    ],
+    "description": "As peças dançam e a posição repete."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/8/4K2R w - - 0 1",
+      "prompt": "Mova a torre para h2.",
+      "expected": [
+        "h1h2"
+      ],
+      "hint": "Volte a torre.",
+      "success": "Correto! A dança começou.",
+      "failure": "Mova para h2."
+    }
+  ],
+  "summary": "Repetir 3 vezes = empate.",
+  "source": {
+    "type": "original"
+  }
+}

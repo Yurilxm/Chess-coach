@@ -1,0 +1,35 @@
+{
+  "id": "oposicao-reis",
+  "level": "intermediate",
+  "category": "finais",
+  "order": 2,
+  "title": "Oposição de Reis",
+  "objective": "Aprender o conceito fundamental dos finais de peões.",
+  "estimatedMinutes": 10,
+  "explanation": "A oposição ocorre quando os reis ficam frente a frente com uma casa de distância. Quem não tem a vez (quem for forçado a se mover) perde a oposição e dá vantagem ao outro.",
+  "demo": {
+    "fen": "8/8/8/3k4/8/8/4K3/8 w - - 0 1",
+    "moves": [
+      "e2e3"
+    ],
+    "description": "O rei branco toma a oposição."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "8/8/8/3k4/8/8/4K3/8 w - - 0 1",
+      "prompt": "Avance o Rei para e3.",
+      "expected": [
+        "e2e3"
+      ],
+      "hint": "Vá para frente.",
+      "success": "Correto! O rei branco tomou espaço.",
+      "failure": "Mova o rei para e3."
+    }
+  ],
+  "summary": "No final de peões, o posicionamento dos reis decide o jogo.",
+  "source": {
+    "type": "original"
+  }
+}

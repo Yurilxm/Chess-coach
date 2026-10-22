@@ -24,7 +24,10 @@ function Header({ mode, onModeChange }) {
           </div>
         </div>
 
-        <ModeSwitcher mode={mode} onChange={onModeChange} />
+        <div className="flex items-center gap-4">
+          
+          <ModeSwitcher mode={mode} onChange={onModeChange} />
+        </div>
       </div>
     </header>
   )

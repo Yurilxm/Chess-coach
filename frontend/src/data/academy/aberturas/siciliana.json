@@ -1,0 +1,41 @@
+{
+  "id": "siciliana",
+  "level": "intermediate",
+  "category": "aberturas",
+  "title": "Defesa Siciliana",
+  "objective": "Entender por que a Siciliana é a defesa mais popular contra 1.e4.",
+  "estimatedMinutes": 12,
+  "explanation": "A Siciliana (1.e4 c5) é a resposta mais agressiva das pretas. Em vez de igualar o centro (como em 1...e5), as pretas atacam o peão de e4 pelo flanco.\n\n**Ideia das Pretas:** Criar desequilíbrio. As pretas geralmente trocam o peão de c5 pelo peão de d4 das brancas, ficando com uma maioria de peões no centro (peões c e e), mas as brancas ganham espaço.\n\n**Cuidado:** As pretas precisam tomar cuidado com o Roque e o desenvolvimento, pois o espaço branco pode ser perigoso.",
+  "demo": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "moves": [
+      "e2e4",
+      "c7c5",
+      "g1f3",
+      "d7d6",
+      "d2d4",
+      "c5d4",
+      "f3d4"
+    ],
+    "description": "A estrutura clássica: as pretas trocam o peão de c por d."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+      "prompt": "Jogue a Defesa Siciliana (peão de c7 para c5).",
+      "expected": [
+        "c7c5"
+      ],
+      "hint": "O peão de c ataca o centro pelo lado.",
+      "success": "Correto! Uma das melhores defesas.",
+      "failure": "Mova o peão de c7 para c5."
+    }
+  ],
+  "summary": "1.e4 c5. As pretas lutam pelo centro de forma indireta.",
+  "source": {
+    "type": "original"
+  },
+  "order": 2
+}

@@ -1,0 +1,35 @@
+{
+  "id": "cravada",
+  "level": "intermediate",
+  "category": "taticas",
+  "title": "Cravada (Pin)",
+  "objective": "Aprender a imobilizar peças adversárias.",
+  "estimatedMinutes": 8,
+  "explanation": "A cravada acontece quando uma peça ataca uma peça adversária que, se se mover, exporá uma peça mais valiosa (como o Rei ou a Dama).\n\n**Cravada Absoluta:** A peça está cravada contra o Rei. Ela **não pode** se mover legalmente.\n**Cravada Relativa:** A peça está cravada contra a Dama ou Torre. Ela pode se mover, mas você perde material.",
+  "demo": {
+    "fen": "rnb1kbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1",
+    "moves": [
+      "f1b5"
+    ],
+    "description": "O bispo crava o cavalo contra o rei preto."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "rnb1kbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1",
+      "prompt": "Faça uma cravada movendo o bispo de f1 para b5.",
+      "expected": [
+        "f1b5"
+      ],
+      "hint": "O bispo ataca na diagonal.",
+      "success": "Correto! O cavalo está cravado.",
+      "failure": "Mova o bispo para b5."
+    }
+  ],
+  "summary": "Na cravada, a peça não pode sair do lugar.",
+  "source": {
+    "type": "original"
+  },
+  "order": 2
+}

@@ -1,0 +1,35 @@
+{
+  "id": "espeto",
+  "level": "intermediate",
+  "category": "taticas",
+  "title": "Espeto (Skewer)",
+  "objective": "O oposto da cravada: atacar uma peça valiosa para capturar a de trás.",
+  "estimatedMinutes": 8,
+  "explanation": "No espeto, você ataca uma peça **valiosa** (como o Rei). Ela é forçada a se mover, e você captura uma peça **menos valiosa** que estava atrás dela na mesma linha.",
+  "demo": {
+    "fen": "4k3/8/8/8/8/8/8/4K2R w K - 0 1",
+    "moves": [
+      "h1h8"
+    ],
+    "description": "A torre ataca o rei, que se move, e a torre captura a peça de trás."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/8/4K2R w K - 0 1",
+      "prompt": "Faça um espeto movendo a torre para h8.",
+      "expected": [
+        "h1h8"
+      ],
+      "hint": "Atire a torre até o final do tabuleiro.",
+      "success": "Correto! O rei precisa sair e você ataca o que ficou.",
+      "failure": "Mova a torre para h8."
+    }
+  ],
+  "summary": "Espeto atinge a peça grande primeiro e a pequena atrás.",
+  "source": {
+    "type": "original"
+  },
+  "order": 3
+}

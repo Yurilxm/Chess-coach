@@ -1,0 +1,285 @@
+{
+  "version": 1,
+  "lessons": [
+    {
+      "id": "mate-rei-dama",
+      "level": "beginner",
+      "category": "finais",
+      "title": "Mate com Rei e Dama",
+      "objective": "Aprender a dar o mate básico usando a Dama.",
+      "estimatedMinutes": 8,
+      "order": 1,
+      "file": "finais/mate-rei-dama.json"
+    },
+    {
+      "id": "movimento-peao",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Como o peão se move",
+      "objective": "Aprender o movimento básico do peão, incluindo o avanço duplo inicial e a captura diagonal.",
+      "estimatedMinutes": 5,
+      "order": 1,
+      "file": "fundamentos/movimento-peao.json"
+    },
+    {
+      "id": "movimento-cavalo",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Como o cavalo se move",
+      "objective": "Aprender o movimento em L do cavalo e sua capacidade de saltar sobre outras peças.",
+      "estimatedMinutes": 6,
+      "order": 2,
+      "file": "fundamentos/movimento-cavalo.json"
+    },
+    {
+      "id": "movimento-bispo",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Como o bispo se move",
+      "objective": "Aprender o movimento diagonal do bispo.",
+      "estimatedMinutes": 5,
+      "order": 3,
+      "file": "fundamentos/movimento-bispo.json"
+    },
+    {
+      "id": "movimento-torre",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Como a torre se move",
+      "objective": "Aprender o movimento em linha reta da torre.",
+      "estimatedMinutes": 5,
+      "order": 4,
+      "file": "fundamentos/movimento-torre.json"
+    },
+    {
+      "id": "movimento-dama",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Como a dama se move",
+      "objective": "Aprender o movimento da dama, que combina torre e bispo.",
+      "estimatedMinutes": 5,
+      "order": 5,
+      "file": "fundamentos/movimento-dama.json"
+    },
+    {
+      "id": "movimento-rei",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Como o rei se move",
+      "objective": "Aprender o movimento do rei e a regra de não poder ficar em xeque.",
+      "estimatedMinutes": 5,
+      "order": 6,
+      "file": "fundamentos/movimento-rei.json"
+    },
+    {
+      "id": "roque",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Roque (o movimento especial do Rei)",
+      "objective": "Aprender a fazer o roque para proteger o rei.",
+      "estimatedMinutes": 6,
+      "order": 7,
+      "file": "fundamentos/roque.json"
+    },
+    {
+      "id": "promocao",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Promoção de Peão",
+      "objective": "Entender como o peão se transforma em outra peça.",
+      "estimatedMinutes": 5,
+      "order": 8,
+      "file": "fundamentos/promocao.json"
+    },
+    {
+      "id": "xeque-mate",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Xeque e Xeque-Mate",
+      "objective": "Aprender a diferença entre Xeque (ameaça) e Mate (fim de jogo).",
+      "estimatedMinutes": 7,
+      "order": 9,
+      "file": "fundamentos/xeque-mate.json"
+    },
+    {
+      "id": "afogamento",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Afogamento (Stalemate)",
+      "objective": "Aprender quando o jogo termina em empate por falta de lances.",
+      "estimatedMinutes": 5,
+      "order": 10,
+      "file": "fundamentos/afogamento.json"
+    },
+    {
+      "id": "empate-repeticao",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Empate por Repetição",
+      "objective": "Entender a regra da repetição tripla.",
+      "estimatedMinutes": 5,
+      "order": 12,
+      "file": "fundamentos/empate-repeticao.json"
+    },
+    {
+      "id": "italiana",
+      "level": "intermediate",
+      "category": "aberturas",
+      "title": "Abertura Italiana",
+      "objective": "Aprender os princípios da Abertura Italiana.",
+      "estimatedMinutes": 12,
+      "order": 1,
+      "file": "aberturas/italiana.json"
+    },
+    {
+      "id": "siciliana",
+      "level": "intermediate",
+      "category": "aberturas",
+      "title": "Defesa Siciliana",
+      "objective": "Entender por que a Siciliana é a defesa mais popular contra 1.e4.",
+      "estimatedMinutes": 12,
+      "order": 2,
+      "file": "aberturas/siciliana.json"
+    },
+    {
+      "id": "francesa",
+      "level": "intermediate",
+      "category": "aberturas",
+      "title": "Defesa Francesa",
+      "objective": "Entender a solidez da Defesa Francesa.",
+      "estimatedMinutes": 12,
+      "order": 3,
+      "file": "aberturas/francesa.json"
+    },
+    {
+      "id": "caro-kann",
+      "level": "intermediate",
+      "category": "aberturas",
+      "title": "Defesa Caro-Kann",
+      "objective": "Aprender a defesa Caro-Kann.",
+      "estimatedMinutes": 12,
+      "order": 4,
+      "file": "aberturas/caro-kann.json"
+    },
+    {
+      "id": "ruy-lopez",
+      "level": "intermediate",
+      "category": "aberturas",
+      "title": "Abertura Ruy López",
+      "objective": "Aprender a abertura mais clássica do xadrez.",
+      "estimatedMinutes": 10,
+      "order": 5,
+      "file": "aberturas/ruy-lopez.json"
+    },
+    {
+      "id": "oposicao-reis",
+      "level": "intermediate",
+      "category": "finais",
+      "title": "Oposição de Reis",
+      "objective": "Aprender o conceito fundamental dos finais de peões.",
+      "estimatedMinutes": 10,
+      "order": 2,
+      "file": "finais/oposicao-reis.json"
+    },
+    {
+      "id": "quadrado-peao",
+      "level": "intermediate",
+      "category": "finais",
+      "title": "Regra do Quadrado",
+      "objective": "Saber se o Rei alcança o peão a tempo.",
+      "estimatedMinutes": 6,
+      "order": 3,
+      "file": "finais/quadrado-peao.json"
+    },
+    {
+      "id": "en-passant",
+      "level": "intermediate",
+      "category": "fundamentos",
+      "title": "Captura En Passant",
+      "objective": "Entender o movimento especial de captura do peão.",
+      "estimatedMinutes": 5,
+      "order": 11,
+      "file": "fundamentos/en-passant.json"
+    },
+    {
+      "id": "garfo",
+      "level": "intermediate",
+      "category": "taticas",
+      "title": "Garfo",
+      "objective": "Reconhecer e executar garfos, uma das táticas mais comuns no xadrez.",
+      "estimatedMinutes": 5,
+      "order": 1,
+      "file": "taticas/garfo.json"
+    },
+    {
+      "id": "cravada",
+      "level": "intermediate",
+      "category": "taticas",
+      "title": "Cravada (Pin)",
+      "objective": "Aprender a imobilizar peças adversárias.",
+      "estimatedMinutes": 8,
+      "order": 2,
+      "file": "taticas/cravada.json"
+    },
+    {
+      "id": "espeto",
+      "level": "intermediate",
+      "category": "taticas",
+      "title": "Espeto (Skewer)",
+      "objective": "O oposto da cravada: atacar uma peça valiosa para capturar a de trás.",
+      "estimatedMinutes": 8,
+      "order": 3,
+      "file": "taticas/espeto.json"
+    },
+    {
+      "id": "ataque-descoberto",
+      "level": "intermediate",
+      "category": "taticas",
+      "title": "Ataque Descoberto",
+      "objective": "Aprender a usar uma peça para revelar o ataque de outra.",
+      "estimatedMinutes": 6,
+      "order": 12,
+      "file": "taticas/ataque-descoberto.json"
+    },
+    {
+      "id": "estrutura-peoes",
+      "level": "advanced",
+      "category": "estrategia",
+      "title": "Estruturas de Peões",
+      "objective": "Entender como os peões ditam o plano de jogo.",
+      "estimatedMinutes": 15,
+      "order": 1,
+      "file": "estrategia/estrutura-peoes.json"
+    },
+    {
+      "id": "bispo-bom-ruim",
+      "level": "advanced",
+      "category": "estrategia",
+      "title": "Bispo Bom e Bispo Ruim",
+      "objective": "Identificar quando um bispo é uma peça forte ou fraca.",
+      "estimatedMinutes": 10,
+      "order": 2,
+      "file": "estrategia/bispo-bom-ruim.json"
+    },
+    {
+      "id": "desvio",
+      "level": "advanced",
+      "category": "taticas",
+      "title": "Desvio (Deflection)",
+      "objective": "Aprender a forçar a peça defensora a sair.",
+      "estimatedMinutes": 8,
+      "order": 4,
+      "file": "taticas/desvio.json"
+    },
+    {
+      "id": "atracao",
+      "level": "advanced",
+      "category": "taticas",
+      "title": "Atração (Decoy)",
+      "objective": "Aprender a forçar o adversário a ir para uma casa ruim.",
+      "estimatedMinutes": 8,
+      "order": 5,
+      "file": "taticas/atracao.json"
+    }
+  ]
+}

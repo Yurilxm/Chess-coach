@@ -1,0 +1,35 @@
+{
+  "id": "atracao",
+  "level": "advanced",
+  "category": "taticas",
+  "order": 5,
+  "title": "Atração (Decoy)",
+  "objective": "Aprender a forçar o adversário a ir para uma casa ruim.",
+  "estimatedMinutes": 8,
+  "explanation": "Na atração, você força (geralmente com sacrifício) uma peça adversária a se mover para uma casa específica onde ela sofrerá um garfo, cravada ou mate.",
+  "demo": {
+    "fen": "4k3/8/8/8/8/8/8/4K2R w - - 0 1",
+    "moves": [
+      "h1h8"
+    ],
+    "description": "A torre atrai o rei."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/8/4K2R w - - 0 1",
+      "prompt": "Mova a torre para h8.",
+      "expected": [
+        "h1h8"
+      ],
+      "hint": "Até o fim do tabuleiro.",
+      "success": "Correto!",
+      "failure": "Mova para h8."
+    }
+  ],
+  "summary": "Force o inimigo para a casa perigosa.",
+  "source": {
+    "type": "original"
+  }
+}

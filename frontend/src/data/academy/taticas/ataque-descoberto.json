@@ -1,0 +1,35 @@
+{
+  "id": "ataque-descoberto",
+  "level": "intermediate",
+  "category": "taticas",
+  "order": 12,
+  "title": "Ataque Descoberto",
+  "objective": "Aprender a usar uma peça para revelar o ataque de outra.",
+  "estimatedMinutes": 6,
+  "explanation": "No ataque descoberto, você move uma peça que estava **bloqueando** o ataque de outra peça sua (como a Dama ou o Bispo) contra o adversário.\n\nA peça que se move pode ir para qualquer lugar (de preferência dando xeque ou ameaçando outra peça), e o ataque da peça de trás é descoberto.",
+  "demo": {
+    "fen": "4k3/8/8/8/8/8/8/4K1BR w - - 0 1",
+    "moves": [
+      "g1g7"
+    ],
+    "description": "O bispo se move e a torre ataca o rei."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/8/4K1BR w - - 0 1",
+      "prompt": "Mova o bispo (g1) para h2. Isso descobre o ataque da torre na coluna h.",
+      "expected": [
+        "g1h2"
+      ],
+      "hint": "O bispo anda em diagonal para h2.",
+      "success": "Correto! O bispo saiu da frente.",
+      "failure": "Mova o bispo para h2."
+    }
+  ],
+  "summary": "Tire a peça do caminho para atacar com a de trás.",
+  "source": {
+    "type": "original"
+  }
+}

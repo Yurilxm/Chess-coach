@@ -1,0 +1,38 @@
+{
+  "id": "caro-kann",
+  "level": "intermediate",
+  "category": "aberturas",
+  "order": 4,
+  "title": "Defesa Caro-Kann",
+  "objective": "Aprender a defesa Caro-Kann.",
+  "estimatedMinutes": 12,
+  "explanation": "Caro-Kann (1.e4 c6) tem ideia semelhante à Francesa, mas as pretas não trancam o bispo de c8. Elas jogam d5 sem bloquear o bispo e depois o desenvolvem para f5.",
+  "demo": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "moves": [
+      "e2e4",
+      "c7c6",
+      "d2d4",
+      "d7d5"
+    ],
+    "description": "As pretas desafiam o centro com c6 e d5."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+      "prompt": "Jogue a Caro-Kann: c7 para c6.",
+      "expected": [
+        "c7c6"
+      ],
+      "hint": "Mova o peão do bispo.",
+      "success": "Correto! Defesa sólida.",
+      "failure": "Mova o peão de c7 para c6."
+    }
+  ],
+  "summary": "Caro-Kann: 1.e4 c6. Sólida sem trancar o bispo.",
+  "source": {
+    "type": "original"
+  }
+}

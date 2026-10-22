@@ -1,0 +1,39 @@
+{
+  "id": "italiana",
+  "level": "intermediate",
+  "category": "aberturas",
+  "title": "Abertura Italiana",
+  "objective": "Aprender os princípios da Abertura Italiana.",
+  "estimatedMinutes": 12,
+  "explanation": "A Italiana é uma das aberturas mais antigas e didáticas. O objetivo das brancas é dominar o centro e preparar o roque rapidamente.\n\n**Lances principais:** 1.e4 e5 2.Cf3 Cc6 3.Bc4. O bispo em c4 mira o ponto fraco das pretas: o peão de f7.\n\n**Planos das Brancas:** Roque curto, avançar o peão d4 para abrir o jogo, controlar o centro.\n**Planos das Pretas:** Desenvolver com Bc5 (Giuoco Piano), ou jogar Cf6 para atacar o peão e4.",
+  "demo": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "moves": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "f1c4"
+    ],
+    "description": "O bispo italiano mira o ponto fraco em f7."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1",
+      "prompt": "Desenvolva o bispo para c4.",
+      "expected": [
+        "f1c4"
+      ],
+      "hint": "A casa é c4.",
+      "success": "Correto! Bem-vindo à Italiana.",
+      "failure": "Mova o bispo para c4."
+    }
+  ],
+  "summary": "1.e4 e5 2.Cf3 Cc6 3.Bc4. Domine o centro.",
+  "source": {
+    "type": "original"
+  },
+  "order": 1
+}

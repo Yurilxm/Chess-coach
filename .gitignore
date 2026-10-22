@@ -60,3 +60,5 @@ Thumbs.db
 *.tmp
 *.temp
 *.log
+# Arquivos temporarios de download
+tmp/

@@ -1,0 +1,35 @@
+{
+  "id": "desvio",
+  "level": "advanced",
+  "category": "taticas",
+  "order": 4,
+  "title": "Desvio (Deflection)",
+  "objective": "Aprender a forçar a peça defensora a sair.",
+  "estimatedMinutes": 8,
+  "explanation": "O desvio ocorre quando você atrai uma peça defensora para longe do seu posto, usando um sacrifício ou um xeque, para que você possa dar o golpe final onde ela estava defendendo.",
+  "demo": {
+    "fen": "4k3/8/8/8/8/8/8/R3K3 w - - 0 1",
+    "moves": [
+      "a1a8"
+    ],
+    "description": "A torre ataca o rei."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/8/R3K3 w - - 0 1",
+      "prompt": "Mova a torre para a8.",
+      "expected": [
+        "a1a8"
+      ],
+      "hint": "Suba a coluna a.",
+      "success": "Correto! A torre domina a oitava fileira.",
+      "failure": "Mova a torre para a8."
+    }
+  ],
+  "summary": "Tire a peça que defende o alvo.",
+  "source": {
+    "type": "original"
+  }
+}

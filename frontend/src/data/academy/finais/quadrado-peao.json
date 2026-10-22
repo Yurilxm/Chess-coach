@@ -1,0 +1,37 @@
+{
+  "id": "quadrado-peao",
+  "level": "intermediate",
+  "category": "finais",
+  "order": 3,
+  "title": "Regra do Quadrado",
+  "objective": "Saber se o Rei alcança o peão a tempo.",
+  "estimatedMinutes": 6,
+  "explanation": "Desenhe um quadrado imaginário do peão até a casa de promoção. Se o Rei adversário estiver dentro desse quadrado (ou puder entrar nele na sua vez), ele captura o peão.",
+  "demo": {
+    "fen": "4k3/8/8/8/4P3/8/8/4K3 w - - 0 1",
+    "moves": [
+      "e4e5",
+      "e8e7",
+      "e5e6"
+    ],
+    "description": "O Rei está dentro do quadrado do peão."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/8/4P3/8/8/4K3 w - - 0 1",
+      "prompt": "O Rei preto está fora do quadrado. Avance o peão para e5.",
+      "expected": [
+        "e4e5"
+      ],
+      "hint": "Empurre o peão.",
+      "success": "Correto! O peão está mais rápido que o Rei.",
+      "failure": "Mova o peão para e5."
+    }
+  ],
+  "summary": "O quadrado mostra quem é mais rápido.",
+  "source": {
+    "type": "original"
+  }
+}

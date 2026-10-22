@@ -1,0 +1,35 @@
+{
+  "id": "roque",
+  "level": "beginner",
+  "category": "fundamentos",
+  "title": "Roque (o movimento especial do Rei)",
+  "objective": "Aprender a fazer o roque para proteger o rei.",
+  "estimatedMinutes": 6,
+  "explanation": "O roque é o único movimento em que duas peças se movem ao mesmo tempo: o rei e a torre.\n\n**Requisitos:** nem o rei nem a torre podem ter se movido antes. Não pode haver peças entre eles. O rei não pode estar em xeque, passar por uma casa atacada, nem terminar em xeque.\n\n**Roque Pequeno (O-O):** rei vai para g1, torre para f1.\n**Roque Grande (O-O-O):** rei vai para c1, torre para d1.",
+  "demo": {
+    "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1",
+    "moves": [
+      "e1g1"
+    ],
+    "description": "O rei e a torre pulam um sobre o outro para se proteger."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1",
+      "prompt": "Faça o Roque Pequeno (mova o rei de e1 para g1).",
+      "expected": [
+        "e1g1"
+      ],
+      "hint": "O rei anda duas casas para a direita.",
+      "success": "Correto! O rei está seguro.",
+      "failure": "O roque é o rei andando 2 casas."
+    }
+  ],
+  "summary": "O roque protege o rei e ativa a torre.",
+  "source": {
+    "type": "original"
+  },
+  "order": 7
+}

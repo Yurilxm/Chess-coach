@@ -1,0 +1,33 @@
+{
+  "id": "xeque-mate",
+  "level": "beginner",
+  "category": "fundamentos",
+  "title": "Xeque e Xeque-Mate",
+  "objective": "Aprender a diferença entre Xeque (ameaça) e Mate (fim de jogo).",
+  "estimatedMinutes": 7,
+  "explanation": "**Xeque:** O rei está sob ataque. Você precisa resolver isso imediatamente (movendo o rei, bloqueando ou capturando).\n\n**Xeque-Mate:** O rei está em xeque e não tem nenhuma saída. O jogo acaba na hora.",
+  "demo": {
+    "fen": "r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4",
+    "moves": [],
+    "description": "O Mate do Pastor. As pretas não têm escapatória."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 0 1",
+      "prompt": "Dê o xeque-mate movendo a Dama de d1 para h5.",
+      "expected": [
+        "d1h5"
+      ],
+      "hint": "A Dama ataca pela diagonal.",
+      "success": "Correto! Você deu um xeque perigoso (o Mate vem a seguir).",
+      "failure": "Mova a Dama para h5."
+    }
+  ],
+  "summary": "O objetivo do xadrez é dar Xeque-Mate no rei adversário.",
+  "source": {
+    "type": "original"
+  },
+  "order": 9
+}

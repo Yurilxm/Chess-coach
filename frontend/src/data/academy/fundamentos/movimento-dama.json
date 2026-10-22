@@ -1,0 +1,35 @@
+{
+  "id": "movimento-dama",
+  "level": "beginner",
+  "category": "fundamentos",
+  "title": "Como a dama se move",
+  "objective": "Aprender o movimento da dama, que combina torre e bispo.",
+  "estimatedMinutes": 5,
+  "explanation": "A dama é a peça mais poderosa do jogo. Ela combina o movimento da **torre** e do **bispo**.\n\n**Movimento:** ela anda em linha reta (vertical/horizontal) E em diagonal. Pode ir para qualquer casa desde que o caminho esteja livre.\n\nPor ser tão forte, tome cuidado para não deixá-la ser capturada facilmente.",
+  "demo": {
+    "fen": "4k3/8/8/8/8/8/8/3QK3 w - - 0 1",
+    "moves": [
+      "d1d8"
+    ],
+    "description": "A dama domina a coluna central."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/8/3QK3 w - - 0 1",
+      "prompt": "Mova a dama de d1 para h5 (em diagonal).",
+      "expected": [
+        "d1h5"
+      ],
+      "hint": "É uma diagonal subindo para a direita.",
+      "success": "Correto! A dama se move como um bispo quando quer.",
+      "failure": "Damas se movem em diagonal também."
+    }
+  ],
+  "summary": "A dama anda em qualquer direção, como torre ou bispo. É a peça mais temida.",
+  "source": {
+    "type": "original"
+  },
+  "order": 5
+}

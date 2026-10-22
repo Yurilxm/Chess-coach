@@ -1,0 +1,41 @@
+{
+  "id": "mate-rei-dama",
+  "level": "beginner",
+  "category": "finais",
+  "order": 1,
+  "title": "Mate com Rei e Dama",
+  "objective": "Aprender a dar o mate básico usando a Dama.",
+  "estimatedMinutes": 8,
+  "explanation": "Para dar mate com a Dama, você deve encurralar o Rei adversário na borda do tabuleiro, mantendo a Dama a uma distância de 'salto de cavalo' do Rei para evitar que ele a capture.",
+  "demo": {
+    "fen": "4k3/8/8/8/8/8/8/3QK3 w - - 0 1",
+    "moves": [
+      "d1d8",
+      "e8f7",
+      "d8d7",
+      "f7f6",
+      "d7d6",
+      "f6f7",
+      "e1e2"
+    ],
+    "description": "A Dama corta o tabuleiro em diagonais."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/8/3QK3 w - - 0 1",
+      "prompt": "Mova a Dama para d8 (cortando a oitava fileira).",
+      "expected": [
+        "d1d8"
+      ],
+      "hint": "Suba a Dama toda.",
+      "success": "Correto! O rei preto está preso.",
+      "failure": "Mova para d8."
+    }
+  ],
+  "summary": "Empurre o rei para a borda e dê o mate.",
+  "source": {
+    "type": "original"
+  }
+}

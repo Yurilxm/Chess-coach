@@ -1,0 +1,20 @@
+{
+  "id": "bispo-bom-ruim",
+  "level": "advanced",
+  "category": "estrategia",
+  "title": "Bispo Bom e Bispo Ruim",
+  "objective": "Identificar quando um bispo é uma peça forte ou fraca.",
+  "estimatedMinutes": 10,
+  "explanation": "**Bispo Bom:** Suas próprias peças (especialmente peões) NÃO estão nas casas da sua cor. Ele tem liberdade para atacar.\n\n**Bispo Ruim:** Suas próprias peças estão presas nas casas da sua cor. O bispo fica 'trancado' e não tem alvos para atacar. Trocar o bispo ruim é uma das melhores estratégias.",
+  "demo": {
+    "fen": "8/8/8/8/8/8/8/8 w - - 0 1",
+    "moves": [],
+    "description": "Teoria."
+  },
+  "exercises": [],
+  "summary": "Bispos precisam de diagonais abertas.",
+  "source": {
+    "type": "original"
+  },
+  "order": 2
+}

@@ -1,0 +1,33 @@
+{
+  "id": "afogamento",
+  "level": "beginner",
+  "category": "fundamentos",
+  "order": 10,
+  "title": "Afogamento (Stalemate)",
+  "objective": "Aprender quando o jogo termina em empate por falta de lances.",
+  "estimatedMinutes": 5,
+  "explanation": "O afogamento ocorre quando o jogador da vez **não tem nenhum lance legal**, mas o Rei **não está em xeque**.\n\nNeste caso, o jogo termina em **Empate** imediatamente. É muito comum iniciantes acidentalmente afogarem o adversário quando estão ganhando por muito material.",
+  "demo": {
+    "fen": "k7/2K5/1Q6/8/8/8/8/8 b - - 0 1",
+    "moves": [],
+    "description": "O Rei preto não tem para onde ir e não está em xeque. Empate!"
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "k7/2K5/1Q6/8/8/8/8/8 w - - 0 1",
+      "prompt": "Mova a Dama de b6 para c6. Isso deixará o Rei preto sem movimentos (Afogamento).",
+      "expected": [
+        "b6c6"
+      ],
+      "hint": "A Dama vai para c6.",
+      "success": "Correto! O Rei preto não tem para onde ir e não está em xeque.",
+      "failure": "Mova a Dama para c6."
+    }
+  ],
+  "summary": "Afogamento é empate por falta de movimentos.",
+  "source": {
+    "type": "original"
+  }
+}

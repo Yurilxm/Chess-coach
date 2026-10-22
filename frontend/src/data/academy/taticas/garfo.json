@@ -1,0 +1,334 @@
+{
+  "id": "garfo",
+  "level": "intermediate",
+  "category": "taticas",
+  "title": "Garfo",
+  "objective": "Reconhecer e executar garfos, uma das táticas mais comuns no xadrez.",
+  "explanation": "O garfo é uma tática em que uma única peça ataca duas ou mais peças adversárias ao mesmo tempo. O adversário só pode salvar uma delas, então você captura a outra no lance seguinte.\n\n**Peças mais eficazes:** o cavalo é o mestre do garfo, porque o padrão de movimento em L o torna difícil de prever. Damas e peões também fazem garfos poderosos.\n\n**Garfo de cavalo:** o cavalo ataca duas peças em casas diferentes e, como o adversário não pode defender as duas com um só lance, ele perde uma.\n\n**Como encontrar:** procure sempre por peças adversárias desprotegidas ou mal posicionadas. Antes de cada lance, verifique se há uma casa de onde sua peça pode ameaçar dois alvos ao mesmo tempo.",
+  "demo": {
+    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+    "moves": [
+      "f3g5",
+      "d7d5",
+      "g5f7"
+    ],
+    "description": "O cavalo branco faz um garfo: ataca o peão em f7 e a dama em d8."
+  },
+  "exercises": [
+    {
+      "id": "fork-1",
+      "type": "move",
+      "fen": "5k2/5p1p/1p1P2p1/1B6/5P2/1P3KP1/n6P/8 w - - 0 38",
+      "setup": [
+        "f3e4"
+      ],
+      "prompt": "Encontre o garfo: qual lance ataca duas peças ao mesmo tempo?",
+      "expected": [
+        "a2c3",
+        "e4d4",
+        "c3b5"
+      ],
+      "hint": "Procure uma peça que possa atacar duas peças valiosas ao mesmo tempo.",
+      "success": "Correto! Você encontrou o garfo.",
+      "failure": "Não é isso. Pense em qual peça pode ameaçar dois alvos simultaneamente.",
+      "rating": 586,
+      "themes": [
+        "advantage",
+        "endgame",
+        "fork",
+        "master",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00OPi",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00OPi"
+      }
+    },
+    {
+      "id": "fork-2",
+      "type": "move",
+      "fen": "2kr3r/p1p1bpp1/2p2n1p/8/8/1P6/P1P1RPPP/RNB3K1 w - - 1 16",
+      "setup": [
+        "e2e7"
+      ],
+      "prompt": "Encontre o garfo: qual lance ataca duas peças ao mesmo tempo?",
+      "expected": [
+        "d8d1",
+        "e7e1",
+        "d1e1"
+      ],
+      "hint": "Procure uma peça que possa atacar duas peças valiosas ao mesmo tempo.",
+      "success": "Correto! Você encontrou o garfo.",
+      "failure": "Não é isso. Pense em qual peça pode ameaçar dois alvos simultaneamente.",
+      "rating": 591,
+      "themes": [
+        "backRankMate",
+        "fork",
+        "mate",
+        "mateIn2",
+        "middlegame",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "007XE",
+        "license": "CC0",
+        "url": "https://lichess.org/training/007XE"
+      }
+    },
+    {
+      "id": "fork-3",
+      "type": "move",
+      "fen": "6k1/6pp/p1N2p2/1pP2bP1/5P2/8/PPP5/3K4 b - - 1 28",
+      "setup": [
+        "f6g5"
+      ],
+      "prompt": "Encontre o garfo: qual lance ataca duas peças ao mesmo tempo?",
+      "expected": [
+        "c6e7",
+        "g8f7",
+        "e7f5"
+      ],
+      "hint": "Procure uma peça que possa atacar duas peças valiosas ao mesmo tempo.",
+      "success": "Correto! Você encontrou o garfo.",
+      "failure": "Não é isso. Pense em qual peça pode ameaçar dois alvos simultaneamente.",
+      "rating": 624,
+      "themes": [
+        "crushing",
+        "endgame",
+        "fork",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "009tE",
+        "license": "CC0",
+        "url": "https://lichess.org/training/009tE"
+      }
+    },
+    {
+      "id": "fork-4",
+      "type": "move",
+      "fen": "5rk1/5ppp/4p3/4N3/8/1Pn5/5PPP/5RK1 w - - 0 28",
+      "setup": [
+        "f1c1"
+      ],
+      "prompt": "Encontre o garfo: qual lance ataca duas peças ao mesmo tempo?",
+      "expected": [
+        "c3e2",
+        "g1f1",
+        "e2c1"
+      ],
+      "hint": "Procure uma peça que possa atacar duas peças valiosas ao mesmo tempo.",
+      "success": "Correto! Você encontrou o garfo.",
+      "failure": "Não é isso. Pense em qual peça pode ameaçar dois alvos simultaneamente.",
+      "rating": 653,
+      "themes": [
+        "crushing",
+        "endgame",
+        "fork",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "002GQ",
+        "license": "CC0",
+        "url": "https://lichess.org/training/002GQ"
+      }
+    },
+    {
+      "id": "fork-5",
+      "type": "move",
+      "fen": "1k6/pp6/4nNp1/P6p/3pr3/7P/3R1PPK/8 b - - 0 40",
+      "setup": [
+        "e4e5"
+      ],
+      "prompt": "Encontre o garfo: qual lance ataca duas peças ao mesmo tempo?",
+      "expected": [
+        "f6d7",
+        "b8c7",
+        "d7e5"
+      ],
+      "hint": "Procure uma peça que possa atacar duas peças valiosas ao mesmo tempo.",
+      "success": "Correto! Você encontrou o garfo.",
+      "failure": "Não é isso. Pense em qual peça pode ameaçar dois alvos simultaneamente.",
+      "rating": 689,
+      "themes": [
+        "crushing",
+        "endgame",
+        "fork",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Bn4",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Bn4"
+      }
+    },
+    {
+      "id": "fork-6",
+      "type": "move",
+      "fen": "r5k1/5pp1/2p5/P1N4p/2Pp1n2/1P3P2/5P1P/3R2K1 w - - 1 26",
+      "setup": [
+        "d1d4"
+      ],
+      "prompt": "Encontre o garfo: qual lance ataca duas peças ao mesmo tempo?",
+      "expected": [
+        "f4e2",
+        "g1f1",
+        "e2d4"
+      ],
+      "hint": "Procure uma peça que possa atacar duas peças valiosas ao mesmo tempo.",
+      "success": "Correto! Você encontrou o garfo.",
+      "failure": "Não é isso. Pense em qual peça pode ameaçar dois alvos simultaneamente.",
+      "rating": 694,
+      "themes": [
+        "crushing",
+        "endgame",
+        "fork",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00Ui0",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00Ui0"
+      }
+    },
+    {
+      "id": "fork-7",
+      "type": "move",
+      "fen": "8/4k3/1p1p4/rP2p1p1/P2nP1P1/3BK3/8/R7 w - - 0 35",
+      "setup": [
+        "e3d2"
+      ],
+      "prompt": "Encontre o garfo: qual lance ataca duas peças ao mesmo tempo?",
+      "expected": [
+        "d4b3",
+        "d2c3",
+        "b3a1"
+      ],
+      "hint": "Procure uma peça que possa atacar duas peças valiosas ao mesmo tempo.",
+      "success": "Correto! Você encontrou o garfo.",
+      "failure": "Não é isso. Pense em qual peça pode ameaçar dois alvos simultaneamente.",
+      "rating": 703,
+      "themes": [
+        "crushing",
+        "endgame",
+        "fork",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "008P4",
+        "license": "CC0",
+        "url": "https://lichess.org/training/008P4"
+      }
+    },
+    {
+      "id": "fork-8",
+      "type": "move",
+      "fen": "6k1/5pp1/p1N1b3/1n5p/1B4P1/P4P1P/2K5/8 b - - 2 42",
+      "setup": [
+        "e6d5"
+      ],
+      "prompt": "Encontre o garfo: qual lance ataca duas peças ao mesmo tempo?",
+      "expected": [
+        "c6e7",
+        "g8h7",
+        "e7d5"
+      ],
+      "hint": "Procure uma peça que possa atacar duas peças valiosas ao mesmo tempo.",
+      "success": "Correto! Você encontrou o garfo.",
+      "failure": "Não é isso. Pense em qual peça pode ameaçar dois alvos simultaneamente.",
+      "rating": 715,
+      "themes": [
+        "advantage",
+        "endgame",
+        "fork",
+        "master",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00TAb",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00TAb"
+      }
+    },
+    {
+      "id": "fork-9",
+      "type": "move",
+      "fen": "8/8/8/2Pk4/pK4p1/3N4/5P2/3b4 b - - 7 59",
+      "setup": [
+        "d1e2"
+      ],
+      "prompt": "Encontre o garfo: qual lance ataca duas peças ao mesmo tempo?",
+      "expected": [
+        "d3f4",
+        "d5c6",
+        "f4e2"
+      ],
+      "hint": "Procure uma peça que possa atacar duas peças valiosas ao mesmo tempo.",
+      "success": "Correto! Você encontrou o garfo.",
+      "failure": "Não é isso. Pense em qual peça pode ameaçar dois alvos simultaneamente.",
+      "rating": 777,
+      "themes": [
+        "crushing",
+        "endgame",
+        "fork",
+        "master",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00K0G",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00K0G"
+      }
+    },
+    {
+      "id": "fork-10",
+      "type": "move",
+      "fen": "b7/p1k1pp2/1pn2qp1/8/4B3/1PNR4/P1P2PP1/5K2 b - - 1 26",
+      "setup": [
+        "a7a6"
+      ],
+      "prompt": "Encontre o garfo: qual lance ataca duas peças ao mesmo tempo?",
+      "expected": [
+        "c3d5",
+        "c7b8",
+        "d5f6"
+      ],
+      "hint": "Procure uma peça que possa atacar duas peças valiosas ao mesmo tempo.",
+      "success": "Correto! Você encontrou o garfo.",
+      "failure": "Não é isso. Pense em qual peça pode ameaçar dois alvos simultaneamente.",
+      "rating": 802,
+      "themes": [
+        "crushing",
+        "endgame",
+        "fork",
+        "short"
+      ],
+      "source": {
+        "type": "lichess",
+        "id": "00TOX",
+        "license": "CC0",
+        "url": "https://lichess.org/training/00TOX"
+      }
+    }
+  ],
+  "summary": "Garfo é atacar duas peças com uma só. O cavalo é imbatível nisso. Sempre olhe para peças mal posicionadas do adversário — garfos aparecem quando menos se espera.",
+  "related": [
+    "cravada",
+    "espeto",
+    "ataque-duplo"
+  ],
+  "source": {
+    "type": "original"
+  },
+  "order": 1
+}

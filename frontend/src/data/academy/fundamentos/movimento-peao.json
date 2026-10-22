@@ -1,0 +1,68 @@
+{
+  "id": "movimento-peao",
+  "level": "beginner",
+  "category": "fundamentos",
+  "title": "Como o peão se move",
+  "objective": "Aprender o movimento básico do peão, incluindo o avanço duplo inicial e a captura diagonal.",
+  "explanation": "O peão é a única peça que se move de forma diferente de como captura.\n\n**Movimento:** o peão avança sempre em linha reta, uma casa por vez, na direção do lado adversário. Os peões brancos sobem (do lado das brancas em direção às pretas) e os peões pretos descem.\n\n**Avanço duplo:** na primeira jogada de cada peão, é permitido avançar duas casas de uma vez, desde que o caminho esteja livre.\n\n**Captura:** o peão captura em diagonal, uma casa à frente-esquerda ou à frente-direita. Ele não pode capturar uma peça que esteja imediatamente à sua frente.",
+  "demo": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "moves": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "f1c4",
+      "g8f6",
+      "e4e5"
+    ],
+    "description": "Os peões centrais avançam duas casas no primeiro movimento."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "prompt": "Mova o peão de e2 duas casas (o avanço duplo inicial).",
+      "expected": [
+        "e2e4"
+      ],
+      "hint": "Na primeira jogada, o peão pode avançar duas casas.",
+      "success": "Correto! O avanço duplo é permitido apenas no primeiro movimento do peão.",
+      "failure": "Não é isso. Lembre-se: no primeiro movimento, o peão pode avançar duas casas."
+    },
+    {
+      "id": "ex2",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/4P3/4K3 w - - 0 1",
+      "prompt": "Mova o peão de e2 uma casa apenas.",
+      "expected": [
+        "e2e3"
+      ],
+      "hint": "Como esse peão já não está na posição inicial, ele avança só uma casa.",
+      "success": "Correto! Depois do primeiro movimento, o peão avança apenas uma casa por vez.",
+      "failure": "Não é isso. Depois do primeiro movimento, o peão avança apenas uma casa."
+    },
+    {
+      "id": "ex3",
+      "type": "move",
+      "fen": "4k3/8/8/8/3p4/4P3/8/4K3 w - - 0 1",
+      "prompt": "Capture o peão preto em d4.",
+      "expected": [
+        "e3d4"
+      ],
+      "hint": "Peões capturam em diagonal. Mova o peão branco de e3 para d4.",
+      "success": "Correto! O peão capturou uma peça na diagonal.",
+      "failure": "Não é isso. Peões capturam em diagonal, não em linha reta."
+    }
+  ],
+  "summary": "O peão avança em linha reta (uma casa, ou duas na primeira jogada) e captura em diagonal. É a peça com mais regras especiais — incluindo promoção e en passant, que veremos depois.",
+  "related": [
+    "movimento-peao-promocao",
+    "en-passant"
+  ],
+  "source": {
+    "type": "original"
+  },
+  "order": 1
+}

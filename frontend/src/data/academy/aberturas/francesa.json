@@ -1,0 +1,38 @@
+{
+  "id": "francesa",
+  "level": "intermediate",
+  "category": "aberturas",
+  "order": 3,
+  "title": "Defesa Francesa",
+  "objective": "Entender a solidez da Defesa Francesa.",
+  "estimatedMinutes": 12,
+  "explanation": "A Francesa (1.e4 e6) é muito sólida. As pretas aceitam um bispo um pouco passivo em c8, mas constroem uma muralha de peões impenetrável. O contra-ataque das pretas geralmente vem com c5 e f6.",
+  "demo": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "moves": [
+      "e2e4",
+      "e7e6",
+      "d2d4",
+      "d7d5"
+    ],
+    "description": "As pretas montam a muralha."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "prompt": "Jogue 1.e4 e6.",
+      "expected": [
+        "e2e4"
+      ],
+      "hint": "Abra com o peão do rei.",
+      "success": "Correto. Agora jogue e6.",
+      "failure": "Abra com e4."
+    }
+  ],
+  "summary": "Francesa: 1.e4 e6. Sólida e desafiadora.",
+  "source": {
+    "type": "original"
+  }
+}

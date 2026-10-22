@@ -1,0 +1,39 @@
+{
+  "id": "ruy-lopez",
+  "level": "intermediate",
+  "category": "aberturas",
+  "order": 5,
+  "title": "Abertura Ruy López",
+  "objective": "Aprender a abertura mais clássica do xadrez.",
+  "estimatedMinutes": 10,
+  "explanation": "A Ruy López (1.e4 e5 2.Cf3 Cc6 3.Bb5) é uma das aberturas mais antigas e respeitadas.\n\n**Ideia:** O bispo de b5 pressiona o cavalo de c6, que defende o peão de e5. As brancas querem controlar o centro e criar tensão.",
+  "demo": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "moves": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "f1b5"
+    ],
+    "description": "O bispo pressiona o cavalo."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1",
+      "prompt": "Jogue o bispo para b5 (Ruy López).",
+      "expected": [
+        "f1b5"
+      ],
+      "hint": "A casa é b5.",
+      "success": "Correto! Abertura clássica.",
+      "failure": "Mova para b5."
+    }
+  ],
+  "summary": "Ruy López: 3.Bb5, pressão no centro.",
+  "source": {
+    "type": "original"
+  }
+}

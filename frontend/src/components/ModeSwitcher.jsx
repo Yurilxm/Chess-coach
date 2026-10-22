@@ -1,4 +1,4 @@
-import { BookOpen, PenLine, Bot, History } from 'lucide-react'
+import { BookOpen, PenLine, Bot, History, GraduationCap, Settings } from 'lucide-react'
 
 function ModeSwitcher({ mode, onChange }) {
   return (
@@ -46,6 +46,29 @@ function ModeSwitcher({ mode, onChange }) {
       >
         <History className="w-4 h-4" />
         Histórico
+      </button>
+      <button
+        onClick={() => onChange('academy')}
+        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+          mode === 'academy'
+            ? 'bg-gradient-to-r from-violet-500 to-violet-600 text-white shadow-md shadow-violet-500/20'
+            : 'text-slate-400 hover:text-white hover:bg-white/5'
+        }`}
+      >
+        <GraduationCap className="w-4 h-4" />
+        Academia
+      </button>
+      <div className="w-px h-6 bg-white/10 mx-1" />
+      <button
+        onClick={() => onChange('settings')}
+        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+          mode === 'settings'
+            ? 'bg-white/15 text-white shadow-inner'
+            : 'text-slate-400 hover:text-white hover:bg-white/5'
+        }`}
+      >
+        <Settings className="w-4 h-4" />
+        Configurações
       </button>
     </div>
   )

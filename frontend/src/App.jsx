@@ -10,6 +10,10 @@ import AdvancedTools from './components/AdvancedTools'
 import BotDifficultySelector from './components/BotDifficultySelector'
 import GameReviewModal from './components/GameReviewModal'
 import MatchHistoryView from './components/MatchHistoryView'
+import AcademyView from './components/AcademyView'
+import LessonView from './components/LessonView'
+import { SettingsView } from './components/SettingsView'
+
 import { useChessGame } from './hooks/useChessGame'
 import { useChessEditor } from './hooks/useChessEditor'
 import { useStockfishAnalysis } from './hooks/useStockfishAnalysis'
@@ -25,6 +29,7 @@ function App() {
   const [selectedMoveIndex, setSelectedMoveIndex] = useState(0)
   const [botGameStarted, setBotGameStarted] = useState(false)
   const [selectedMatch, setSelectedMatch] = useState(null)
+  const [activeLesson, setActiveLesson] = useState(null)
 
   const game = useChessGame()
   const editor = useChessEditor()
@@ -37,22 +42,12 @@ function App() {
 
   const activeFen = mode === 'editor' ? editor.fen : game.fen
 
-  // Espelha game.history num ref (evita dep de array que muda toda hora).
   const historyRef = useRef(game.history)
   historyRef.current = game.history
-
-  // Guarda qual FEN ja foi explicada pelo coach.
   const lastExplainedFenRef = useRef(null)
-
-  // Guarda se a partida atual ja foi salva no historico.
   const matchSavedRef = useRef(false)
-
-  // Guarda se ja pedimos a revisao da partida atual. Impede que fechar
-  // o modal (clearReview -> review=null) dispare o useEffect de novo e
-  // refaca a analise em loop.
   const reviewRequestedRef = useRef(false)
 
-  // Reset de analise/coach ao trocar de posicao.
   useEffect(() => {
     clear()
     clearCoach()
@@ -60,7 +55,6 @@ function App() {
     lastExplainedFenRef.current = null
   }, [activeFen, clear, clearCoach])
 
-  // Explica automaticamente a primeira opcao quando a analise chega.
   useEffect(() => {
     if (!analysis?.lines?.[0]?.move || !activeFen) return
     if (lastExplainedFenRef.current === activeFen) return
@@ -74,18 +68,16 @@ function App() {
     )
   }, [analysis, activeFen, coachExplanation, coachLoading, explainMove])
 
-  // Ao trocar de modo, reseta estado do bot e limpa a revisao.
   const gameReset = game.reset
   const gameSetPlayerColor = game.setPlayerColor
   useEffect(() => {
-    if (mode === 'bot') {
-      gameReset()
-    }
+    if (mode === 'bot') gameReset()
     gameSetPlayerColor(null)
     setBotGameStarted(false)
     clearReview()
     matchSavedRef.current = false
     reviewRequestedRef.current = false
+    setActiveLesson(null)
   }, [mode, gameReset, gameSetPlayerColor, clearReview])
 
   function handleStartBotGame() {
@@ -98,13 +90,8 @@ function App() {
       const timer = setTimeout(() => {
         bot.requestMove(game.fen, game.history).then((result) => {
           if (result?.from_square && result?.to_square) {
-            game.attemptMove(result.from_square, result.to_square, {
-              skipColorCheck: true,
-              promotion: result.promotion,
-            })
-            setTimeout(() => {
-              game.executeNextPremove()
-            }, 100)
+            game.attemptMove(result.from_square, result.to_square, { skipColorCheck: true, promotion: result.promotion })
+            setTimeout(() => game.executeNextPremove(), 100)
           }
         })
       }, 500)
@@ -112,182 +99,81 @@ function App() {
     }
   }
 
-  // Bot joga automaticamente.
   const botThinking = bot.thinking
   const botRequestMove = bot.requestMove
   const gameAttemptMove = game.attemptMove
   const gameExecuteNextPremove = game.executeNextPremove
   useEffect(() => {
-    if (mode !== 'bot') return
-    if (!botGameStarted) return
-    if (game.isGameOver) return
-    if (!game.playerColor) return
-
+    if (mode !== 'bot' || !botGameStarted || game.isGameOver || !game.playerColor) return
     const botColor = game.playerColor === 'w' ? 'b' : 'w'
-
-    if (game.turn !== botColor) return
-    if (botThinking) return
+    if (game.turn !== botColor || botThinking) return
 
     const timer = setTimeout(() => {
       botRequestMove(game.fen, historyRef.current).then((result) => {
         if (result?.from_square && result?.to_square) {
-          gameAttemptMove(result.from_square, result.to_square, {
-            skipColorCheck: true,
-            promotion: result.promotion,
-          })
-          setTimeout(() => {
-            gameExecuteNextPremove()
-          }, 100)
+          gameAttemptMove(result.from_square, result.to_square, { skipColorCheck: true, promotion: result.promotion })
+          setTimeout(() => gameExecuteNextPremove(), 100)
         }
       })
     }, 400)
-
     return () => clearTimeout(timer)
-  }, [
-    game.fen,
-    game.turn,
-    game.isGameOver,
-    game.playerColor,
-    mode,
-    botGameStarted,
-    botThinking,
-    botRequestMove,
-    gameAttemptMove,
-    gameExecuteNextPremove,
-  ])
+  }, [game.fen, game.turn, game.isGameOver, game.playerColor, mode, botGameStarted, botThinking, botRequestMove, gameAttemptMove, gameExecuteNextPremove])
 
-  // Revisao pos-partida.
   useEffect(() => {
-    if (mode !== 'bot') return
-    if (!botGameStarted) return
-    if (!game.isGameOver) return
-    // So pede UMA vez por partida. Sem isso, fechar o modal re-dispara
-    // o efeito (review=null) e re-analisa em loop.
-    if (reviewRequestedRef.current) return
-    if (historyRef.current.length === 0) return
-
+    if (mode !== 'bot' || !botGameStarted || !game.isGameOver) return
+    if (reviewRequestedRef.current || historyRef.current.length === 0) return
     reviewRequestedRef.current = true
     requestReview(historyRef.current, game.playerColor)
-  }, [
-    game.isGameOver,
-    game.playerColor,
-    mode,
-    botGameStarted,
-    review,
-    reviewLoading,
-    requestReview,
-  ])
+  }, [game.isGameOver, game.playerColor, mode, botGameStarted, review, reviewLoading, requestReview])
 
-  // Salva a partida no historico quando a revisao chega.
   useEffect(() => {
-    if (mode !== 'bot') return
-    if (!botGameStarted) return
-    if (!review || reviewLoading) return
-    if (matchSavedRef.current) return
-    if (!review.stats) return
-
+    if (mode !== 'bot' || !botGameStarted || !review || reviewLoading) return
+    if (matchSavedRef.current || !review.stats) return
     matchSavedRef.current = true
-    matchHistory.saveMatch({
-      playerColor: game.playerColor,
-      difficulty: bot.difficulty,
-      review,
-      history: historyRef.current,
-    })
-  }, [
-    review,
-    reviewLoading,
-    mode,
-    botGameStarted,
-    game.playerColor,
-    bot.difficulty,
-    matchHistory,
-  ])
+    matchHistory.saveMatch({ playerColor: game.playerColor, difficulty: bot.difficulty, review, history: historyRef.current })
+  }, [review, reviewLoading, mode, botGameStarted, game.playerColor, bot.difficulty, matchHistory])
 
   const handleSelectMove = useCallback((index) => {
     setSelectedMoveIndex(index)
     const lines = analysis?.lines || []
     const selectedLine = lines[index]
-    if (selectedLine?.move && activeFen) {
-      explainMove(activeFen, selectedLine.move, selectedLine.evaluation)
-    }
+    if (selectedLine?.move && activeFen) explainMove(activeFen, selectedLine.move, selectedLine.evaluation)
   }, [analysis, activeFen, explainMove])
 
-  function handleAnalyze() {
-    clearCoach()
-    analyze(activeFen)
-  }
-
-  function handleImportFen(fen) {
-    if (mode === 'editor') editor.loadFen(fen)
-    else game.loadFen(fen)
-  }
-
+  function handleAnalyze() { clearCoach(); analyze(activeFen); }
+  function handleImportFen(fen) { mode === 'editor' ? editor.loadFen(fen) : game.loadFen(fen); }
   function handleBotReset() {
-    game.reset()
-    game.setPlayerColor(null)
-    setBotGameStarted(false)
-    clearReview()
-    matchSavedRef.current = false
-    reviewRequestedRef.current = false
+    game.reset(); game.setPlayerColor(null); setBotGameStarted(false); clearReview();
+    matchSavedRef.current = false; reviewRequestedRef.current = false;
   }
+  function handleOpenMatch(match) { setReplayIndex(null); setReplayFen(null); setSelectedMatch(match); }
+  function handleCloseMatch() { setSelectedMatch(null); setReplayIndex(null); setReplayFen(null); }
 
-  function handleOpenMatch(match) {
-    setReplayIndex(null)
-    setReplayFen(null)
-    setSelectedMatch(match)
-  }
-
-  function handleCloseMatch() {
-    setSelectedMatch(null)
-    setReplayIndex(null)
-    setReplayFen(null)
-  }
-
-  // Review ativo: pode ser da partida atual ou de uma partida salva.
   const activeReview = selectedMatch ? selectedMatch.review : review
   const activeReviewLoading = selectedMatch ? false : reviewLoading
   const closeActiveReview = selectedMatch ? handleCloseMatch : clearReview
 
-  // Pre-posiciona o replay no ULTIMO lance sempre que o review chega.
-  // Evita que o modal abra sem tabuleiro e faz o ultimo lance aparecer
-  // sem o usuario precisar clicar em nada.
   useEffect(() => {
     const moves = activeReview?.all_moves
-    if (!moves || moves.length === 0) {
-      setReplayIndex(null)
-      setReplayFen(null)
-      return
-    }
-
-    const lastIdx = moves.length - 1
-    setReplayIndex(lastIdx)
-
+    if (!moves || moves.length === 0) { setReplayIndex(null); setReplayFen(null); return; }
+    setReplayIndex(moves.length - 1)
     const temp = new Chess()
-    for (let i = 0; i <= lastIdx; i++) {
-      const m = moves[i]
+    for (const m of moves) {
       if (!m?.move_uci) continue
       const uci = m.move_uci
-      const from = uci.substring(0, 2)
-      const to = uci.substring(2, 4)
+      const from = uci.substring(0, 2), to = uci.substring(2, 4)
       const promo = uci.length > 4 ? uci.substring(4, 5) : undefined
-      try {
-        promo ? temp.move({ from, to, promotion: promo }) : temp.move({ from, to })
-      } catch {
-        // lance invalido, ignora
-      }
+      try { promo ? temp.move({ from, to, promotion: promo }) : temp.move({ from, to }) } catch { /* ignore */ }
     }
     setReplayFen(temp.fen())
   }, [activeReview])
 
-  const selectedBestMove = analysis?.lines?.[selectedMoveIndex]?.move
-    || analysis?.top_moves?.[selectedMoveIndex]
-    || analysis?.best_move
-
+  const selectedBestMove = analysis?.lines?.[selectedMoveIndex]?.move || analysis?.top_moves?.[selectedMoveIndex] || analysis?.best_move
   const isBotMode = mode === 'bot'
   const isEditorMode = mode === 'editor'
   const isHistoryMode = mode === 'history'
-
-  // Lista de partidas salvas (recalculada a cada render — barato).
+  const isAcademyMode = mode === 'academy'
+  const isSettingsMode = mode === 'settings'
   const matchesList = isHistoryMode ? matchHistory.listMatches() : []
 
   return (
@@ -302,29 +188,24 @@ function App() {
       <Header mode={mode} onModeChange={setMode} />
 
       <main className="relative z-10 flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
-        <div className="relative w-full rounded-[32px] bg-white/[0.035] backdrop-blur-2xl ring-1 ring-white/10 shadow-2xl shadow-black/30 p-5 md:p-8">
-          {isHistoryMode ? (
-            <MatchHistoryView
-              matches={matchesList}
-              onOpenMatch={handleOpenMatch}
-              onDeleteMatch={matchHistory.deleteMatch}
-              onClearAll={matchHistory.clearAll}
-            />
-          ) : (
+        {isSettingsMode || isAcademyMode || isHistoryMode ? (
+          <div className="w-full">
+            {isSettingsMode ? <SettingsView /> :
+             isAcademyMode ? (
+               activeLesson ? <LessonView lesson={activeLesson} onBack={() => setActiveLesson(null)} /> : <AcademyView onOpenLesson={setActiveLesson} />
+             ) : (
+               <MatchHistoryView matches={matchesList} onOpenMatch={handleOpenMatch} onDeleteMatch={matchHistory.deleteMatch} onClearAll={matchHistory.clearAll} />
+             )}
+          </div>
+        ) : (
+          <div className="relative w-full rounded-[32px] bg-white/[0.035] backdrop-blur-2xl ring-1 ring-white/10 shadow-2xl shadow-black/30 p-5 md:p-8">
             <div className="flex gap-6 justify-center items-start flex-wrap lg:flex-nowrap">
               <div className="flex gap-3 items-stretch">
                 <EvalBar evaluation={analysis?.evaluation} orientation="vertical" />
-
                 {isEditorMode ? (
                   <EditorView editor={editor} boardWidth={520} bestMoveUci={selectedBestMove} />
                 ) : (
-                  <GameView
-                    game={game}
-                    boardWidth={520}
-                    bestMoveUci={selectedBestMove}
-                    isBotMode={isBotMode}
-                    onBotReset={handleBotReset}
-                  />
+                  <GameView game={game} boardWidth={520} bestMoveUci={selectedBestMove} isBotMode={isBotMode} onBotReset={handleBotReset} />
                 )}
               </div>
 
@@ -332,104 +213,50 @@ function App() {
                 {isBotMode && !botGameStarted && (
                   <>
                     <div className="bg-slate-900/60 backdrop-blur-sm rounded-2xl border border-white/10 p-4">
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-                        Escolha sua cor
-                      </p>
+                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Escolha sua cor</p>
                       <div className="flex gap-2">
-                        <button
-                          onClick={() => game.setPlayerColor('w')}
-                          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 border ${
-                            game.playerColor === 'w'
-                              ? 'bg-white/15 text-white border-white/30 ring-1 ring-white/20'
-                              : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'
-                          }`}
-                        >
-                          <span className="w-4 h-4 rounded-full bg-white border border-white/40 flex-shrink-0" />
-                          Brancas
+                        <button onClick={() => game.setPlayerColor('w')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 border ${game.playerColor === 'w' ? 'bg-white/15 text-white border-white/30 ring-1 ring-white/20' : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'}`}>
+                          <span className="w-4 h-4 rounded-full bg-white border border-white/40 flex-shrink-0" /> Brancas
                         </button>
-                        <button
-                          onClick={() => game.setPlayerColor('b')}
-                          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 border ${
-                            game.playerColor === 'b'
-                              ? 'bg-slate-700/80 text-white border-white/20 ring-1 ring-white/20'
-                              : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'
-                          }`}
-                        >
-                          <span className="w-4 h-4 rounded-full bg-slate-900 ring-1 ring-white/40 flex-shrink-0" />
-                          Pretas
+                        <button onClick={() => game.setPlayerColor('b')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 border ${game.playerColor === 'b' ? 'bg-slate-700/80 text-white border-white/20 ring-1 ring-white/20' : 'bg-white/5 text-slate-400 border-white/10 hover:bg-white/10'}`}>
+                          <span className="w-4 h-4 rounded-full bg-slate-900 ring-1 ring-white/40 flex-shrink-0" /> Pretas
                         </button>
                       </div>
                     </div>
-
-                    <BotDifficultySelector
-                      difficulty={bot.difficulty}
-                      onChange={bot.setDifficulty}
-                    />
-
-                    <button
-                      onClick={handleStartBotGame}
-                      disabled={!game.playerColor}
-                      className="w-full px-6 py-4 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-white font-bold rounded-2xl transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:-translate-y-0.5 text-base flex items-center justify-center gap-3"
-                    >
-                      <Play className="w-5 h-5" />
-                      Iniciar Partida
+                    <BotDifficultySelector difficulty={bot.difficulty} onChange={bot.setDifficulty} />
+                    <button onClick={handleStartBotGame} disabled={!game.playerColor} className="w-full px-6 py-4 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-white font-bold rounded-2xl transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:-translate-y-0.5 text-base flex items-center justify-center gap-3">
+                      <Play className="w-5 h-5" /> Iniciar Partida
                     </button>
                   </>
                 )}
-
                 {isBotMode && botGameStarted && (
-                  <button
-                    onClick={handleBotReset}
-                    className="w-full px-6 py-4 bg-white/5 hover:bg-white/10 text-slate-300 font-medium rounded-2xl transition-all duration-200 cursor-pointer border border-white/10 text-base flex items-center justify-center gap-3"
-                  >
-                    <RefreshCw className="w-5 h-5" />
-                    Nova Partida
+                  <button onClick={handleBotReset} className="w-full px-6 py-4 bg-white/5 hover:bg-white/10 text-slate-300 font-medium rounded-2xl transition-all duration-200 cursor-pointer border border-white/10 text-base flex items-center justify-center gap-3">
+                    <RefreshCw className="w-5 h-5" /> Nova Partida
                   </button>
                 )}
-
                 {isBotMode && bot.thinking && (
                   <div className="bg-cyan-500/10 backdrop-blur-sm rounded-xl border border-cyan-500/20 p-3 flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                     <span className="text-xs text-cyan-300">Bot está pensando...</span>
                   </div>
                 )}
-
-                <button
-                  onClick={handleAnalyze}
-                  disabled={!activeFen || loading}
-                  className="w-full px-6 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold rounded-2xl transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:-translate-y-0.5 text-base flex items-center justify-center gap-3"
-                >
-                  <Brain className="w-5 h-5" />
-                  {loading ? 'Analisando...' : 'Analisar posição'}
+                <button onClick={handleAnalyze} disabled={!activeFen || loading} className="w-full px-6 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold rounded-2xl transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:-translate-y-0.5 text-base flex items-center justify-center gap-3">
+                  <Brain className="w-5 h-5" /> {loading ? 'Analisando...' : 'Analisar posição'}
                 </button>
-
-                <AnalysisPanel
-                  fen={activeFen}
-                  analysis={analysis}
-                  loading={loading}
-                  error={error}
-                  selected={selectedMoveIndex}
-                  onSelect={handleSelectMove}
-                  coachExplanation={coachExplanation}
-                  coachLoading={coachLoading}
-                />
-
+                <AnalysisPanel fen={activeFen} analysis={analysis} loading={loading} error={error} selected={selectedMoveIndex} onSelect={handleSelectMove} coachExplanation={coachExplanation} coachLoading={coachLoading} />
                 <AdvancedTools fen={activeFen} onImportFen={handleImportFen} />
-
                 {!analysis && !loading && !error && (
                   <div className="text-center py-12">
                     <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4 ring-1 ring-white/10">
                       <Brain className="w-8 h-8 text-slate-600" />
                     </div>
-                    <p className="text-slate-500 text-sm max-w-[250px] mx-auto">
-                      Faça um lance ou ajuste a posição e clique em "Analisar posição" para receber dicas do coach.
-                    </p>
+                    <p className="text-slate-500 text-sm max-w-[250px] mx-auto">Faça um lance ou ajuste a posição e clique em "Analisar posição" para receber dicas do coach.</p>
                   </div>
                 )}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </main>
 
       <GameReviewModal
@@ -440,11 +267,7 @@ function App() {
         coachLoading={coachLoading}
         onExplainMove={explainMove}
         onReplayMove={(index) => {
-          if (index === null || index < 0 || index >= (activeReview?.all_moves?.length || 0)) {
-            setReplayIndex(null)
-            setReplayFen(null)
-            return
-          }
+          if (index === null || index < 0 || index >= (activeReview?.all_moves?.length || 0)) { setReplayIndex(null); setReplayFen(null); return; }
           setReplayIndex(index)
           const temp = new Chess()
           for (let i = 0; i <= index; i++) {
@@ -454,7 +277,7 @@ function App() {
               const from = uci.substring(0, 2)
               const to = uci.substring(2, 4)
               const promo = uci.length > 4 ? uci.substring(4, 5) : undefined
-              try { promo ? temp.move({ from, to, promotion: promo }) : temp.move({ from, to }) } catch { /* lance invalido, ignora */ }
+              try { promo ? temp.move({ from, to, promotion: promo }) : temp.move({ from, to }) } catch { /* ignore */ }
             }
           }
           setReplayFen(temp.fen())

@@ -1,0 +1,35 @@
+{
+  "id": "movimento-torre",
+  "level": "beginner",
+  "category": "fundamentos",
+  "title": "Como a torre se move",
+  "objective": "Aprender o movimento em linha reta da torre.",
+  "estimatedMinutes": 5,
+  "explanation": "A torre é uma peça muito poderosa. Ela se move em **linha reta**: para frente, para trás, ou para os lados, quantas casas quiser.\n\n**Bloqueio:** ela não pode saltar peças. Ela para assim que encontra uma peça (podendo capturá-la se for do adversário).\n\nTorres são especialmente fortes quando controlam **colunas abertas** (colunas sem peões).",
+  "demo": {
+    "fen": "4k3/8/8/8/8/8/8/R3K3 w - - 0 1",
+    "moves": [
+      "a1a8"
+    ],
+    "description": "A torre sobe toda a coluna a até o final."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/8/R3K3 w - - 0 1",
+      "prompt": "Mova a torre de a1 para a4.",
+      "expected": [
+        "a1a4"
+      ],
+      "hint": "Suba 3 casas na mesma coluna.",
+      "success": "Correto! A torre desliza em linha reta.",
+      "failure": "Torres andam em linha reta."
+    }
+  ],
+  "summary": "A torre anda em linha reta (vertical ou horizontal). Gosta de colunas abertas.",
+  "source": {
+    "type": "original"
+  },
+  "order": 4
+}

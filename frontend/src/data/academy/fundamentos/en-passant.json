@@ -1,0 +1,35 @@
+{
+  "id": "en-passant",
+  "level": "intermediate",
+  "category": "fundamentos",
+  "order": 11,
+  "title": "Captura En Passant",
+  "objective": "Entender o movimento especial de captura do peão.",
+  "estimatedMinutes": 5,
+  "explanation": "Se um peão avança **duas casas** de uma vez e cai exatamente ao lado de um peão adversário, o peão adversário pode capturá-lo **como se ele tivesse avançado apenas uma casa**.\n\n**Regra de ouro:** Só pode ser feito **imediatamente** no lance seguinte ao avanço duplo. Se você esperar, perde o direito.",
+  "demo": {
+    "fen": "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+    "moves": [
+      "e5d6"
+    ],
+    "description": "O peão branco captura o peão preto en passant."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+      "prompt": "Faça a captura en passant (peão de e5).",
+      "expected": [
+        "e5d6"
+      ],
+      "hint": "Vá para a casa d6.",
+      "success": "Correto! Captura especial realizada.",
+      "failure": "Mova para d6."
+    }
+  ],
+  "summary": "En passant captura um peão que passou correndo.",
+  "source": {
+    "type": "original"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "movimento-cavalo",
+  "level": "beginner",
+  "category": "fundamentos",
+  "title": "Como o cavalo se move",
+  "objective": "Aprender o movimento em L do cavalo e sua capacidade de saltar sobre outras peças.",
+  "estimatedMinutes": 6,
+  "explanation": "O cavalo é a única peça que pode **saltar por cima** de outras peças.\n\n**Movimento:** ele se move em formato de 'L': duas casas em linha reta e depois uma casa perpendicular. Isso significa que ele sempre cai em uma casa de cor oposta à que estava.\n\n**Captura:** ele captura a peça que estiver na casa final do movimento, não importando o que está no caminho.",
+  "demo": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "moves": [
+      "g1f3",
+      "g8f6",
+      "f3e5"
+    ],
+    "description": "O cavalo salta para o centro, passando por cima dos peões."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "prompt": "Mova o cavalo do lado do rei (g1) para uma casa válida.",
+      "expected": [
+        "g1f3",
+        "g1h3"
+      ],
+      "hint": "O cavalo pode ir para f3 ou h3.",
+      "success": "Correto! O cavalo saltou em L.",
+      "failure": "Não é um movimento de cavalo."
+    },
+    {
+      "id": "ex2",
+      "type": "move",
+      "fen": "4k3/8/8/8/8/8/8/4K1N1 w - - 0 1",
+      "prompt": "Mova o cavalo (g1) para a casa e2.",
+      "expected": [
+        "g1e2"
+      ],
+      "hint": "Uma casa para a esquerda e uma para cima.",
+      "success": "Correto! Cavalos fazem o L.",
+      "failure": "Lembre-se do L."
+    }
+  ],
+  "summary": "O cavalo é a única peça que salta. Sempre se move em L.",
+  "related": [
+    "garfo"
+  ],
+  "source": {
+    "type": "original"
+  },
+  "order": 2
+}
