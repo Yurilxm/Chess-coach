@@ -1,6 +1,6 @@
 # Chess Coach
 
-Treinador pessoal de xadrez com análise do Stockfish e explicações com IA (Gemini).
+Treinador pessoal de xadrez com análise do Stockfish, IA (Gemini) e uma Academia de Xadrez interativa.
 
 ## Funcionalidades
 
@@ -11,6 +11,8 @@ Treinador pessoal de xadrez com análise do Stockfish e explicações com IA (Ge
 - **Modo Bot** — jogue contra o Stockfish com 14 níveis de dificuldade (rating 200 a 3000)
 - **Revisão pós-partida** — relatório completo com precisão, classificação de cada lance e estatísticas
 - **Histórico de partidas** — as 50 partidas mais recentes ficam salvas no navegador
+- **Academia de Xadrez** — 33 lições interativas divididas em níveis e categorias, incluindo 180 puzzles reais do Lichess (Garfo, Mate em 1 e Mate em 2)
+- **Temas Visuais** — escolha a cor do tabuleiro (Oceano, Floresta, etc.) e o estilo das peças (Madeira, Vidro, Vintage)
 - **Pré-jogadas** — fila de lances planejados enquanto o bot pensa
 
 ### Classificação de lances
@@ -125,14 +127,15 @@ Aplicação em http://localhost:5173.
    - **Jogar** — mova as peças livremente e explore variações.
    - **vs Bot** — escolha sua cor e a dificuldade, jogue contra o Stockfish.
    - **Editor** — monte posições via FEN ou arrastando peças.
-   - **Histórico** — veja suas partidas anteriores, com estatísticas completas.
+   - **Histórico** — veja suas partidas anteriores.
+   - **Academia** — estude fundamentos, táticas e aberturas. Resolva puzzles e acompanhe seu progresso.
+   - **Configurações** — mude o tema visual do tabuleiro e das peças.
 3. Clique em **Analisar posição** para ver a avaliação, os top 3 lances e a explicação da IA.
 4. Ao final de uma partida contra o Bot, o modal de **Revisão** aparece com:
    - Resultado, precisão e abertura detectada
-   - Contadores clicáveis por categoria (clique para filtrar os lances)
+   - Contadores clicáveis por categoria
    - Replay lance a lance com o tabuleiro
-   - Lista de erros para revisar com explicação do coach (Gemini)
-5. As partidas ficam salvas automaticamente no **Histórico**.
+   - Lista de erros com explicação do coach (Gemini)
 
 ## Desenvolvimento
 
@@ -146,134 +149,47 @@ Um comando, na raiz do projeto:
 
 Isso roda:
 
-- **Backend** — `pytest` no `backend/venv` (100+ testes)
-- **Frontend** — `vitest` em `frontend/` (170+ testes)
+- **Backend** — `pytest` no `backend/venv` (101 testes)
+- **Frontend** — `vitest` em `frontend/` (595 testes)
 
-Se algum falhar, o script para e mostra o erro.
-
-### Rodar só backend ou só frontend
-
-```bash
-# Backend
-python -m pytest
-
-# Frontend
-cd frontend
-npm test
-npm run test:watch    # modo watch
-cd ..
-```
+O frontend inclui o `academyContent.test.js` que varre todos os JSONs da Academia garantindo que FENs e soluções estão corretos.
 
 ### Estrutura dos testes
 
-**Backend** (`backend/tests/`):
-
-| Arquivo | Cobre |
-|---------|-------|
-| `conftest.py` | Fixtures compartilhadas (FENs clássicos, partida sintética) |
-| `test_classify_move.py` | Classificação de lances (incluindo brilliant/sacrifício) |
-| `test_game_rules.py` | Regras de xadrez (xeque-mate, afogamento, material insuficiente) |
-| `test_repetition.py` | Detecção de repetição tripla |
-| `test_openings.py` | Catálogo de aberturas do bot |
-| `test_coach_service.py` | Gemini (mock) |
-| `test_stockfish_service.py` | Análise (engine mockada) |
-| `test_stockfish_integration.py` | Análise real (pulado se o binário não existir) |
-| `test_review_service.py` | Revisão pós-partida |
-| `test_review_mate.py` | Casos de borda (mate, lance ilegal, UCI malformado) |
-| `test_review_sacrifice.py` | Detecção de sacrifícios |
-| `test_api_contract.py` | Contrato dos endpoints via TestClient |
-
-**Frontend** (`frontend/src/`):
-
-| Arquivo | Cobre |
-|---------|-------|
-| `utils/*.test.js` | Helpers de xadrez, avaliação, tradução de lances, aberturas |
-| `hooks/useChessGame*.test.js` | Estado do jogo + premove |
-| `hooks/useChessEditor*.test.js` | Estado do editor |
-| `hooks/useStockfishAnalysis.test.js` | Chamadas à API |
-| `hooks/useMatchHistory.test.js` | Persistência no localStorage |
-
-### Lint e build do frontend
-
-```bash
-cd frontend
-npm run lint
-npm run build
-cd ..
-```
-
-### CI
-
-A cada push em `main` ou PR, o GitHub Actions roda:
-
-- **Backend** — `pytest` (Ubuntu + Python 3.12)
-- **Frontend** — `lint` + `test` + `build` (Ubuntu + Node 20)
-
-Veja o status em https://github.com/Yurilxm/Chess-coach/actions.
+**Backend** (`backend/tests/`): cobre classificação, regras, stockfish, gemini e contrato da API.
+**Frontend** (`frontend/src/`): cobre utils, hooks, contextos e **validação de conteúdo da Academia**.
 
 ## Arquitetura
 
-### Backend (`backend/`)
+### Frontend
 
-- **`api/`** — routers HTTP. Todos síncronos (`def`), rodando no threadpool do FastAPI.
-- **`services/`** — regras de negócio. `stockfish_service` expõe `engine_analysis()`, wrapper atômico que serializa o acesso à engine com `threading.Lock`.
-- **`chess_logic/`** — lógica pura de xadrez (classificação de lances, detecção de sacrifício, regras, repetição, catálogo de aberturas do bot). Sem dependência de HTTP ou engine.
-- **`models/`** — schemas Pydantic de request/response.
-- **`config/settings.py`** — carrega `.env`, expõe caminho do Stockfish e os 14 níveis de dificuldade.
-
-### Frontend (`frontend/src/`)
-
-- **`hooks/`** — estado da partida. `useChessGame` e `useChessEditor` encapsulam o `chess.js` atrás de uma ref mutável, expondo estado reativo só quando algo muda de fato. `useStockfishAnalysis`, `useBotPlayer`, `useCoach`, `useGameReview` e `useMatchHistory` chamam a API / localStorage.
-- **`components/`** — apresentação. `ChessBoard` é totalmente "burro": só espelha props no Chessground. Nada de regra de xadrez aqui.
-- **`utils/`** — funções puras (helpers, cálculo de destinos, aberturas ECO, tradução de notação).
-- **`utils/apiConfig.js`** — única fonte das URLs da API, lida de `VITE_API_URL`.
+- **`contexts/`** — Context API para configurações globais (Temas).
+- **`data/academy/`** — Banco de dados em JSON com todas as lições e puzzles.
+- **`hooks/`** — Isolam a lógica de estado (jogo, editor, academia, temas).
+- **`components/`** — Apresentação (ChessBoard, AcademyView, SettingsView, etc).
 
 ### Decisões técnicas
 
-- **Engine persistente com lock.** O Stockfish é um processo caro de iniciar; criar um por request seria lento. Uma instância fica viva, protegida por `threading.Lock`, e `engine_analysis()` garante que duas requests nunca se atropelem.
-- **Routers `def` (não `async`).** Como a engine é bloqueante, `async def` travaria o event loop. Com `def`, o FastAPI usa threadpool e o servidor continua responsivo.
-- **Detecção de abertura no frontend.** O backend mantém um catálogo próprio só para o bot escolher a linha, sem código ECO. O display (badge durante o jogo, modal de revisão) usa `utils/openings.js` no frontend, com códigos ECO reais (C50, B20...). Uma fonte única para o usuário ver.
-- **Sem estado global entre requests.** `get_opening_moves` recebe o histórico completo e decide o próximo lance só com base nele — idempotente, seguro para múltiplos jogadores simultâneos.
-- **Histórico em `localStorage`.** Escolha consciente para não exigir backend/migrations. O hook `useMatchHistory` isola o acesso ao storage; trocar por API/SQLite no futuro é só mudar a implementação interna.
-- **"Brilhante" por heurística.** Categoria detectada quando o lance deixa uma peça sua pendurada (valor ≥ 3) que não estava pendurada antes, e o `cp_loss` fica abaixo de 30. Não é perfeito como o Chess.com, mas é honesto.
-- **Gemini com fallback.** Ao expandir um erro no modal, o coach tenta explicar via Gemini. Se falhar (quota, rede), a explicação heurística local é exibida — sem erro na tela.
-- **Análise do review reaproveita `best_cp`.** O `cp_before` de uma iteração é o `best_cp` da anterior (mesma posição). Isso corta ~50% das chamadas à engine no review.
+- **Academia 100% Offline:** O conteúdo é compilado junto com o app via Vite (`import.meta.glob`). Nenhuma chamada de API é feita na Academia.
+- **Validação Automática de Dados:** Em vez de testar cada lição manualmente, o teste `academyContent.test.js` lê os JSONs e usa o `chess.js` para garantir que o FEN é válido e o lance esperado é legal.
+- **Context API para Temas:** O `SettingsContext` evita o "prop drilling" e permite que a mudança de tema afete todos os tabuleiros instantaneamente.
+- **Engine persistente com lock:** O Stockfish roda com `threading.Lock` para não travar o event loop do FastAPI.
 
 ## Estrutura do projeto
 
 ```text
 chess-coach/
-├── backend/
-│   ├── api/                # Routers (analyze, coach, play, review)
-│   ├── chess_logic/        # Regras puras (classificações, sacrifício, aberturas)
-│   ├── config/
-│   │   └── settings.py     # Caminho do Stockfish, níveis de dificuldade
-│   ├── engine/             # Stockfish.exe (não versionado)
-│   ├── models/             # Pydantic schemas
-│   ├── services/           # Bot, coach, review, stockfish
-│   ├── tests/              # pytest
-│   ├── main.py             # Entry point FastAPI
-│   ├── requirements.txt
-│   └── requirements-dev.txt
+├── backend/                # API FastAPI + Stockfish + Testes
 ├── frontend/
 │   ├── src/
-│   │   ├── components/     # Componentes React (incluindo MatchHistoryView)
-│   │   ├── hooks/          # Estado da partida, chamadas à API, histórico
-│   │   ├── utils/          # Helpers puros
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── .env.example        # Template de VITE_API_URL
-│   ├── eslint.config.js
-│   ├── vitest.config.js
-│   ├── package.json
-│   └── vite.config.js
-├── .github/workflows/
-│   └── test.yml            # CI
-├── .env                    # Chaves (não versionado)
-├── .gitignore
-├── dev.ps1                 # Inicia backend + frontend
-├── test.ps1                # Roda pytest + vitest
-├── pytest.ini
+│   │   ├── components/     # UI React (AcademyView, SettingsView, etc)
+│   │   ├── contexts/       # SettingsContext (Temas)
+│   │   ├── data/academy/   # Lições em JSON
+│   │   ├── hooks/          # useAcademy, useLesson, useChessGame, etc
+│   │   └── utils/          # lessonValidator, chessHelpers, etc
+│   └── ...
+├── dev.ps1                 # Script de inicialização
+├── test.ps1                # Script de testes
 └── README.md
 ```
 

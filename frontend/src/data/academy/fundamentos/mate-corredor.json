@@ -1,0 +1,35 @@
+{
+  "id": "mate-corredor",
+  "level": "beginner",
+  "category": "fundamentos",
+  "order": 10,
+  "title": "Mate do Corredor (Back Rank)",
+  "objective": "Aprender a dar mate na última fileira.",
+  "estimatedMinutes": 5,
+  "explanation": "O Mate do Corredor acontece quando o Rei está preso atrás dos próprios peões e uma Torre ou Dama invade a última fileira.",
+  "demo": {
+    "fen": "6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1",
+    "moves": [
+      "a1a8"
+    ],
+    "description": "A torre entra na oitava fileira e dá mate."
+  },
+  "exercises": [
+    {
+      "id": "ex1",
+      "type": "move",
+      "fen": "6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1",
+      "prompt": "Dê o Mate do Corredor movendo a torre.",
+      "expected": [
+        "a1a8"
+      ],
+      "hint": "Mova a torre para a oitava fileira (a8).",
+      "success": "Correto! O rei não tem escapatória.",
+      "failure": "Mova a torre para a8."
+    }
+  ],
+  "summary": "Cuidado com o rei preso na última fileira.",
+  "source": {
+    "type": "original"
+  }
+}

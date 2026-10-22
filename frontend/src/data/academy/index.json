@@ -92,6 +92,16 @@
       "file": "fundamentos/promocao.json"
     },
     {
+      "id": "mate-pastor",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Mate do Pastor (Scholar's Mate)",
+      "objective": "Aprender o xeque-mate mais rápido e famoso do xadrez.",
+      "estimatedMinutes": 5,
+      "order": 9,
+      "file": "fundamentos/mate-pastor.json"
+    },
+    {
       "id": "xeque-mate",
       "level": "beginner",
       "category": "fundamentos",
@@ -112,6 +122,16 @@
       "file": "fundamentos/afogamento.json"
     },
     {
+      "id": "mate-corredor",
+      "level": "beginner",
+      "category": "fundamentos",
+      "title": "Mate do Corredor (Back Rank)",
+      "objective": "Aprender a dar mate na última fileira.",
+      "estimatedMinutes": 5,
+      "order": 10,
+      "file": "fundamentos/mate-corredor.json"
+    },
+    {
       "id": "empate-repeticao",
       "level": "beginner",
       "category": "fundamentos",
@@ -120,6 +140,16 @@
       "estimatedMinutes": 5,
       "order": 12,
       "file": "fundamentos/empate-repeticao.json"
+    },
+    {
+      "id": "puzzles-mate1",
+      "level": "beginner",
+      "category": "taticas",
+      "title": "Puzzles: Mate em 1",
+      "objective": "Resolva 60 puzzles interativos sobre puzzles: mate em 1.",
+      "estimatedMinutes": 60,
+      "order": 99,
+      "file": "taticas/puzzles-mate1.json"
     },
     {
       "id": "italiana",
@@ -240,6 +270,26 @@
       "estimatedMinutes": 6,
       "order": 12,
       "file": "taticas/ataque-descoberto.json"
+    },
+    {
+      "id": "puzzles-garfo",
+      "level": "intermediate",
+      "category": "taticas",
+      "title": "Puzzles: Garfo",
+      "objective": "Resolva 60 puzzles interativos sobre puzzles: garfo.",
+      "estimatedMinutes": 60,
+      "order": 99,
+      "file": "taticas/puzzles-garfo.json"
+    },
+    {
+      "id": "puzzles-mate2",
+      "level": "intermediate",
+      "category": "taticas",
+      "title": "Puzzles: Mate em 2",
+      "objective": "Resolva 60 puzzles interativos sobre puzzles: mate em 2.",
+      "estimatedMinutes": 60,
+      "order": 99,
+      "file": "taticas/puzzles-mate2.json"
     },
     {
       "id": "estrutura-peoes",
